@@ -12,50 +12,59 @@
             text-align: center;
             padding: 20px;
             background-color: #f8f9fa;
+            margin: 0;
         }
         model-viewer {
             width: 100%;
-            height: 400px;
+            height: 500px;
             margin: 0 auto;
         }
         .ar-button {
-            background: white;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border: none;
             border-radius: 50px;
-            padding: 12px 20px;
+            padding: 12px 24px;
             font-weight: bold;
             color: #0066cc;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>My AR Furniture</h1>
+        <p>See how this chair looks in your home before you buy.</p>
 
-    <h1>My AR Furniture</h1>
-    <p>See how this chair looks in your home before you buy.</p>
+        <!-- THE MODEL-VIEWER TAG -->
+        <model-viewer 
+            src="models/old_chair.glb"
+            alt="A 3D model of a modern chair"
+            ar 
+            ar-modes="webxr scene-viewer quick-look"
+            environment-image="neutral" 
+            shadow-intensity="1"
+            camera-controls 
+            touch-action="pan-y"
+            auto-rotate
+            rotation-per-second="30deg"
+        >
+            <!-- This button will become the AR button -->
+            <button slot="ar-button" class="ar-button">
+                👆 View in Your Space
+            </button>
+        </model-viewer>
 
-    <!-- THE MODEL-VIEWER TAG WITH THE CORRECT PATH TO YOUR MODEL -->
-    <model-viewer 
-        src="assets/models/old_chair.glb" 
-        alt="A 3D model of a modern chair"
-        ar 
-        ar-modes="webxr scene-viewer quick-look"
-        environment-image="neutral" 
-        shadow-intensity="1"
-        camera-controls 
-        touch-action="pan-y"
-        auto-rotate
-        rotation-per-second="30deg"
-    >
-        <!-- This button will become the AR button -->
-        <button slot="ar-button" class="ar-button">
-            👆 View in Your Space
-        </button>
-    </model-viewer>
-
-    <p><strong>Description:</strong> This handcrafted chair is perfect for your dining room or office.</p>
-    <p><strong>Price:</strong> $199</p>
-
+        <p><strong>Description:</strong> This handcrafted chair is perfect for your dining room or office.</p>
+    </div>
 </body>
 </html>
