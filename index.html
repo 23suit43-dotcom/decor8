@@ -3,62 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AR Furniture Placement - See furniture in your space">
-    <title>AR Furniture Viewer</title>
-    <link rel="stylesheet" href="style.css">
+    <title>My Furniture AR Showroom</title>
+    <!-- Import the model-viewer script from a CDN -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        model-viewer {
+            width: 100%;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .ar-button {
+            background: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-weight: bold;
+            color: #0066cc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-        <p>Loading AR Experience...</p>
-    </div>
 
-    <!-- Main UI -->
-    <div id="ui-container">
-        <button id="start-ar" class="ar-button">Start AR</button>
-        
-        <div id="model-selector" class="selector-hidden">
-            <div class="model-option" data-model="chair">
-                <img src="assets/chair-thumb.jpg" alt="Chair">
-                <span>Chair</span>
-            </div>
-            <div class="model-option" data-model="table">
-                <img src="assets/table-thumb.jpg" alt="Table">
-                <span>Table</span>
-            </div>
-            <div class="model-option" data-model="lamp">
-                <img src="assets/lamp-thumb.jpg" alt="Lamp">
-                <span>Lamp</span>
-            </div>
-        </div>
+    <h1>My AR Furniture</h1>
+    <p>See how this chair looks in your home before you buy.</p>
 
-        <div id="controls" class="controls-hidden">
-            <button id="move-btn" class="control-btn active">Move</button>
-            <button id="rotate-btn" class="control-btn">Rotate</button>
-            <button id="scale-btn" class="control-btn">Scale</button>
-            <button id="delete-btn" class="control-btn delete">×</button>
-        </div>
-    </div>
+    <!-- THE MODEL-VIEWER TAG WITH THE CORRECT PATH TO YOUR MODEL -->
+    <model-viewer 
+        src="assets/models/old_chair.glb" 
+        alt="A 3D model of a modern chair"
+        ar 
+        ar-modes="webxr scene-viewer quick-look"
+        environment-image="neutral" 
+        shadow-intensity="1"
+        camera-controls 
+        touch-action="pan-y"
+        auto-rotate
+        rotation-per-second="30deg"
+    >
+        <!-- This button will become the AR button -->
+        <button slot="ar-button" class="ar-button">
+            👆 View in Your Space
+        </button>
+    </model-viewer>
 
-    <!-- Instructions -->
-    <div id="instructions" class="instructions-hidden">
-        <p>Point your camera at a flat surface. Tap to place furniture.</p>
-        <p>Use controls to move, rotate, and scale.</p>
-    </div>
+    <p><strong>Description:</strong> This handcrafted chair is perfect for your dining room or office.</p>
+    <p><strong>Price:</strong> $199</p>
 
-    <!-- WebXR Warning -->
-    <div id="xr-warning" class="warning-hidden">
-        <p>WebXR not supported in your browser.</p>
-        <p>Try Chrome on Android or Safari on iOS.</p>
-    </div>
-
-    <!-- Three.js and Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/XRButton.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
-    
-    <!-- Main Application Script -->
-    <script src="script.js"></script>
 </body>
 </html>
