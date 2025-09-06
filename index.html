@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Furniture AR Showroom</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js"></script>
+    <!-- Use latest version without specific version number -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -44,7 +45,6 @@
         <h1>My AR Furniture</h1>
         <p>See how this chair looks in your home before you buy.</p>
 
-        <!-- THE MODEL-VIEWER TAG -->
         <model-viewer 
             src="models/old_chair.glb"
             alt="A 3D model of a modern chair"
@@ -66,5 +66,3 @@
     </div>
 </body>
 </html>
-
-
