@@ -66,6 +66,28 @@
             margin: 0 auto;
         }
 
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            color: #6c757d;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2575fc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Products Gallery Section */
         .category {
             padding: 2rem 1rem;
@@ -103,6 +125,7 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease;
+            position: relative;
         }
         .model-card:hover {
             transform: translateY(-5px);
@@ -111,6 +134,7 @@
             width: 100%;
             height: 300px;
             --poster-color: #ffffff00;
+            background-color: #f8f9fa;
         }
         .model-info {
             padding: 1.5rem;
@@ -122,6 +146,12 @@
         }
         .model-info p {
             color: #6c757d;
+        }
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
         }
 
         /* Responsive Design */
@@ -168,11 +198,18 @@
                     auto-rotate 
                     ar 
                     environment-image="legacy"
-                    shadow-intensity="1">
+                    shadow-intensity="1"
+                    loading="eager"
+                    reveal="interaction"
+                    generate-schema>
+                    <div class="loading" slot="poster">
+                        <div class="spinner"></div>
+                        Loading Modern Sofa...
+                    </div>
                 </model-viewer>
                 <div class="model-info">
                     <h3>Modern Sofa</h3>
-                    <p>A comfortable and stylish modern sofa for your living space. Perfect for contemporary interiors.</p>
+                    <p>A comfortable and stylish modern sofa for your living space.</p>
                 </div>
             </div>
 
@@ -185,11 +222,18 @@
                     auto-rotate 
                     ar 
                     environment-image="legacy"
-                    shadow-intensity="1">
+                    shadow-intensity="1"
+                    loading="eager"
+                    reveal="interaction"
+                    generate-schema>
+                    <div class="loading" slot="poster">
+                        <div class="spinner"></div>
+                        Loading Coffee Table...
+                    </div>
                 </model-viewer>
                 <div class="model-info">
                     <h3>Coffee Table</h3>
-                    <p>A sleek and functional coffee table with a modern design. Ideal for placing drinks and decor.</p>
+                    <p>A sleek and functional coffee table with modern design.</p>
                 </div>
             </div>
 
@@ -202,11 +246,18 @@
                     auto-rotate 
                     ar 
                     environment-image="legacy"
-                    shadow-intensity="1">
+                    shadow-intensity="1"
+                    loading="eager"
+                    reveal="interaction"
+                    generate-schema>
+                    <div class="loading" slot="poster">
+                        <div class="spinner"></div>
+                        Loading TV Stand...
+                    </div>
                 </model-viewer>
                 <div class="model-info">
                     <h3>TV Stand</h3>
-                    <p>A contemporary TV stand with ample storage space for media equipment and accessories.</p>
+                    <p>A contemporary TV stand with ample storage space.</p>
                 </div>
             </div>
 
@@ -219,11 +270,18 @@
                     auto-rotate 
                     ar 
                     environment-image="legacy"
-                    shadow-intensity="1">
+                    shadow-intensity="1"
+                    loading="eager"
+                    reveal="interaction"
+                    generate-schema>
+                    <div class="loading" slot="poster">
+                        <div class="spinner"></div>
+                        Loading Accent Chair...
+                    </div>
                 </model-viewer>
                 <div class="model-info">
                     <h3>Accent Chair</h3>
-                    <p>A beautiful accent chair that adds character and style to any living room corner.</p>
+                    <p>A beautiful accent chair that adds character to any room.</p>
                 </div>
             </div>
         </div>
@@ -242,15 +300,20 @@
                     auto-rotate 
                     ar 
                     environment-image="legacy"
-                    shadow-intensity="1">
+                    shadow-intensity="1"
+                    loading="eager"
+                    reveal="interaction"
+                    generate-schema>
+                    <div class="loading" slot="poster">
+                        <div class="spinner"></div>
+                        Loading Vintage Chair...
+                    </div>
                 </model-viewer>
                 <div class="model-info">
                     <h3>Vintage Chair</h3>
-                    <p>A charming vintage chair with character. Perfect for adding a rustic touch to your kitchen.</p>
+                    <p>A charming vintage chair with character for your kitchen.</p>
                 </div>
             </div>
-
-            <!-- Add more Kitchen models as needed -->
         </div>
     </section>
 
@@ -267,20 +330,25 @@
                     auto-rotate 
                     ar 
                     environment-image="legacy"
-                    shadow-intensity="1">
+                    shadow-intensity="1"
+                    loading="eager"
+                    reveal="interaction"
+                    generate-schema>
+                    <div class="loading" slot="poster">
+                        <div class="spinner"></div>
+                        Loading Dublin Chair...
+                    </div>
                 </model-viewer>
                 <div class="model-info">
                     <h3>Dublin Chair</h3>
-                    <p>An elegant Dublin chair designed for comfort and style. Perfect for bedroom seating.</p>
+                    <p>An elegant Dublin chair designed for comfort and style.</p>
                 </div>
             </div>
-
-            <!-- Add more Bedroom models as needed -->
         </div>
     </section>
 
     <script>
-        // Simple script to highlight the current page in navigation
+        // Highlight current page in navigation
         document.addEventListener('DOMContentLoaded', function() {
             const currentPage = window.location.pathname.split('/').pop();
             const navLinks = document.querySelectorAll('nav a');
@@ -291,6 +359,52 @@
                     link.id = 'products-link';
                 }
             });
+
+            // Error handling for failed model loads
+            const modelViewers = document.querySelectorAll('model-viewer');
+            
+            modelViewers.forEach(viewer => {
+                viewer.addEventListener('error', (event) => {
+                    console.error('Model failed to load:', viewer.src);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.textContent = 'Failed to load 3D model. Please check the file path.';
+                    viewer.parentNode.insertBefore(errorDiv, viewer.nextSibling);
+                    
+                    // Hide the loading spinner
+                    const loadingElement = viewer.querySelector('.loading');
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                });
+
+                viewer.addEventListener('load', (event) => {
+                    console.log('Model loaded successfully:', viewer.src);
+                    // Hide the loading spinner when model loads
+                    const loadingElement = viewer.querySelector('.loading');
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add performance optimization
+        let isScrolling;
+        window.addEventListener('scroll', function() {
+            window.clearTimeout(isScrolling);
+            isScrolling = setTimeout(function() {
+                const modelViewers = document.querySelectorAll('model-viewer');
+                modelViewers.forEach(viewer => {
+                    const rect = viewer.getBoundingClientRect();
+                    // Pause auto-rotate for models not in viewport
+                    if (rect.top > window.innerHeight || rect.bottom < 0) {
+                        viewer.autoRotate = false;
+                    } else {
+                        viewer.autoRotate = true;
+                    }
+                });
+            }, 100);
         });
     </script>
 </body>
