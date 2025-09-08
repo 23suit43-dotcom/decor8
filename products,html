@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products - 3D Models Showcase</title>
+    <!-- Load the model-viewer component -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar Styles */
+        nav {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        #products-link {
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #343a40;
+            margin-bottom: 1rem;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Products Gallery Section */
+        .category {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+        .category-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #343a40;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        .category-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 2px;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .model-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+        model-viewer {
+            width: 100%;
+            height: 300px;
+            --poster-color: #ffffff00;
+        }
+        .model-info {
+            padding: 1.5rem;
+        }
+        .model-info h3 {
+            color: #343a40;
+            margin-bottom: 0.5rem;
+            text-transform: capitalize;
+        }
+        .model-info p {
+            color: #6c757d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            nav a {
+                margin: 0.3rem 0;
+                text-align: center;
+            }
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html" id="products-link">Products</a>
+        <a href="login.html">Login</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Explore Our 3D Models</h1>
+        <p>Browse our curated collection of high-quality 3D models, organized by room category.</p>
+    </header>
+
+    <!-- Living Room Models Section -->
+    <section class="category" id="living-room">
+        <h2 class="category-title">Living Room</h2>
+        <div class="models-grid">
+            <!-- Modern Sofa -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/modern-sofa.glb" 
+                    alt="Modern Sofa" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Modern Sofa</h3>
+                    <p>A comfortable and stylish modern sofa for your living space. Perfect for contemporary interiors.</p>
+                </div>
+            </div>
+
+            <!-- Coffee Table -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/coffee_table.glb" 
+                    alt="Coffee Table" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Coffee Table</h3>
+                    <p>A sleek and functional coffee table with a modern design. Ideal for placing drinks and decor.</p>
+                </div>
+            </div>
+
+            <!-- TV Stand -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/tv-stand.glb" 
+                    alt="TV Stand" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>TV Stand</h3>
+                    <p>A contemporary TV stand with ample storage space for media equipment and accessories.</p>
+                </div>
+            </div>
+
+            <!-- Accent Chair -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/accent-chair.glb" 
+                    alt="Accent Chair" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Accent Chair</h3>
+                    <p>A beautiful accent chair that adds character and style to any living room corner.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kitchen Models Section -->
+    <section class="category" id="kitchen">
+        <h2 class="category-title">Kitchen</h2>
+        <div class="models-grid">
+            <!-- Old Chair -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/old_chair.glb" 
+                    alt="Old Chair" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Vintage Chair</h3>
+                    <p>A charming vintage chair with character. Perfect for adding a rustic touch to your kitchen.</p>
+                </div>
+            </div>
+
+            <!-- Add more Kitchen models as needed -->
+        </div>
+    </section>
+
+    <!-- Bedroom Models Section -->
+    <section class="category" id="bedroom">
+        <h2 class="category-title">Bedroom</h2>
+        <div class="models-grid">
+            <!-- Dublin Chair -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/dublin_chair.glb" 
+                    alt="Dublin Chair" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Dublin Chair</h3>
+                    <p>An elegant Dublin chair designed for comfort and style. Perfect for bedroom seating.</p>
+                </div>
+            </div>
+
+            <!-- Add more Bedroom models as needed -->
+        </div>
+    </section>
+
+    <script>
+        // Simple script to highlight the current page in navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('nav a');
+            
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.id = 'products-link';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
