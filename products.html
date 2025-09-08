@@ -7,193 +7,290 @@
     <!-- Load the model-viewer component -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f8f9fa; color: #333; line-height: 1.6; padding: 20px; }
-
-        /* Navigation */
-        nav { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); padding: 1rem; margin-bottom: 20px; border-radius: 10px; text-align: center; }
-        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; margin: 0 0.5rem; border-radius: 50px; display: inline-block; }
-        nav a:hover { background-color: rgba(255, 255, 255, 0.2); }
-
-        /* Debug Info */
-        .debug-info {
-            background: #ffecb3;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #ff9800;
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
         }
 
-        /* Model Cards */
+        /* Navigation Bar Styles */
+        nav {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        #products-link {
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #343a40;
+            margin-bottom: 1rem;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Products Gallery Section */
+        .category {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+        .category-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #343a40;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        .category-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 2px;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
         .model-card {
             background: white;
             border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .model-card:hover {
+            transform: translateY(-5px);
         }
         model-viewer {
             width: 100%;
             height: 300px;
-            border: 2px dashed #ccc;
-            margin: 10px 0;
-            background-color: #f0f0f0;
+            --poster-color: #ffffff00;
         }
-        .file-path {
-            background: #e9ecef;
-            padding: 8px;
-            border-radius: 4px;
-            font-family: monospace;
-            margin: 5px 0;
-            font-size: 14px;
+        .model-info {
+            padding: 1.5rem;
         }
-        .status {
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            margin: 5px 0;
-            display: inline-block;
+        .model-info h3 {
+            color: #343a40;
+            margin-bottom: 0.5rem;
+            text-transform: capitalize;
         }
-        .status.loading { background: #fff3cd; color: #856404; }
-        .status.error { background: #f8d7da; color: #721c24; }
-        .status.success { background: #d4edda; color: #155724; }
+        .model-info p {
+            color: #6c757d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            nav a {
+                margin: 0.3rem 0;
+                text-align: center;
+            }
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav>
         <a href="index.html">Home</a>
-        <a href="products.html" style="background-color: rgba(255, 255, 255, 0.3); font-weight: bold;">Products</a>
+        <a href="products.html" id="products-link">Products</a>
         <a href="login.html">Login</a>
         <a href="contact.html">Contact</a>
     </nav>
 
-    <!-- Debug Information -->
-    <div class="debug-info">
-        <h3>🛠️ Debug Mode Enabled</h3>
-        <p>If models don't load, check these common issues:</p>
-        <ol>
-            <li>File names must match exactly (case-sensitive)</li>
-            <li>Files must be in the <strong>models/</strong> folder</li>
-            <li>Files must have <strong>.glb</strong> extension</li>
-            <li>Check browser Console for errors (F12)</li>
-        </ol>
-    </div>
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Explore Our 3D Models</h1>
+        <p>Browse our curated collection of high-quality 3D models, organized by room category.</p>
+    </header>
 
-    <h1>3D Models Testing Page</h1>
-    <p>This page will show you exactly what's working and what's not.</p>
+    <!-- Living Room Models Section -->
+    <section class="category" id="living-room">
+        <h2 class="category-title">Living Room</h2>
+        <div class="models-grid">
+            <!-- Modern Sofa -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/modern-sofa.glb" 
+                    alt="Modern Sofa" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Modern Sofa</h3>
+                    <p>A comfortable and stylish modern sofa for your living space. Perfect for contemporary interiors.</p>
+                </div>
+            </div>
 
-    <!-- Living Room Models -->
-    <div class="model-card">
-        <h2>1. modern-sofa.glb</h2>
-        <div class="file-path">Path: "models/modern-sofa.glb"</div>
-        <div class="status loading" id="status-1">Checking file...</div>
-        <model-viewer id="model-1" src="models/modern-sofa.glb" alt="Modern Sofa" camera-controls style="background-color: #e3f2fd;"></model-viewer>
-    </div>
+            <!-- Coffee Table -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/coffee_table.glb" 
+                    alt="Coffee Table" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Coffee Table</h3>
+                    <p>A sleek and functional coffee table with a modern design. Ideal for placing drinks and decor.</p>
+                </div>
+            </div>
 
-    <div class="model-card">
-        <h2>2. coffee_table.glb</h2>
-        <div class="file-path">Path: "models/coffee_table.glb"</div>
-        <div class="status loading" id="status-2">Checking file...</div>
-        <model-viewer id="model-2" src="models/coffee_table.glb" alt="Coffee Table" camera-controls style="background-color: #f3e5f5;"></model-viewer>
-    </div>
+            <!-- TV Stand -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/tv-stand.glb" 
+                    alt="TV Stand" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>TV Stand</h3>
+                    <p>A contemporary TV stand with ample storage space for media equipment and accessories.</p>
+                </div>
+            </div>
 
-    <div class="model-card">
-        <h2>3. tv-stand.glb</h2>
-        <div class="file-path">Path: "models/tv-stand.glb"</div>
-        <div class="status loading" id="status-3">Checking file...</div>
-        <model-viewer id="model-3" src="models/tv-stand.glb" alt="TV Stand" camera-controls style="background-color: #e8f5e8;"></model-viewer>
-    </div>
+            <!-- Accent Chair -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/accent-chair.glb" 
+                    alt="Accent Chair" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Accent Chair</h3>
+                    <p>A beautiful accent chair that adds character and style to any living room corner.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="model-card">
-        <h2>4. accent-chair.glb</h2>
-        <div class="file-path">Path: "models/accent-chair.glb"</div>
-        <div class="status loading" id="status-4">Checking file...</div>
-        <model-viewer id="model-4" src="models/accent-chair.glb" alt="Accent Chair" camera-controls style="background-color: #fff3e0;"></model-viewer>
-    </div>
+    <!-- Kitchen Models Section -->
+    <section class="category" id="kitchen">
+        <h2 class="category-title">Kitchen</h2>
+        <div class="models-grid">
+            <!-- Old Chair -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/old_chair.glb" 
+                    alt="Old Chair" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Vintage Chair</h3>
+                    <p>A charming vintage chair with character. Perfect for adding a rustic touch to your kitchen.</p>
+                </div>
+            </div>
 
-    <div class="model-card">
-        <h2>5. old_chair.glb</h2>
-        <div class="file-path">Path: "models/old_chair.glb"</div>
-        <div class="status loading" id="status-5">Checking file...</div>
-        <model-viewer id="model-5" src="models/old_chair.glb" alt="Old Chair" camera-controls style="background-color: #fbe9e7;"></model-viewer>
-    </div>
+            <!-- Add more Kitchen models as needed -->
+        </div>
+    </section>
 
-    <div class="model-card">
-        <h2>6. dublin_chair.glb</h2>
-        <div class="file-path">Path: "models/dublin_chair.glb"</div>
-        <div class="status loading" id="status-6">Checking file...</div>
-        <model-viewer id="model-6" src="models/dublin_chair.glb" alt="Dublin Chair" camera-controls style="background-color: #e8eaf6;"></model-viewer>
-    </div>
+    <!-- Bedroom Models Section -->
+    <section class="category" id="bedroom">
+        <h2 class="category-title">Bedroom</h2>
+        <div class="models-grid">
+            <!-- Dublin Chair -->
+            <div class="model-card">
+                <model-viewer 
+                    src="models/dublin_chair.glb" 
+                    alt="Dublin Chair" 
+                    camera-controls 
+                    auto-rotate 
+                    ar 
+                    environment-image="legacy"
+                    shadow-intensity="1">
+                </model-viewer>
+                <div class="model-info">
+                    <h3>Dublin Chair</h3>
+                    <p>An elegant Dublin chair designed for comfort and style. Perfect for bedroom seating.</p>
+                </div>
+            </div>
+
+            <!-- Add more Bedroom models as needed -->
+        </div>
+    </section>
 
     <script>
-        // Debug script to check each model
+        // Simple script to highlight the current page in navigation
         document.addEventListener('DOMContentLoaded', function() {
-            const models = [
-                { id: 'model-1', statusId: 'status-1', name: 'modern-sofa.glb' },
-                { id: 'model-2', statusId: 'status-2', name: 'coffee_table.glb' },
-                { id: 'model-3', statusId: 'status-3', name: 'tv-stand.glb' },
-                { id: 'model-4', statusId: 'status-4', name: 'accent-chair.glb' },
-                { id: 'model-5', statusId: 'status-5', name: 'old_chair.glb' },
-                { id: 'model-6', statusId: 'status-6', name: 'dublin_chair.glb' }
-            ];
-
-            models.forEach(model => {
-                const viewer = document.getElementById(model.id);
-                const status = document.getElementById(model.statusId);
-
-                if (!viewer) {
-                    console.error('Could not find model viewer for:', model.name);
-                    return;
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('nav a');
+            
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.id = 'products-link';
                 }
-
-                // Check if model loads successfully
-                viewer.addEventListener('load', () => {
-                    status.textContent = '✅ SUCCESS: Model loaded successfully!';
-                    status.className = 'status success';
-                    console.log('Loaded:', model.name);
-                });
-
-                // Check if model fails to load
-                viewer.addEventListener('error', (e) => {
-                    status.textContent = '❌ ERROR: Failed to load model. Check file path and name.';
-                    status.className = 'status error';
-                    console.error('Failed to load:', model.name, e);
-                    
-                    // Show exact error in console
-                    fetch(viewer.src)
-                        .then(response => {
-                            if (!response.ok) {
-                                console.error('HTTP error:', response.status, response.statusText, 'for', viewer.src);
-                            }
-                            return response.text();
-                        })
-                        .catch(error => {
-                            console.error('Network error:', error, 'for', viewer.src);
-                        });
-                });
-
-                // Check after a timeout if still loading
-                setTimeout(() => {
-                    if (status.className.includes('loading')) {
-                        status.textContent = '⚠️ STILL LOADING: Model might be very large or having issues';
-                        status.className = 'status loading';
-                        console.log('Still loading:', model.name);
-                    }
-                }, 3000);
             });
-
-            // Log folder structure help
-            console.log('🔍 Expected folder structure:');
-            console.log('your-website-folder/');
-            console.log('├── products.html');
-            console.log('└── models/');
-            console.log('    ├── modern-sofa.glb');
-            console.log('    ├── coffee_table.glb');
-            console.log('    ├── tv-stand.glb');
-            console.log('    ├── accent-chair.glb');
-            console.log('    ├── old_chair.glb');
-            console.log('    └── dublin_chair.glb');
         });
     </script>
 </body>
