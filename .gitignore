@@ -1,0 +1,15 @@
+# Ignore 3D models folder
+models/
+
+# Ignore operating system files
+.DS_Store
+Thumbs.db
+
+# Ignore editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore node modules (if you add JavaScript packages later)
+node_modules/
