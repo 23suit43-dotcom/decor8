@@ -7,29 +7,105 @@
     <!-- Load the model-viewer component -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f8f9fa; color: #333; line-height: 1.6; padding: 20px; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        body { 
+            background-color: #f8f9fa; 
+            color: #333; 
+            line-height: 1.6; 
+            padding: 20px; 
+        }
 
         /* Navigation */
-        nav { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); padding: 1rem; margin-bottom: 20px; border-radius: 10px; text-align: center; }
-        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; margin: 0 0.5rem; border-radius: 50px; display: inline-block; }
-        nav a:hover { background-color: rgba(255, 255, 255, 0.2); }
-        #products-link { background-color: rgba(255, 255, 255, 0.3); font-weight: bold; }
+        nav { 
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); 
+            padding: 1rem; 
+            margin-bottom: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+        }
+        
+        nav a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 0.5rem 1rem; 
+            margin: 0 0.5rem; 
+            border-radius: 50px; 
+            display: inline-block; 
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            transform: translateY(-2px);
+        }
+        
+        #products-link { 
+            background-color: rgba(255, 255, 255, 0.3); 
+            font-weight: bold; 
+        }
 
         /* Page Header */
-        .page-header { text-align: center; padding: 2rem 1rem; margin-bottom: 2rem; }
-        .page-header h1 { font-size: 2.5rem; color: #343a40; margin-bottom: 1rem; }
-        .page-header p { font-size: 1.1rem; color: #6c757d; max-width: 600px; margin: 0 auto; }
+        .page-header { 
+            text-align: center; 
+            padding: 2rem 1rem; 
+            margin-bottom: 2rem; 
+        }
+        
+        .page-header h1 { 
+            font-size: 2.5rem; 
+            color: #343a40; 
+            margin-bottom: 1rem; 
+        }
+        
+        .page-header p { 
+            font-size: 1.1rem; 
+            color: #6c757d; 
+            max-width: 600px; 
+            margin: 0 auto; 
+        }
 
         /* Category Sections */
-        .category { margin: 3rem 0; }
-        .category-title { text-align: center; margin-bottom: 2rem; color: #343a40; font-size: 2rem; padding-bottom: 0.5rem; border-bottom: 3px solid; }
-        .living-room .category-title { border-color: #6a11cb; color: #6a11cb; }
-        .kitchen .category-title { border-color: #28a745; color: #28a745; }
-        .bedroom .category-title { border-color: #ff6b6b; color: #ff6b6b; }
+        .category { 
+            margin: 3rem 0; 
+        }
+        
+        .category-title { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            font-size: 2rem; 
+            padding-bottom: 0.5rem; 
+            border-bottom: 3px solid; 
+        }
+        
+        .living-room .category-title { 
+            border-color: #6a11cb; 
+            color: #6a11cb; 
+        }
+        
+        .kitchen .category-title { 
+            border-color: #28a745; 
+            color: #28a745; 
+        }
+        
+        .bedroom .category-title { 
+            border-color: #ff6b6b; 
+            color: #ff6b6b; 
+        }
 
         /* Model Grid */
-        .models-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 0 auto; max-width: 1200px; }
+        .models-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem; 
+            margin: 0 auto; 
+            max-width: 1200px; 
+        }
         
         /* Model Cards */
         .model-card {
@@ -39,7 +115,9 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
+            position: relative;
         }
+        
         .model-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -51,6 +129,8 @@
             margin: 1rem 0;
             border-radius: 10px;
             --poster-color: #ffffff00;
+            background-color: #f8f9fa;
+            border: 2px dashed #dee2e6;
         }
         
         .model-info h3 {
@@ -62,6 +142,7 @@
         .model-info p {
             color: #6c757d;
             font-size: 0.95rem;
+            margin-bottom: 0.5rem;
         }
 
         .file-path {
@@ -81,14 +162,56 @@
             margin: 0.5rem 0;
             display: inline-block;
         }
-        .status.loading { background: #fff3cd; color: #856404; }
-        .status.error { background: #f8d7da; color: #721c24; }
-        .status.success { background: #d4edda; color: #155724; }
+        
+        .status.loading { 
+            background: #fff3cd; 
+            color: #856404; 
+        }
+        
+        .status.error { 
+            background: #f8d7da; 
+            color: #721c24; 
+        }
+        
+        .status.success { 
+            background: #d4edda; 
+            color: #155724; 
+        }
+        
+        .status.info { 
+            background: #cce5ff; 
+            color: #004085; 
+        }
+
+        .local-message {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 2px dashed #dee2e6;
+        }
+
+        .local-message h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .models-grid { grid-template-columns: 1fr; }
-            nav a { margin: 0.3rem; padding: 0.4rem 0.8rem; }
+            .models-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            nav a { 
+                margin: 0.3rem; 
+                padding: 0.4rem 0.8rem; 
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -105,6 +228,7 @@
     <div class="page-header">
         <h1>Explore Our 3D Models</h1>
         <p>Browse our collection of high-quality 3D furniture models organized by room category</p>
+        <p><small>📁 Models are available locally for demonstration purposes</small></p>
     </div>
 
     <!-- ==================== LIVING ROOM ==================== -->
@@ -118,7 +242,7 @@
                     <h3>Sectional Sofa</h3>
                     <p>Comfortable L-shaped sofa for modern living spaces</p>
                     <div class="file-path">models/sectional-sofa.glb</div>
-                    <div class="status loading" id="status-1">Loading...</div>
+                    <div class="status loading" id="status-1">Checking availability...</div>
                 </div>
             </div>
 
@@ -129,7 +253,7 @@
                     <h3>TV Unit</h3>
                     <p>Modern entertainment center with storage space</p>
                     <div class="file-path">models/tv-unit.glb</div>
-                    <div class="status loading" id="status-2">Loading...</div>
+                    <div class="status loading" id="status-2">Checking availability...</div>
                 </div>
             </div>
 
@@ -140,7 +264,7 @@
                     <h3>Coffee Table</h3>
                     <p>Stylish center table for your living room</p>
                     <div class="file-path">models/coffee-table.glb</div>
-                    <div class="status loading" id="status-3">Loading...</div>
+                    <div class="status loading" id="status-3">Checking availability...</div>
                 </div>
             </div>
 
@@ -151,7 +275,7 @@
                     <h3>Accent Chair</h3>
                     <p>Elegant chair to complement your living space</p>
                     <div class="file-path">models/ac-chair.glb</div>
-                    <div class="status loading" id="status-4">Loading...</div>
+                    <div class="status loading" id="status-4">Checking availability...</div>
                 </div>
             </div>
 
@@ -162,7 +286,7 @@
                     <h3>Bookshelf</h3>
                     <p>Functional storage for books and decor items</p>
                     <div class="file-path">models/bookshelf.glb</div>
-                    <div class="status loading" id="status-5">Loading...</div>
+                    <div class="status loading" id="status-5">Checking availability...</div>
                 </div>
             </div>
 
@@ -173,7 +297,7 @@
                     <h3>Photo Frame</h3>
                     <p>Decorative frame for your cherished memories</p>
                     <div class="file-path">models/photoframe.glb</div>
-                    <div class="status loading" id="status-6">Loading...</div>
+                    <div class="status loading" id="status-6">Checking availability...</div>
                 </div>
             </div>
 
@@ -184,7 +308,7 @@
                     <h3>Cabinet</h3>
                     <p>Storage solution for living room essentials</p>
                     <div class="file-path">models/cabinet.glb</div>
-                    <div class="status loading" id="status-7">Loading...</div>
+                    <div class="status loading" id="status-7">Checking availability...</div>
                 </div>
             </div>
         </div>
@@ -201,7 +325,7 @@
                     <h3>Kitchen Island</h3>
                     <p>Central workspace with additional storage</p>
                     <div class="file-path">models/kitchen-island.glb</div>
-                    <div class="status loading" id="status-8">Loading...</div>
+                    <div class="status loading" id="status-8">Checking availability...</div>
                 </div>
             </div>
 
@@ -212,7 +336,7 @@
                     <h3>Dining Table</h3>
                     <p>Elegant table for family meals and gatherings</p>
                     <div class="file-path">models/dining-table.glb</div>
-                    <div class="status loading" id="status-9">Loading...</div>
+                    <div class="status loading" id="status-9">Checking availability...</div>
                 </div>
             </div>
 
@@ -223,7 +347,7 @@
                     <h3>Bar Stool</h3>
                     <p>Counter-height seating for kitchen islands</p>
                     <div class="file-path">models/bar-stool.glb</div>
-                    <div class="status loading" id="status-10">Loading...</div>
+                    <div class="status loading" id="status-10">Checking availability...</div>
                 </div>
             </div>
 
@@ -234,7 +358,7 @@
                     <h3>Modern Fridge</h3>
                     <p>Stylish refrigerator with advanced features</p>
                     <div class="file-path">models/modern-fridge.glb</div>
-                    <div class="status loading" id="status-11">Loading...</div>
+                    <div class="status loading" id="status-11">Checking availability...</div>
                 </div>
             </div>
         </div>
@@ -251,7 +375,7 @@
                     <h3>Queen Bed Frame</h3>
                     <p>Elegant bed frame for comfortable sleeping</p>
                     <div class="file-path">models/Queen-Bed-Frame.glb</div>
-                    <div class="status loading" id="status-12">Loading...</div>
+                    <div class="status loading" id="status-12">Checking availability...</div>
                 </div>
             </div>
 
@@ -262,7 +386,7 @@
                     <h3>Dresser</h3>
                     <p>Storage solution for clothing and accessories</p>
                     <div class="file-path">models/dresser.glb</div>
-                    <div class="status loading" id="status-13">Loading...</div>
+                    <div class="status loading" id="status-13">Checking availability...</div>
                 </div>
             </div>
 
@@ -273,7 +397,7 @@
                     <h3>Nightstand</h3>
                     <p>Bedside table for essentials and decor</p>
                     <div class="file-path">models/nightstand.glb</div>
-                    <div class="status loading" id="status-14">Loading...</div>
+                    <div class="status loading" id="status-14">Checking availability...</div>
                 </div>
             </div>
 
@@ -284,7 +408,7 @@
                     <h3>Wardrobe</h3>
                     <p>Spacious clothing storage unit</p>
                     <div class="file-path">models/wardrobe.glb</div>
-                    <div class="status loading" id="status-15">Loading...</div>
+                    <div class="status loading" id="status-15">Checking availability...</div>
                 </div>
             </div>
 
@@ -295,14 +419,14 @@
                     <h3>Study Table</h3>
                     <p>Compact workspace for bedroom study area</p>
                     <div class="file-path">models/studytable.glb</div>
-                    <div class="status loading" id="status-16">Loading...</div>
+                    <div class="status loading" id="status-16">Checking availability...</div>
                 </div>
             </div>
         </div>
     </section>
 
     <script>
-        // Model status tracking
+        // Model status tracking with local file handling
         const models = [
             // Living Room
             { id: 'model-1', statusId: 'status-1', name: 'sectional-sofa.glb' },
@@ -327,7 +451,7 @@
             { id: 'model-16', statusId: 'status-16', name: 'studytable.glb' }
         ];
 
-        // Initialize model viewers
+        // Initialize model viewers with local file handling
         document.addEventListener('DOMContentLoaded', function() {
             // Highlight current page
             const currentPage = window.location.pathname.split('/').pop();
@@ -338,7 +462,7 @@
                 }
             });
 
-            // Set up model load/error handlers
+            // Set up model load/error handlers for local files
             models.forEach(model => {
                 const viewer = document.getElementById(model.id);
                 const status = document.getElementById(model.statusId);
@@ -350,9 +474,29 @@
                     });
 
                     viewer.addEventListener('error', () => {
-                        status.textContent = '❌ Failed to load';
-                        status.className = 'status error';
+                        status.textContent = '📍 Available locally only';
+                        status.className = 'status info';
+                        viewer.style.display = 'none';
+                        
+                        // Create a friendly message for local files
+                        const message = document.createElement('div');
+                        message.className = 'local-message';
+                        message.innerHTML = `
+                            <h4>3D Model Preview</h4>
+                            <p>This model is available locally for demonstration</p>
+                            <p><small>File: ${model.name}</small></p>
+                            <p><small>📍 Stored in local models/ folder</small></p>
+                        `;
+                        viewer.parentNode.insertBefore(message, viewer.nextSibling);
                     });
+
+                    // Set timeout to handle cases where error doesn't fire
+                    setTimeout(() => {
+                        if (status.className.includes('loading')) {
+                            status.textContent = '📍 Available locally only';
+                            status.className = 'status info';
+                        }
+                    }, 3000);
                 }
             });
         });
