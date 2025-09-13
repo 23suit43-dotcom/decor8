@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products - 3D Models Showcase</title>
+    <!-- Load the model-viewer component -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        body { 
+            background-color: #f8f9fa; 
+            color: #333; 
+            line-height: 1.6; 
+            padding: 20px; 
+        }
+
+        /* Navigation */
+        nav { 
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); 
+            padding: 1rem; 
+            margin-bottom: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+        }
+        
+        nav a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 0.5rem 1rem; 
+            margin: 0 0.5rem; 
+            border-radius: 50px; 
+            display: inline-block; 
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            transform: translateY(-2px);
+        }
+        
+        #products-link { 
+            background-color: rgba(255, 255, 255, 0.3); 
+            font-weight: bold; 
+        }
+
+        /* Page Header */
+        .page-header { 
+            text-align: center; 
+            padding: 2rem 1rem; 
+            margin-bottom: 2rem; 
+        }
+        
+        .page-header h1 { 
+            font-size: 2.5rem; 
+            color: #343a40; 
+            margin-bottom: 1rem; 
+        }
+        
+        .page-header p { 
+            font-size: 1.1rem; 
+            color: #6c757d; 
+            max-width: 600px; 
+            margin: 0 auto; 
+        }
+
+        /* Category Sections */
+        .category { 
+            margin: 3rem 0; 
+        }
+        
+        .category-title { 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            font-size: 2rem; 
+            padding-bottom: 0.5rem; 
+            border-bottom: 3px solid; 
+        }
+        
+        .living-room .category-title { 
+            border-color: #6a11cb; 
+            color: #6a11cb; 
+        }
+        
+        .kitchen .category-title { 
+            border-color: #28a745; 
+            color: #28a745; 
+        }
+        
+        .bedroom .category-title { 
+            border-color: #ff6b6b; 
+            color: #ff6b6b; 
+        }
+
+        /* Model Grid */
+        .models-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem; 
+            margin: 0 auto; 
+            max-width: 1200px; 
+        }
+        
+        /* Model Cards */
+        .model-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        model-viewer {
+            width: 100%;
+            height: 250px;
+            margin: 1rem 0;
+            border-radius: 10px;
+            --poster-color: #ffffff00;
+            background-color: #f8f9fa;
+            border: 2px dashed #dee2e6;
+        }
+        
+        .model-info h3 {
+            color: #343a40;
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.3rem;
+        }
+        
+        .model-info p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-path {
+            background: #e9ecef;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            margin: 0.5rem 0;
+            word-break: break-all;
+        }
+
+        .status {
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+        }
+        
+        .status.loading { 
+            background: #fff3cd; 
+            color: #856404; 
+        }
+        
+        .status.error { 
+            background: #f8d7da; 
+            color: #721c24; 
+        }
+        
+        .status.success { 
+            background: #d4edda; 
+            color: #155724; 
+        }
+        
+        .status.info { 
+            background: #cce5ff; 
+            color: #004085; 
+        }
+
+        .local-message {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 2px dashed #dee2e6;
+        }
+
+        .local-message h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .models-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            nav a { 
+                margin: 0.3rem; 
+                padding: 0.4rem 0.8rem; 
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html" id="products-link">Products</a>
+        <a href="login.html">Login</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Explore Our 3D Models</h1>
+        <p>Browse our collection of high-quality 3D furniture models organized by room category</p>
+        <p><small>📁 Models are available locally for demonstration purposes</small></p>
+    </div>
+
+    <!-- ==================== LIVING ROOM ==================== -->
+    <section class="category living-room">
+        <h2 class="category-title">🛋️ Living Room</h2>
+        <div class="models-grid">
+            <!-- Sectional Sofa -->
+            <div class="model-card">
+                <model-viewer id="model-1" src="models/sectional-sofa.glb" alt="Sectional Sofa" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Sectional Sofa</h3>
+                    <p>Comfortable L-shaped sofa for modern living spaces</p>
+                    <div class="file-path">models/sectional-sofa.glb</div>
+                    <div class="status loading" id="status-1">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- TV Unit -->
+            <div class="model-card">
+                <model-viewer id="model-2" src="models/tv-unit.glb" alt="TV Unit" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>TV Unit</h3>
+                    <p>Modern entertainment center with storage space</p>
+                    <div class="file-path">models/tv-unit.glb</div>
+                    <div class="status loading" id="status-2">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Coffee Table -->
+            <div class="model-card">
+                <model-viewer id="model-3" src="models/coffee-table.glb" alt="Coffee Table" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Coffee Table</h3>
+                    <p>Stylish center table for your living room</p>
+                    <div class="file-path">models/coffee-table.glb</div>
+                    <div class="status loading" id="status-3">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Accent Chair -->
+            <div class="model-card">
+                <model-viewer id="model-4" src="models/ac-chair.glb" alt="Accent Chair" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Accent Chair</h3>
+                    <p>Elegant chair to complement your living space</p>
+                    <div class="file-path">models/ac-chair.glb</div>
+                    <div class="status loading" id="status-4">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Bookshelf -->
+            <div class="model-card">
+                <model-viewer id="model-5" src="models/bookshelf.glb" alt="Bookshelf" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Bookshelf</h3>
+                    <p>Functional storage for books and decor items</p>
+                    <div class="file-path">models/bookshelf.glb</div>
+                    <div class="status loading" id="status-5">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Photo Frame -->
+            <div class="model-card">
+                <model-viewer id="model-6" src="models/photoframe.glb" alt="Photo Frame" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Photo Frame</h3>
+                    <p>Decorative frame for your cherished memories</p>
+                    <div class="file-path">models/photoframe.glb</div>
+                    <div class="status loading" id="status-6">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Cabinet -->
+            <div class="model-card">
+                <model-viewer id="model-7" src="models/cabinet.glb" alt="Cabinet" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Cabinet</h3>
+                    <p>Storage solution for living room essentials</p>
+                    <div class="file-path">models/cabinet.glb</div>
+                    <div class="status loading" id="status-7">Checking availability...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== KITCHEN ==================== -->
+    <section class="category kitchen">
+        <h2 class="category-title">🍽️ Kitchen</h2>
+        <div class="models-grid">
+            <!-- Kitchen Island -->
+            <div class="model-card">
+                <model-viewer id="model-8" src="models/kitchen-island.glb" alt="Kitchen Island" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Kitchen Island</h3>
+                    <p>Central workspace with additional storage</p>
+                    <div class="file-path">models/kitchen-island.glb</div>
+                    <div class="status loading" id="status-8">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Dining Table -->
+            <div class="model-card">
+                <model-viewer id="model-9" src="models/dining-table.glb" alt="Dining Table" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Dining Table</h3>
+                    <p>Elegant table for family meals and gatherings</p>
+                    <div class="file-path">models/dining-table.glb</div>
+                    <div class="status loading" id="status-9">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Bar Stool -->
+            <div class="model-card">
+                <model-viewer id="model-10" src="models/bar-stool.glb" alt="Bar Stool" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Bar Stool</h3>
+                    <p>Counter-height seating for kitchen islands</p>
+                    <div class="file-path">models/bar-stool.glb</div>
+                    <div class="status loading" id="status-10">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Modern Fridge -->
+            <div class="model-card">
+                <model-viewer id="model-11" src="models/modern-fridge.glb" alt="Modern Fridge" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Modern Fridge</h3>
+                    <p>Stylish refrigerator with advanced features</p>
+                    <div class="file-path">models/modern-fridge.glb</div>
+                    <div class="status loading" id="status-11">Checking availability...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BEDROOM ==================== -->
+    <section class="category bedroom">
+        <h2 class="category-title">🛏️ Bedroom</h2>
+        <div class="models-grid">
+            <!-- Queen Bed Frame -->
+            <div class="model-card">
+                <model-viewer id="model-12" src="models/Queen-Bed-Frame.glb" alt="Queen Bed Frame" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Queen Bed Frame</h3>
+                    <p>Elegant bed frame for comfortable sleeping</p>
+                    <div class="file-path">models/Queen-Bed-Frame.glb</div>
+                    <div class="status loading" id="status-12">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Dresser -->
+            <div class="model-card">
+                <model-viewer id="model-13" src="models/dresser.glb" alt="Dresser" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Dresser</h3>
+                    <p>Storage solution for clothing and accessories</p>
+                    <div class="file-path">models/dresser.glb</div>
+                    <div class="status loading" id="status-13">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Nightstand -->
+            <div class="model-card">
+                <model-viewer id="model-14" src="models/nightstand.glb" alt="Nightstand" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Nightstand</h3>
+                    <p>Bedside table for essentials and decor</p>
+                    <div class="file-path">models/nightstand.glb</div>
+                    <div class="status loading" id="status-14">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Wardrobe -->
+            <div class="model-card">
+                <model-viewer id="model-15" src="models/wardrobe.glb" alt="Wardrobe" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Wardrobe</h3>
+                    <p>Spacious clothing storage unit</p>
+                    <div class="file-path">models/wardrobe.glb</div>
+                    <div class="status loading" id="status-15">Checking availability...</div>
+                </div>
+            </div>
+
+            <!-- Study Table -->
+            <div class="model-card">
+                <model-viewer id="model-16" src="models/studytable.glb" alt="Study Table" camera-controls auto-rotate></model-viewer>
+                <div class="model-info">
+                    <h3>Study Table</h3>
+                    <p>Compact workspace for bedroom study area</p>
+                    <div class="file-path">models/studytable.glb</div>
+                    <div class="status loading" id="status-16">Checking availability...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Model status tracking with local file handling
+        const models = [
+            // Living Room
+            { id: 'model-1', statusId: 'status-1', name: 'sectional-sofa.glb' },
+            { id: 'model-2', statusId: 'status-2', name: 'tv-unit.glb' },
+            { id: 'model-3', statusId: 'status-3', name: 'coffee-table.glb' },
+            { id: 'model-4', statusId: 'status-4', name: 'ac-chair.glb' },
+            { id: 'model-5', statusId: 'status-5', name: 'bookshelf.glb' },
+            { id: 'model-6', statusId: 'status-6', name: 'photoframe.glb' },
+            { id: 'model-7', statusId: 'status-7', name: 'cabinet.glb' },
+            
+            // Kitchen
+            { id: 'model-8', statusId: 'status-8', name: 'kitchen-island.glb' },
+            { id: 'model-9', statusId: 'status-9', name: 'dining-table.glb' },
+            { id: 'model-10', statusId: 'status-10', name: 'bar-stool.glb' },
+            { id: 'model-11', statusId: 'status-11', name: 'modern-fridge.glb' },
+            
+            // Bedroom
+            { id: 'model-12', statusId: 'status-12', name: 'Queen-Bed-Frame.glb' },
+            { id: 'model-13', statusId: 'status-13', name: 'dresser.glb' },
+            { id: 'model-14', statusId: 'status-14', name: 'nightstand.glb' },
+            { id: 'model-15', statusId: 'status-15', name: 'wardrobe.glb' },
+            { id: 'model-16', statusId: 'status-16', name: 'studytable.glb' }
+        ];
+
+        // Initialize model viewers with local file handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight current page
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.id = 'products-link';
+                }
+            });
+
+            // Set up model load/error handlers for local files
+            models.forEach(model => {
+                const viewer = document.getElementById(model.id);
+                const status = document.getElementById(model.statusId);
+
+                if (viewer && status) {
+                    viewer.addEventListener('load', () => {
+                        status.textContent = '✅ Loaded successfully';
+                        status.className = 'status success';
+                    });
+
+                    viewer.addEventListener('error', () => {
+                        status.textContent = '📍 Available locally only';
+                        status.className = 'status info';
+                        viewer.style.display = 'none';
+                        
+                        // Create a friendly message for local files
+                        const message = document.createElement('div');
+                        message.className = 'local-message';
+                        message.innerHTML = `
+                            <h4>3D Model Preview</h4>
+                            <p>This model is available locally for demonstration</p>
+                            <p><small>File: ${model.name}</small></p>
+                            <p><small>📍 Stored in local models/ folder</small></p>
+                        `;
+                        viewer.parentNode.insertBefore(message, viewer.nextSibling);
+                    });
+
+                    // Set timeout to handle cases where error doesn't fire
+                    setTimeout(() => {
+                        if (status.className.includes('loading')) {
+                            status.textContent = '📍 Available locally only';
+                            status.className = 'status info';
+                        }
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<div style="text-align: center; margin: 20px;">
+    <h3>Scan to visit our website</h3>
+    <div id="qrcode"></div>
+    <p>Point your camera at this code</p>
+</div>
+
+<!-- Add this script to your page -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script>
+    // Generate QR code for your website
+    QRCode.toCanvas(document.getElementById('qrcode'), 
+    'https://your-website-address.com', 
+    { width: 200 }, 
+    function(error) {
+        if (error) console.error(error);
+        console.log('QR code generated!');
+    });
+</script>
