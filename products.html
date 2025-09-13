@@ -3,456 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Products - 3D Models Showcase</title>
-    <!-- Load the model-viewer component -->
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <title>Products - Decor8 3D Models</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        }
-        
-        body { 
-            background-color: #f8f9fa; 
-            color: #333; 
-            line-height: 1.6; 
-            padding: 20px; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Navigation */
-        nav { 
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); 
-            padding: 1rem; 
-            margin-bottom: 20px; 
-            border-radius: 10px; 
-            text-align: center; 
-        }
-        
-        nav a { 
-            color: white; 
-            text-decoration: none; 
-            padding: 0.5rem 1rem; 
-            margin: 0 0.5rem; 
-            border-radius: 50px; 
-            display: inline-block; 
-            transition: all 0.3s ease;
-        }
-        
-        nav a:hover { 
-            background-color: rgba(255, 255, 255, 0.2); 
-            transform: translateY(-2px);
-        }
-        
-        #products-link { 
-            background-color: rgba(255, 255, 255, 0.3); 
-            font-weight: bold; 
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
         }
 
-        /* Page Header */
-        .page-header { 
-            text-align: center; 
-            padding: 2rem 1rem; 
-            margin-bottom: 2rem; 
-        }
-        
-        .page-header h1 { 
-            font-size: 2.5rem; 
-            color: #343a40; 
-            margin-bottom: 1rem; 
-        }
-        
-        .page-header p { 
-            font-size: 1.1rem; 
-            color: #6c757d; 
-            max-width: 600px; 
-            margin: 0 auto; 
-        }
-
-        /* Category Sections */
-        .category { 
-            margin: 3rem 0; 
-        }
-        
-        .category-title { 
-            text-align: center; 
-            margin-bottom: 2rem; 
-            font-size: 2rem; 
-            padding-bottom: 0.5rem; 
-            border-bottom: 3px solid; 
-        }
-        
-        .living-room .category-title { 
-            border-color: #6a11cb; 
-            color: #6a11cb; 
-        }
-        
-        .kitchen .category-title { 
-            border-color: #28a745; 
-            color: #28a745; 
-        }
-        
-        .bedroom .category-title { 
-            border-color: #ff6b6b; 
-            color: #ff6b6b; 
-        }
-
-        /* Model Grid */
-        .models-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 2rem; 
-            margin: 0 auto; 
-            max-width: 1200px; 
-        }
-        
-        /* Model Cards */
-        .model-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
             text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
-        .model-card:hover {
+
+        nav {
+            background: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #667eea;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: white;
+            margin: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
-        
-        model-viewer {
+
+        .product-viewer {
             width: 100%;
             height: 250px;
-            margin: 1rem 0;
-            border-radius: 10px;
-            --poster-color: #ffffff00;
-        }
-        
-        .model-info h3 {
-            color: #343a40;
-            margin: 1rem 0 0.5rem 0;
-            font-size: 1.3rem;
-        }
-        
-        .model-info p {
-            color: #6c757d;
-            font-size: 0.95rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
         }
 
-        .status {
-            padding: 0.5rem;
+        .product-info h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .view-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
             border-radius: 5px;
-            font-size: 0.9rem;
-            margin: 0.5rem 0;
+            cursor: pointer;
+            text-decoration: none;
             display: inline-block;
-            background: #d4edda; 
-            color: #155724;
+            transition: opacity 0.3s;
         }
 
-        /* Responsive */
+        .view-button:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: white;
+            margin-top: 2rem;
+        }
+
         @media (max-width: 768px) {
-            .models-grid { 
-                grid-template-columns: 1fr; 
+            .products-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
             }
             
-            nav a { 
-                margin: 0.3rem; 
-                padding: 0.4rem 0.8rem; 
-            }
-            
-            .page-header h1 {
-                font-size: 2rem;
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <header>
+        <h1>Decor8 3D Models</h1>
+    </header>
+
     <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html" id="products-link">Products</a>
-        <a href="login.html">Login</a>
-        <a href="contact.html">Contact</a>
+        <ul>
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="./products.html">Products</a></li>
+            <li><a href="./contact.html">Contact</a></li>
+            <li><a href="./ar-viewer.html">AR Viewer</a></li>
+        </ul>
     </nav>
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <h1>Explore Our 3D Models</h1>
-        <p>Browse our collection of high-quality 3D furniture models</p>
+    <section class="hero">
+        <h2>Explore Our 3D Furniture Collection</h2>
+        <p>Browse our high-quality 3D models available for preview and AR viewing</p>
+    </section>
+
+    <div class="products-grid">
+        <!-- Living Room Furniture -->
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/sectional-sofa.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Sectional Sofa</h3>
+                <p>Modern comfortable sectional sofa for your living room</p>
+                <a href="./ar-viewer.html?model=sectional-sofa" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/cofee-table.glb" scale="0.8 0.8 0.8" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Coffee Table</h3>
+                <p>Elegant coffee table with modern design</p>
+                <a href="./ar-viewer.html?model=cofee-table" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/tv-unit.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>TV Unit</h3>
+                <p>Modern TV unit with storage compartments</p>
+                <a href="./ar-viewer.html?model=tv-unit" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <!-- Bedroom Furniture -->
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/queen-bed-frame.glb" scale="0.4 0.4 0.4" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Queen Bed Frame</h3>
+                <p>Luxurious queen size bed frame</p>
+                <a href="./ar-viewer.html?model=queen-bed-frame" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/wardrobe.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Wardrobe</h3>
+                <p>Spacious wardrobe with mirror</p>
+                <a href="./ar-viewer.html?model=wardrobe" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/dresser.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Dresser</h3>
+                <p>Elegant bedroom dresser with drawers</p>
+                <a href="./ar-viewer.html?model=dresser" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <!-- Kitchen Furniture -->
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/kitchen-island.glb" scale="0.4 0.4 0.4" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Kitchen Island</h3>
+                <p>Modern kitchen island with seating</p>
+                <a href="./ar-viewer.html?model=kitchen-island" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/modern-fridge.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Modern Fridge</h3>
+                <p>Stainless steel smart refrigerator</p>
+                <a href="./ar-viewer.html?model=modern-fridge" class="view-button">View in AR</a>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-viewer">
+                <a-scene embedded>
+                    <a-entity gltf-model="./models/dining-table.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                    <a-sky color="#ECECEC"></a-sky>
+                </a-scene>
+            </div>
+            <div class="product-info">
+                <h3>Dining Table</h3>
+                <p>6-seater modern dining table</p>
+                <a href="./ar-viewer.html?model=dining-table" class="view-button">View in AR</a>
+            </div>
+        </div>
     </div>
 
-    <!-- ==================== LIVING ROOM ==================== -->
-    <section class="category living-room">
-        <h2 class="category-title">🛋️ Living Room</h2>
-        <div class="models-grid">
-            <!-- Sectional Sofa -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1B0kGhAYGi23GDu9o1O4gaUM2FKMEny3R" 
-                    alt="Sectional Sofa" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Sectional Sofa</h3>
-                    <p>Comfortable L-shaped sofa for modern living spaces</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- TV Unit -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=184cdhc-Py-zW0R0q-hcTZ21DVMou8b5m" 
-                    alt="TV Unit" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>TV Unit</h3>
-                    <p>Modern entertainment center with storage space</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Coffee Table -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1_b2P0cLQ1SqmogDexJARDZVwJyttIr9G" 
-                    alt="Coffee Table" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Coffee Table</h3>
-                    <p>Stylish center table for your living room</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Accent Chair -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1pOFHk3ngtYOiY4ZQKXfdarzHoocYIQoj" 
-                    alt="Accent Chair" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Accent Chair</h3>
-                    <p>Elegant chair to complement your living space</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Bookshelf -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=15MmBENVYJSs6Y_DEdUOLg5flzDOgS0a3" 
-                    alt="Bookshelf" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Bookshelf</h3>
-                    <p>Functional storage for books and decor items</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Photo Frame -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1siB_Byjnj_f8Y-NWl9myxy7Riz4Wil0g" 
-                    alt="Photo Frame" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Photo Frame</h3>
-                    <p>Decorative frame for your cherished memories</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Cabinet -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1SH5Na0Qf66wGvpvl_wDUoQQ5tOouqRJJ" 
-                    alt="Cabinet" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Cabinet</h3>
-                    <p>Storage solution for living room essentials</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== KITCHEN ==================== -->
-    <section class="category kitchen">
-        <h2 class="category-title">🍽️ Kitchen</h2>
-        <div class="models-grid">
-            <!-- Kitchen Island -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1CuBDDWNbrKbRM7orb94ix3a3qKaX6lkm" 
-                    alt="Kitchen Island" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Kitchen Island</h3>
-                    <p>Central workspace with additional storage</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Dining Table -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1a1_C-dudNso-EaNTXKOHr3Yiix02Yu79" 
-                    alt="Dining Table" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Dining Table</h3>
-                    <p>Elegant table for family meals and gatherings</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Bar Stool -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1_QkzmjOyHKsqYt7N0FYsXUteOhCeNqo1" 
-                    alt="Bar Stool" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Bar Stool</h3>
-                    <p>Counter-height seating for kitchen islands</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Modern Fridge -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1yLi2rDl-zkqySTwi8rqXoyGHFXNm0apb" 
-                    alt="Modern Fridge" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Modern Fridge</h3>
-                    <p>Stylish refrigerator with advanced features</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== BEDROOM ==================== -->
-    <section class="category bedroom">
-        <h2 class="category-title">🛏️ Bedroom</h2>
-        <div class="models-grid">
-            <!-- Queen Bed Frame -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1UBVjc4YfK7K6zScSJhCirhk9nzTe4-nP" 
-                    alt="Queen Bed Frame" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Queen Bed Frame</h3>
-                    <p>Elegant bed frame for comfortable sleeping</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Dresser -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1Ei_7V-ZBhl9mJ3q2CiNsrry1IgKjDoWd" 
-                    alt="Dresser" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Dresser</h3>
-                    <p>Storage solution for clothing and accessories</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Nightstand -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1DaoYoXknRGcyxVBXHx3YtSqnP4-wNzVs" 
-                    alt="Nightstand" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Nightstand</h3>
-                    <p>Bedside table for essentials and decor</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Wardrobe -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1n1x_8glb5ssfeKwZ4fUApBbizVvwERCL" 
-                    alt="Wardrobe" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Wardrobe</h3>
-                    <p>Spacious clothing storage unit</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-
-            <!-- Study Table -->
-            <div class="model-card">
-                <model-viewer 
-                    src="https://drive.google.com/uc?export=download&id=1YEki827lo4AgJ4UfJhUgcevlA-7vJ6z9" 
-                    alt="Study Table" 
-                    camera-controls 
-                    auto-rotate>
-                </model-viewer>
-                <div class="model-info">
-                    <h3>Study Table</h3>
-                    <p>Compact workspace for bedroom study area</p>
-                    <div class="status">✅ Live 3D Model</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Highlight current page in navigation
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPage = window.location.pathname.split('/').pop();
-            const navLinks = document.querySelectorAll('nav a');
-            
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.id = 'products-link';
-                }
-            });
-        });
-    </script>
+    <footer>
+        <p>&copy; 2024 Decor8. All rights reserved.</p>
+        <p>3D Models available for AR viewing and preview</p>
+    </footer>
 </body>
 </html>
