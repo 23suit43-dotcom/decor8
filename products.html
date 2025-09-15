@@ -3,59 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - Decor8 3D Models</title>
+    <title>Products - Decor8 AR Experience</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f4f4f4; }
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem; text-align: center; }
-        nav { background: #fff; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; }
-        nav a { text-decoration: none; color: #333; font-weight: 500; }
-        nav a:hover { color: #667eea; }
-        .hero { text-align: center; padding: 3rem 1rem; background: white; margin: 1rem; border-radius: 10px; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 2rem; max-width: 1200px; margin: 0 auto; }
-        .product-card { background: white; border-radius: 10px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .product-viewer { width: 100%; height: 250px; border-radius: 8px; margin-bottom: 1rem; background: #f8f9fa; border: 2px solid #e9ecef; }
-        .view-button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1.5rem; border: none; border-radius: 5px; text-decoration: none; display: inline-block; }
-        footer { text-align: center; padding: 2rem; background: #333; color: white; margin-top: 2rem; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-viewer {
+            width: 100%;
+            height: 250px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .product-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .product-info p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .ar-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .ar-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .category-header {
+            text-align: center;
+            margin: 40px 0 20px 0;
+            color: #2c3e50;
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        nav {
+            background: white;
+            padding: 1rem;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background: #3498db;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <header><h1>Decor8 3D Models</h1></header>
-    <nav>
-        <ul>
-            <li><a href="./index.html">Home</a></li>
-            <li><a href="./products.html">Products</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-            <li><a href="./ar-viewer.html">AR Viewer</a></li>
-        </ul>
-    </nav>
+    <div class="container">
+        <header>
+            <h1>Decor8 AR Experience</h1>
+            <p class="subtitle">View our furniture in your space using augmented reality</p>
+        </header>
 
-    <section class="hero">
-        <h2>Explore Our 3D Furniture Collection</h2>
-        <p>Browse our high-quality 3D models available for preview and AR viewing</p>
-    </section>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="ar-viewer.html">AR Viewer</a></li>
+            </ul>
+        </nav>
 
-    <div class="products-grid">
-        <!-- Sectional Sofa -->
-        <div class="product-card">
-            <div class="product-viewer">
-                <a-scene embedded>
-                    <a-entity gltf-model="./models/sectional-sofa.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
-                    <a-sky color="#ECECEC"></a-sky>
-                </a-scene>
+        <!-- Living Room Section -->
+        <div class="category-header">Living Room</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/sectional-sofa.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Sectional Sofa</h3>
+                    <p>Modern comfortable sectional sofa for your living room</p>
+                    <a href="./ar-viewer.html?model=sectional-sofa" class="ar-button">View in AR</a>
+                </div>
             </div>
-            <div class="product-info">
-                <h3>Sectional Sofa</h3>
-                <p>Comfortable L-shaped sofa for modern living spaces</p>
-                <a href="./ar-viewer.html?model=sectional-sofa" class="view-button">View in AR</a>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/cofee-table.glb" scale="0.8 0.8 0.8" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Coffee Table</h3>
+                    <p>Elegant coffee table with modern design</p>
+                    <a href="./ar-viewer.html?model=cofee-table" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/tv-unit.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>TV Unit</h3>
+                    <p>Modern TV unit with storage compartments</p>
+                    <a href="./ar-viewer.html?model=tv-unit" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/bookshelf.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Bookshelf</h3>
+                    <p>Elegant bookshelf for study room</p>
+                    <a href="./ar-viewer.html?model=bookshelf" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/cabinet.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Cabinet</h3>
+                    <p>Storage cabinet for various rooms</p>
+                    <a href="./ar-viewer.html?model=cabinet" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/ac-chair.glb" scale="0.8 0.8 0.8" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>AC Chair</h3>
+                    <p>Comfortable accent chair</p>
+                    <a href="./ar-viewer.html?model=ac-chair" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/bar-stool.glb" scale="0.9 0.9 0.9" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Bar Stool</h3>
+                    <p>Modern bar stool for kitchen island</p>
+                    <a href="./ar-viewer.html?model=bar-stool" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/lounge_chair.glb" scale="0.7 0.7 0.7" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Lounge Chair</h3>
+                    <p>Comfortable lounge chair for relaxation</p>
+                    <a href="./ar-viewer.html?model=lounge_chair" class="ar-button">View in AR</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bedroom Section -->
+        <div class="category-header">Bedroom</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/Queen-Bed-Frame.glb" scale="0.4 0.4 0.4" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Queen Bed Frame</h3>
+                    <p>Luxurious queen size bed frame</p>
+                    <a href="./ar-viewer.html?model=Queen-Bed-Frame" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/wardrobe.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Wardrobe</h3>
+                    <p>Spacious wardrobe with mirror</p>
+                    <a href="./ar-viewer.html?model=wardrobe" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/dresser.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Dresser</h3>
+                    <p>Elegant bedroom dresser with drawers</p>
+                    <a href="./ar-viewer.html?model=dresser" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/nightstand.glb" scale="0.7 0.7 0.7" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Nightstand</h3>
+                    <p>Bedside table with storage</p>
+                    <a href="./ar-viewer.html?model=nightstand" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/studytable.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Study Table</h3>
+                    <p>Modern study desk for home office</p>
+                    <a href="./ar-viewer.html?model=studytable" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/photoframe.glb" scale="1.0 1.0 1.0" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Photo Frame</h3>
+                    <p>Elegant wall photo frame</p>
+                    <a href="./ar-viewer.html?model=photoframe" class="ar-button">View in AR</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kitchen Section -->
+        <div class="category-header">Kitchen & Dining</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/kitchen-island.glb" scale="0.4 0.4 0.4" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Kitchen Island</h3>
+                    <p>Modern kitchen island with seating</p>
+                    <a href="./ar-viewer.html?model=kitchen-island" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/modern-fridge.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Modern Fridge</h3>
+                    <p>Stainless steel smart refrigerator</p>
+                    <a href="./ar-viewer.html?model=modern-fridge" class="ar-button">View in AR</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-viewer">
+                    <a-scene embedded>
+                        <a-entity gltf-model="./models/dining-table.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
+                        <a-sky color="#ECECEC"></a-sky>
+                    </a-scene>
+                </div>
+                <div class="product-info">
+                    <h3>Dining Table</h3>
+                    <p>6-seater modern dining table</p>
+                    <a href="./ar-viewer.html?model=dining-table" class="ar-button">View in AR</a>
+                </div>
             </div>
         </div>
     </div>
-
-    <footer>
-        <p>&copy; 2024 Decor8. All rights reserved.</p>
-    </footer>
 </body>
 </html>
