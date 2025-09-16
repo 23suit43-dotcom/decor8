@@ -3,148 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login / Register - Decor8</title>
+  <title>Login - Decor8</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      display: flex; justify-content: center; align-items: center;
-      height: 100vh; margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
     .container {
-      background: white; padding: 2rem; border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      width: 100%; max-width: 400px;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    .tabs {
-      display: flex; justify-content: space-around;
-      margin-bottom: 1.5rem;
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1rem;
     }
-    .tabs button {
-      flex: 1; padding: 0.8rem; border: none;
-      background: #eee; cursor: pointer; font-weight: bold;
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
-    .tabs button.active {
-      background: #667eea; color: white;
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
-    .form { display: none; }
-    .form.active { display: block; }
-    .form-group { margin-bottom: 1rem; position: relative; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #555; }
-    input {
-      width: 100%; padding: 0.8rem; border: 1px solid #ddd;
-      border-radius: 6px; outline: none;
+    button:hover {
+      opacity: 0.9;
     }
-    input:focus { border-color: #667eea; }
-    .toggle-password {
-      position: absolute; right: 10px; top: 35px;
-      cursor: pointer; font-size: 0.9rem; color: #667eea;
+    .toggle-link {
+      text-align: center;
+      margin-top: 10px;
     }
-    .btn {
-      width: 100%; padding: 0.9rem;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none; border-radius: 6px;
-      color: white; font-weight: bold; cursor: pointer;
+    .toggle-link a {
+      color: #667eea;
+      cursor: pointer;
+      text-decoration: none;
     }
-    .btn:hover { opacity: 0.9; }
-    .extra { text-align: center; margin-top: 1rem; font-size: 0.9rem; }
-    .extra a { color: #667eea; text-decoration: none; }
+    .password-container {
+      display: flex;
+      align-items: center;
+    }
+    .password-container input {
+      flex: 1;
+    }
+    .password-container button {
+      width: auto;
+      margin-left: 5px;
+      padding: 10px;
+      background: #764ba2;
+    }
   </style>
-  <script>
-    function switchTab(tab) {
-      document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
-      document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
-      document.getElementById(tab + "-tab").classList.add("active");
-      document.getElementById(tab).classList.add("active");
-    }
-
-    function togglePassword(id, toggleId) {
-      const field = document.getElementById(id);
-      const toggle = document.getElementById(toggleId);
-      if (field.type === "password") {
-        field.type = "text";
-        toggle.innerText = "Hide";
-      } else {
-        field.type = "password";
-        toggle.innerText = "Show";
-      }
-    }
-
-    function loginUser(e) {
-      e.preventDefault();
-      let email = document.getElementById("login-email").value.trim();
-      let password = document.getElementById("login-password").value;
-      if (!email || !password) {
-        alert("Enter both email and password");
-        return false;
-      }
-      window.location.href = "index.html"; // redirect to dashboard
-    }
-
-    function registerUser(e) {
-      e.preventDefault();
-      let username = document.getElementById("reg-username").value.trim();
-      let email = document.getElementById("reg-email").value.trim();
-      let password = document.getElementById("reg-password").value;
-      let confirm = document.getElementById("reg-confirm").value;
-
-      if (!username || !email || !password || !confirm) {
-        alert("All fields are required!");
-        return false;
-      }
-      if (password !== confirm) {
-        alert("Passwords do not match!");
-        return false;
-      }
-      alert("Registration successful! Please login.");
-      switchTab('login');
-    }
-  </script>
 </head>
 <body>
   <div class="container">
-    <div class="tabs">
-      <button id="login-tab" class="active" onclick="switchTab('login')">Login</button>
-      <button id="register-tab" onclick="switchTab('register')">Register</button>
+    <h2 id="formTitle">Login</h2>
+
+    <form id="loginForm" onsubmit="loginUser(event)">
+      <input type="email" id="email" placeholder="Email" required>
+      <div class="password-container">
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="button" onclick="togglePassword('password')">Show</button>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+
+    <form id="registerForm" onsubmit="registerUser(event)" style="display:none;">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <div class="password-container">
+        <input type="password" id="regPassword" placeholder="Password" required>
+        <button type="button" onclick="togglePassword('regPassword')">Show</button>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="toggle-link">
+      <p id="toggleText">Don’t have an account? <a onclick="showRegister()">Register</a></p>
     </div>
-
-    <!-- Login Form -->
-    <form id="login" class="form active" onsubmit="return loginUser(event)">
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="Enter Email">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="Enter Password">
-        <span id="toggleLoginPass" class="toggle-password" onclick="togglePassword('login-password','toggleLoginPass')">Show</span>
-      </div>
-      <button type="submit" class="btn">Login</button>
-    </form>
-
-    <!-- Register Form -->
-    <form id="register" class="form" onsubmit="return registerUser(event)">
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" id="reg-username" placeholder="Enter Username">
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="reg-email" placeholder="Enter Email">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="reg-password" placeholder="Enter Password">
-        <span id="toggleRegPass" class="toggle-password" onclick="togglePassword('reg-password','toggleRegPass')">Show</span>
-      </div>
-      <div class="form-group">
-        <label>Confirm Password</label>
-        <input type="password" id="reg-confirm" placeholder="Confirm Password">
-        <span id="toggleRegConfirm" class="toggle-password" onclick="togglePassword('reg-confirm','toggleRegConfirm')">Show</span>
-      </div>
-      <button type="submit" class="btn">Register</button>
-    </form>
   </div>
+
+  <script>
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+    }
+
+    function showRegister() {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("registerForm").style.display = "block";
+      document.getElementById("formTitle").innerText = "Register";
+      document.getElementById("toggleText").innerHTML = 
+        'Already have an account? <a onclick="showLogin()">Login</a>';
+    }
+
+    function showLogin() {
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("formTitle").innerText = "Login";
+      document.getElementById("toggleText").innerHTML = 
+        'Don’t have an account? <a onclick="showRegister()">Register</a>';
+    }
+
+    function loginUser(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (email && password) {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "products.html";
+      } else {
+        alert("Please enter valid credentials");
+      }
+    }
+
+    function registerUser(event) {
+      event.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+
+      if (name && email && password) {
+        alert("Registration successful! Please login.");
+        showLogin();
+      } else {
+        alert("Please fill all fields");
+      }
+    }
+  </script>
 </body>
 </html>
 
