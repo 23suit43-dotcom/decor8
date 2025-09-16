@@ -6,7 +6,7 @@
   <title>Login - Decor8</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
       display: flex;
       justify-content: center;
@@ -14,55 +14,92 @@
       height: 100vh;
       margin: 0;
     }
+
     .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 350px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 15px;
+      width: 380px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.8s ease-in-out;
     }
+
     h2 {
       text-align: center;
-      color: #333;
-      margin-bottom: 1rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
     }
+
     input, button {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      background: #667eea;
-      color: white;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
       border: none;
+      font-size: 1rem;
+    }
+
+    input {
+      background: rgba(255, 255, 255, 0.8);
+      outline: none;
+    }
+
+    input:focus {
+      border: 2px solid #667eea;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-weight: bold;
       cursor: pointer;
+      transition: 0.3s;
     }
+
     button:hover {
-      opacity: 0.9;
+      transform: translateY(-2px);
+      opacity: 0.95;
     }
+
     .toggle-link {
       text-align: center;
-      margin-top: 10px;
+      margin-top: 15px;
+      color: #fff;
+      font-size: 0.9rem;
     }
+
     .toggle-link a {
-      color: #667eea;
+      color: #ffdb58;
       cursor: pointer;
       text-decoration: none;
+      font-weight: bold;
     }
+
     .password-container {
       display: flex;
       align-items: center;
     }
+
     .password-container input {
       flex: 1;
     }
+
     .password-container button {
       width: auto;
       margin-left: 5px;
-      padding: 10px;
-      background: #764ba2;
+      padding: 10px 15px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      background: #ffdb58;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -70,6 +107,7 @@
   <div class="container">
     <h2 id="formTitle">Login</h2>
 
+    <!-- Login Form -->
     <form id="loginForm" onsubmit="loginUser(event)">
       <input type="email" id="email" placeholder="Email" required>
       <div class="password-container">
@@ -79,6 +117,7 @@
       <button type="submit">Login</button>
     </form>
 
+    <!-- Register Form -->
     <form id="registerForm" onsubmit="registerUser(event)" style="display:none;">
       <input type="text" id="name" placeholder="Full Name" required>
       <input type="email" id="regEmail" placeholder="Email" required>
@@ -123,7 +162,11 @@
 
       if (email && password) {
         localStorage.setItem("loggedIn", "true");
-        window.location.href = "products.html";
+
+        // check redirectAfterLogin
+        const redirectPage = localStorage.getItem("redirectAfterLogin") || "index.html";
+        localStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirectPage;
       } else {
         alert("Please enter valid credentials");
       }
@@ -145,4 +188,3 @@
   </script>
 </body>
 </html>
-
