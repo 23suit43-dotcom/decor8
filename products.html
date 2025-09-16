@@ -18,8 +18,16 @@
     /* Header */
     .header { text-align: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
 
+    /* Section Titles */
+    h2.section-title {
+      margin: 3rem 0 1rem;
+      text-align: center;
+      color: #2c3e50;
+      font-size: 2rem;
+    }
+
     /* Products */
-    .products-container { max-width: 1300px; margin: 2rem auto; padding: 0 1rem; }
+    .products-container { max-width: 1300px; margin: 0 auto; padding: 0 1rem; }
     .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 
     /* Product Card */
@@ -59,11 +67,13 @@
     <p>Browse our collection of high-quality 3D furniture models</p>
   </div>
 
-  <!-- Products Grid -->
   <div class="products-container">
+
+    <!-- Living Room -->
+    <h2 class="section-title">Living Room</h2>
     <div class="products-grid">
 
-      <!-- 1 AC Chair -->
+      <!-- AC Chair -->
       <div class="product-card">
         <div class="product-viewer">
           <model-viewer src="./models/ac-chair.glb" alt="AC Chair" ar auto-rotate camera-controls></model-viewer>
@@ -75,7 +85,7 @@
         </div>
       </div>
 
-      <!-- 2 Bookshelf -->
+      <!-- Bookshelf -->
       <div class="product-card">
         <div class="product-viewer">
           <model-viewer src="./models/bookshelf.glb" alt="Bookshelf" ar auto-rotate camera-controls></model-viewer>
@@ -87,31 +97,7 @@
         </div>
       </div>
 
-      <!-- 3 Bar Stool -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/bar-stool.glb" alt="Bar Stool" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Bar Stool</h3>
-          <p>Stylish bar stool for kitchen counters.</p>
-          <a href="./models/bar-stool.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 4 Cabinet -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/cabinet.glb" alt="Cabinet" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Cabinet</h3>
-          <p>Compact cabinet with storage space.</p>
-          <a href="./models/cabinet.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 5 Coffee Table -->
+      <!-- Coffee Table -->
       <div class="product-card">
         <div class="product-viewer">
           <model-viewer src="./models/coffee-table.glb" alt="Coffee Table" ar auto-rotate camera-controls></model-viewer>
@@ -123,103 +109,7 @@
         </div>
       </div>
 
-      <!-- 6 Dining Table -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/dining-table.glb" alt="Dining Table" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Dining Table</h3>
-          <p>Stylish dining table perfect for family meals.</p>
-          <a href="./models/dining-table.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 7 Dresser -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/dresser.glb" alt="Dresser" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Dresser</h3>
-          <p>Modern dresser with multiple drawers.</p>
-          <a href="./models/dresser.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 8 Kitchen Island -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/kitchen-island.glb" alt="Kitchen Island" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Kitchen Island</h3>
-          <p>Functional kitchen island with storage.</p>
-          <a href="./models/kitchen-island.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 9 Modern Fridge -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/modern-fridge.glb" alt="Modern Fridge" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Modern Fridge</h3>
-          <p>Stylish refrigerator with large capacity.</p>
-          <a href="./models/modern-fridge.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 10 Nightstand -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/nightstand.glb" alt="Nightstand" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Nightstand</h3>
-          <p>Compact nightstand for your bedroom.</p>
-          <a href="./models/nightstand.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 11 Photo Frame -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/photoframe.glb" alt="Photo Frame" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Photo Frame</h3>
-          <p>Elegant photo frame for your favorite memories.</p>
-          <a href="./models/photoframe.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 12 Queen Bed Frame -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/Queen-bed-frame.glb" alt="Queen Bed Frame" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Queen Bed Frame</h3>
-          <p>Comfortable queen size bed frame.</p>
-          <a href="./models/Queen-bed-frame.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 13 Study Table -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/studytable.glb" alt="Study Table" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Study Table</h3>
-          <p>Spacious study table with storage options.</p>
-          <a href="./models/studytable.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- 14 TV Unit -->
+      <!-- TV Unit -->
       <div class="product-card">
         <div class="product-viewer">
           <model-viewer src="./models/tv-unit.glb" alt="TV Unit" ar auto-rotate camera-controls></model-viewer>
@@ -231,7 +121,61 @@
         </div>
       </div>
 
-      <!-- 15 Wardrobe -->
+      <!-- Photo Frame -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/photoframe.glb" alt="Photo Frame" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Photo Frame</h3>
+          <p>Elegant photo frame for your favorite memories.</p>
+          <a href="./models/photoframe.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bedroom -->
+    <h2 class="section-title">Bedroom</h2>
+    <div class="products-grid">
+
+      <!-- Queen Bed Frame -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/queen-bed-frame.glb" alt="Queen Bed Frame" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Queen Bed Frame</h3>
+          <p>Comfortable queen size bed frame.</p>
+          <a href="./models/queen-bed-frame.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Nightstand -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/nightstand.glb" alt="Nightstand" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Nightstand</h3>
+          <p>Compact nightstand for your bedroom.</p>
+          <a href="./models/nightstand.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Dresser -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/dresser.glb" alt="Dresser" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Dresser</h3>
+          <p>Modern dresser with multiple drawers.</p>
+          <a href="./models/dresser.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Wardrobe -->
       <div class="product-card">
         <div class="product-viewer">
           <model-viewer src="./models/wardrobe.glb" alt="Wardrobe" ar auto-rotate camera-controls></model-viewer>
@@ -244,6 +188,85 @@
       </div>
 
     </div>
+
+    <!-- Kitchen -->
+    <h2 class="section-title">Kitchen</h2>
+    <div class="products-grid">
+
+      <!-- Bar Stool -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/bar-stool.glb" alt="Bar Stool" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Bar Stool</h3>
+          <p>Stylish bar stool for kitchen counters.</p>
+          <a href="./models/bar-stool.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Cabinet -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/cabinet.glb" alt="Cabinet" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Cabinet</h3>
+          <p>Compact cabinet with storage space.</p>
+          <a href="./models/cabinet.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Dining Table -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/dining-table.glb" alt="Dining Table" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Dining Table</h3>
+          <p>Stylish dining table perfect for family meals.</p>
+          <a href="./models/dining-table.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Kitchen Island -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/kitchen-island.glb" alt="Kitchen Island" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Kitchen Island</h3>
+          <p>Functional kitchen island with storage.</p>
+          <a href="./models/kitchen-island.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Modern Fridge -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/modern-fridge.glb" alt="Modern Fridge" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Modern Fridge</h3>
+          <p>Stylish refrigerator with large capacity.</p>
+          <a href="./models/modern-fridge.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+      <!-- Study Table -->
+      <div class="product-card">
+        <div class="product-viewer">
+          <model-viewer src="./models/studytable.glb" alt="Study Table" ar auto-rotate camera-controls></model-viewer>
+        </div>
+        <div class="product-info">
+          <h3>Study Table</h3>
+          <p>Spacious study table with storage options.</p>
+          <a href="./models/studytable.glb" class="ar-button">View in AR</a>
+        </div>
+      </div>
+
+    </div>
   </div>
 </body>
 </html>
+
