@@ -1,151 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Furniture AR Showroom</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-        /* General Styles */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        
-        /* Navigation Bar */
-        nav {
-            background-color: #2c3e50;
-            padding: 1rem 0;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 20px;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
-        }
-        
-        nav a:hover {
-            color: #3498db;
-        }
-        
-        /* Main Content */
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-        
-        /* AR Viewer */
-        model-viewer {
-            width: 100%;
-            height: 500px;
-            margin: 2rem auto;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* AR Button */
-        .ar-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            border-radius: 50px;
-            padding: 12px 24px;
-            font-weight: bold;
-            color: #0066cc;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .ar-button:hover {
-            background: white;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-        
-        footer p {
-            margin: 0;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            nav a {
-                margin: 0 10px;
-                font-size: 1rem;
-            }
-            
-            model-viewer {
-                height: 400px;
-            }
-            
-            .container {
-                padding: 0 15px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decor8 - Home</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f8f9fa; }
+
+    /* Navigation */
+    nav { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; }
+    nav a { text-decoration: none; color: #333; font-weight: 500; padding: 0.5rem 1rem; }
+    nav a:hover { color: #667eea; }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 90vh;
+      overflow: hidden;
+    }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .hero img.active {
+      opacity: 1;
+    }
+    .hero-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.7);
+    }
+    .hero-text h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .hero-text p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .hero-text a {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 12px 24px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero-text a:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: #fff;
+      color: #555;
+      border-top: 1px solid #ddd;
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="login.html">Login</a>
-        <a href="contact.html">Contact</a>
-    </nav>
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 
-    <!-- Main Content - YOUR AR VIEWER IS HERE -->
-    <div class="container">
-        <h1>My AR Furniture</h1>
-        <p>See how this chair looks in your home before you buy.</p>
+  <!-- Hero Section with Slider -->
+  <div class="hero">
+    <img src="images/living-room.jpg" class="active" alt="Living Room">
+    <img src="images/bedroom.jpg" alt="Bedroom">
+    <img src="images/kitchen.jpg" alt="Kitchen">
+    <img src="images/home-interior.jpg" alt="Modern Interior">
 
-        <!-- THE MODEL-VIEWER TAG - UNCHANGED -->
-        <model-viewer 
-            src="models/lounge_chair.glb"
-            alt="A 3D model of a modern chair"
-            ar 
-            ar-modes="webxr scene-viewer quick-look"
-            environment-image="neutral" 
-            shadow-intensity="1"
-            camera-controls 
-            touch-action="pan-y"
-            auto-rotate
-            rotation-per-second="30deg"
-        >
-            <button slot="ar-button" class="ar-button">
-                👆 View in Your Space
-            </button>
-        </model-viewer>
-
-        <p><strong>Description:</strong> This handcrafted chair is perfect for your dining room or office.</p>
+    <div class="hero-text">
+      <h1>Welcome to Decor8</h1>
+      <p>Transform Your Home with Smart AR Decor</p>
+      <a href="products.html">Explore Products</a>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 My Furniture AR. All rights reserved.</p>
-    </footer>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Decor8. All rights reserved.</p>
+  </footer>
+
+  <!-- Slider Script -->
+  <script>
+    let slides = document.querySelectorAll(".hero img");
+    let index = 0;
+
+    function showSlide() {
+      slides.forEach((img, i) => {
+        img.classList.remove("active");
+        if (i === index) {
+          img.classList.add("active");
+        }
+      });
+      index = (index + 1) % slides.length;
+    }
+
+    setInterval(showSlide, 4000); // Change image every 4 seconds
+  </script>
 </body>
 </html>
+
+
 
