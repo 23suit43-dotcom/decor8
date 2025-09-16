@@ -59,7 +59,8 @@
         alert("Passwords do not match!");
         return false;
       }
-      alert("Login Successful!");
+      // ✅ Redirect to home dashboard after login
+      window.location.href = "index.html";
       return true;
     }
   </script>
