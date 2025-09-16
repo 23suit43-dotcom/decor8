@@ -6,130 +6,145 @@
   <title>Login - Decor8</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f8f9fa;
+    }
+    .left {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 10px;
+      padding: 10px;
+    }
+    .left img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .right {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      background: #f8f9fa;
     }
-
-    .container {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 2.5rem;
-      border-radius: 15px;
-      width: 380px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.8s ease-in-out;
+    .form-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
     }
-
     h2 {
-      text-align: center;
-      color: #fff;
       margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
+      font-size: 24px;
+      color: #333;
     }
-
-    input, button {
+    input[type="email"],
+    input[type="password"] {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
-
-    input {
-      background: rgba(255, 255, 255, 0.8);
-      outline: none;
-    }
-
-    input:focus {
-      border: 2px solid #667eea;
-    }
-
-    button {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      opacity: 0.95;
-    }
-
-    .toggle-link {
-      text-align: center;
-      margin-top: 15px;
-      color: #fff;
-      font-size: 0.9rem;
-    }
-
-    .toggle-link a {
-      color: #ffdb58;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
     .password-container {
       display: flex;
       align-items: center;
     }
-
     .password-container input {
       flex: 1;
     }
-
     .password-container button {
-      width: auto;
       margin-left: 5px;
-      padding: 10px 15px;
-      font-size: 0.8rem;
-      border-radius: 6px;
-      background: #ffdb58;
-      color: #333;
+      padding: 10px;
+      border: none;
+      background: #667eea;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #555;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background: #e63946;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background: #d62828;
+    }
+    .toggle-link {
+      margin-top: 1rem;
+      font-size: 14px;
+    }
+    .toggle-link a {
+      color: #e63946;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2 id="formTitle">Login</h2>
+  <!-- Left: Image grid -->
+  <div class="left">
+    <img src="images/cupboard.jpg" alt="Cupboard">
+    <img src="images/tvstand.jpg" alt="TV Stand">
+    <img src="images/chair.jpg" alt="Chair">
+    <img src="images/fridge.jpg" alt="Fridge">
+    <img src="images/dining.jpg" alt="Dining">
+    <img src="images/sofa.jpg" alt="Sofa">
+  </div>
 
-    <!-- Login Form -->
-    <form id="loginForm" onsubmit="loginUser(event)">
-      <input type="email" id="email" placeholder="Email" required>
-      <div class="password-container">
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="button" onclick="togglePassword('password')">Show</button>
+  <!-- Right: Login/Register Form -->
+  <div class="right">
+    <div class="form-container">
+      <h2 id="formTitle">Login</h2>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="loginUser(event)">
+        <input type="email" id="email" placeholder="Email" required>
+        <div class="password-container">
+          <input type="password" id="password" placeholder="Password" required>
+          <button type="button" onclick="togglePassword('password')">Show</button>
+        </div>
+        <div class="remember-me">
+          <input type="checkbox" id="rememberMe"> <label for="rememberMe">&nbsp;Remember me</label>
+        </div>
+        <button type="submit">Log in</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" onsubmit="registerUser(event)" style="display:none;">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="regEmail" placeholder="Email" required>
+        <div class="password-container">
+          <input type="password" id="regPassword" placeholder="Password" required>
+          <button type="button" onclick="togglePassword('regPassword')">Show</button>
+        </div>
+        <button type="submit">Register</button>
+      </form>
+
+      <div class="toggle-link">
+        <p id="toggleText">Don’t have an account? <a onclick="showRegister()">Register Now</a></p>
       </div>
-      <button type="submit">Login</button>
-    </form>
-
-    <!-- Register Form -->
-    <form id="registerForm" onsubmit="registerUser(event)" style="display:none;">
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="email" id="regEmail" placeholder="Email" required>
-      <div class="password-container">
-        <input type="password" id="regPassword" placeholder="Password" required>
-        <button type="button" onclick="togglePassword('regPassword')">Show</button>
-      </div>
-      <button type="submit">Register</button>
-    </form>
-
-    <div class="toggle-link">
-      <p id="toggleText">Don’t have an account? <a onclick="showRegister()">Register</a></p>
     </div>
   </div>
 
@@ -143,7 +158,7 @@
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("registerForm").style.display = "block";
       document.getElementById("formTitle").innerText = "Register";
-      document.getElementById("toggleText").innerHTML = 
+      document.getElementById("toggleText").innerHTML =
         'Already have an account? <a onclick="showLogin()">Login</a>';
     }
 
@@ -151,22 +166,24 @@
       document.getElementById("loginForm").style.display = "block";
       document.getElementById("registerForm").style.display = "none";
       document.getElementById("formTitle").innerText = "Login";
-      document.getElementById("toggleText").innerHTML = 
-        'Don’t have an account? <a onclick="showRegister()">Register</a>';
+      document.getElementById("toggleText").innerHTML =
+        'Don’t have an account? <a onclick="showRegister()">Register Now</a>';
     }
 
     function loginUser(event) {
       event.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      const remember = document.getElementById("rememberMe").checked;
 
       if (email && password) {
         localStorage.setItem("loggedIn", "true");
-
-        // check redirectAfterLogin
-        const redirectPage = localStorage.getItem("redirectAfterLogin") || "index.html";
-        localStorage.removeItem("redirectAfterLogin");
-        window.location.href = redirectPage;
+        if (remember) {
+          localStorage.setItem("rememberEmail", email);
+        } else {
+          localStorage.removeItem("rememberEmail");
+        }
+        window.location.href = "products.html";
       } else {
         alert("Please enter valid credentials");
       }
@@ -185,6 +202,16 @@
         alert("Please fill all fields");
       }
     }
+
+    // Auto-fill email if remembered
+    window.onload = function() {
+      const remembered = localStorage.getItem("rememberEmail");
+      if (remembered) {
+        document.getElementById("email").value = remembered;
+        document.getElementById("rememberMe").checked = true;
+      }
+    }
   </script>
 </body>
 </html>
+
