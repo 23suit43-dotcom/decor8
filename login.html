@@ -1,209 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Decor8</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Decor8</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; margin: 0;
+    }
+    .login-container {
+      background: white; padding: 2rem; border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      width: 100%; max-width: 400px;
+    }
+    h2 { text-align: center; margin-bottom: 1.5rem; color: #333; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #555; }
+    input {
+      width: 100%; padding: 0.8rem; border: 1px solid #ddd;
+      border-radius: 6px; outline: none;
+    }
+    input:focus { border-color: #667eea; }
+    .btn {
+      width: 100%; padding: 0.9rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none; border-radius: 6px;
+      color: white; font-weight: bold; cursor: pointer;
+    }
+    .btn:hover { opacity: 0.9; }
+    .extra { text-align: center; margin-top: 1rem; font-size: 0.9rem; }
+    .extra a { color: #667eea; text-decoration: none; }
+    .extra a:hover { text-decoration: underline; }
+  </style>
+  <script>
+    function validateForm(e) {
+      e.preventDefault();
+      let username = document.getElementById("username").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let password = document.getElementById("password").value;
+      let confirm = document.getElementById("confirm").value;
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .login-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo h1 {
-            color: #333;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-        .logo span {
-            color: #667eea;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn-login {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-        }
-
-        .separator {
-            text-align: center;
-            margin: 1.5rem 0;
-            color: #666;
-            position: relative;
-        }
-
-        .separator::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e9ecef;
-        }
-
-        .separator span {
-            background: white;
-            padding: 0 1rem;
-            position: relative;
-        }
-
-        .social-login {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .social-btn:hover {
-            border-color: #667eea;
-            transform: translateY(-1px);
-        }
-
-        .signup-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .signup-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 1.5rem;
-            }
-            
-            .social-login {
-                flex-direction: column;
-            }
-        }
-    </style>
+      if (!username || !email || !password || !confirm) {
+        alert("All fields are required!");
+        return false;
+      }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        alert("Enter a valid email!");
+        return false;
+      }
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters!");
+        return false;
+      }
+      if (password !== confirm) {
+        alert("Passwords do not match!");
+        return false;
+      }
+      alert("Login Successful!");
+      return true;
+    }
+  </script>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo">
-            <h1>Decor<span>8</span></h1>
-        </div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-
-            <button type="submit" class="btn-login">Sign In</button>
-        </form>
-
-        <div class="separator">
-            <span>or continue with</span>
-        </div>
-
-        <div class="social-login">
-            <button type="button" class="social-btn">Google</button>
-            <button type="button" class="social-btn">Facebook</button>
-        </div>
-
-        <div class="signup-link">
-            Don't have an account? <a href="#">Sign up here</a>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (email && password) {
-                alert('Login successful! Redirecting to homepage...');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            }
-        });
-    </script>
+  <div class="login-container">
+    <h2>Login / Register</h2>
+    <form onsubmit="return validateForm(event)">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter Username">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter Email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter Password">
+      </div>
+      <div class="form-group">
+        <label for="confirm">Confirm Password</label>
+        <input type="password" id="confirm" placeholder="Confirm Password">
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <div class="extra">
+        <p>Forgot Password? <a href="#">Reset here</a></p>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
