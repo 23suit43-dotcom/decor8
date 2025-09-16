@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Decor8</title>
+  <title>Login / Register - Decor8</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,19 +11,35 @@
       display: flex; justify-content: center; align-items: center;
       height: 100vh; margin: 0;
     }
-    .login-container {
+    .container {
       background: white; padding: 2rem; border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       width: 100%; max-width: 400px;
     }
-    h2 { text-align: center; margin-bottom: 1.5rem; color: #333; }
-    .form-group { margin-bottom: 1rem; }
+    .tabs {
+      display: flex; justify-content: space-around;
+      margin-bottom: 1.5rem;
+    }
+    .tabs button {
+      flex: 1; padding: 0.8rem; border: none;
+      background: #eee; cursor: pointer; font-weight: bold;
+    }
+    .tabs button.active {
+      background: #667eea; color: white;
+    }
+    .form { display: none; }
+    .form.active { display: block; }
+    .form-group { margin-bottom: 1rem; position: relative; }
     label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #555; }
     input {
       width: 100%; padding: 0.8rem; border: 1px solid #ddd;
       border-radius: 6px; outline: none;
     }
     input:focus { border-color: #667eea; }
+    .toggle-password {
+      position: absolute; right: 10px; top: 35px;
+      cursor: pointer; font-size: 0.9rem; color: #667eea;
+    }
     .btn {
       width: 100%; padding: 0.9rem;
       background: linear-gradient(135deg, #667eea, #764ba2);
@@ -33,63 +49,102 @@
     .btn:hover { opacity: 0.9; }
     .extra { text-align: center; margin-top: 1rem; font-size: 0.9rem; }
     .extra a { color: #667eea; text-decoration: none; }
-    .extra a:hover { text-decoration: underline; }
   </style>
   <script>
-    function validateForm(e) {
+    function switchTab(tab) {
+      document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".form").forEach(f => f.classList.remove("active"));
+      document.getElementById(tab + "-tab").classList.add("active");
+      document.getElementById(tab).classList.add("active");
+    }
+
+    function togglePassword(id, toggleId) {
+      const field = document.getElementById(id);
+      const toggle = document.getElementById(toggleId);
+      if (field.type === "password") {
+        field.type = "text";
+        toggle.innerText = "Hide";
+      } else {
+        field.type = "password";
+        toggle.innerText = "Show";
+      }
+    }
+
+    function loginUser(e) {
       e.preventDefault();
-      let username = document.getElementById("username").value.trim();
-      let email = document.getElementById("email").value.trim();
-      let password = document.getElementById("password").value;
-      let confirm = document.getElementById("confirm").value;
+      let email = document.getElementById("login-email").value.trim();
+      let password = document.getElementById("login-password").value;
+      if (!email || !password) {
+        alert("Enter both email and password");
+        return false;
+      }
+      window.location.href = "index.html"; // redirect to dashboard
+    }
+
+    function registerUser(e) {
+      e.preventDefault();
+      let username = document.getElementById("reg-username").value.trim();
+      let email = document.getElementById("reg-email").value.trim();
+      let password = document.getElementById("reg-password").value;
+      let confirm = document.getElementById("reg-confirm").value;
 
       if (!username || !email || !password || !confirm) {
         alert("All fields are required!");
-        return false;
-      }
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-        alert("Enter a valid email!");
-        return false;
-      }
-      if (password.length < 6) {
-        alert("Password must be at least 6 characters!");
         return false;
       }
       if (password !== confirm) {
         alert("Passwords do not match!");
         return false;
       }
-      // ✅ Redirect to home dashboard after login
-      window.location.href = "index.html";
-      return true;
+      alert("Registration successful! Please login.");
+      switchTab('login');
     }
   </script>
 </head>
 <body>
-  <div class="login-container">
-    <h2>Login / Register</h2>
-    <form onsubmit="return validateForm(event)">
+  <div class="container">
+    <div class="tabs">
+      <button id="login-tab" class="active" onclick="switchTab('login')">Login</button>
+      <button id="register-tab" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login" class="form active" onsubmit="return loginUser(event)">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter Username">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="Enter Email">
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter Email">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter Password">
-      </div>
-      <div class="form-group">
-        <label for="confirm">Confirm Password</label>
-        <input type="password" id="confirm" placeholder="Confirm Password">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Enter Password">
+        <span id="toggleLoginPass" class="toggle-password" onclick="togglePassword('login-password','toggleLoginPass')">Show</span>
       </div>
       <button type="submit" class="btn">Login</button>
-      <div class="extra">
-        <p>Forgot Password? <a href="#">Reset here</a></p>
+    </form>
+
+    <!-- Register Form -->
+    <form id="register" class="form" onsubmit="return registerUser(event)">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="reg-username" placeholder="Enter Username">
       </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="reg-email" placeholder="Enter Email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Enter Password">
+        <span id="toggleRegPass" class="toggle-password" onclick="togglePassword('reg-password','toggleRegPass')">Show</span>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="reg-confirm" placeholder="Confirm Password">
+        <span id="toggleRegConfirm" class="toggle-password" onclick="togglePassword('reg-confirm','toggleRegConfirm')">Show</span>
+      </div>
+      <button type="submit" class="btn">Register</button>
     </form>
   </div>
 </body>
 </html>
+
