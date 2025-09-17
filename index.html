@@ -19,36 +19,44 @@
       background: rgba(0,0,0,0.5); display: flex; flex-direction: column;
       justify-content: center; align-items: center; color: white;
     }
-    header .overlay h1 {
-      font-size: 3rem; margin: 0; font-family: 'Georgia', serif;
-    }
-    header .overlay p {
-      font-size: 1.5rem; margin-top: 1rem; font-style: italic;
-      font-family: 'Cursive', sans-serif; color: #f8e8ff;
-    }
+    header .overlay h1 { font-size: 3rem; margin: 0; font-family: 'Georgia', serif; }
+    header .overlay p { font-size: 1.5rem; margin-top: 1rem; font-style: italic;
+      font-family: 'Cursive', sans-serif; color: #f8e8ff; }
     .section { padding: 3rem 2rem; text-align: center; }
     .section h2 { margin-bottom: 1.5rem; }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
-    .card:hover { transform: scale(1.03); }
-    .card img { width: 100%; height: 200px; border-radius: 8px; margin-bottom: 1rem; object-fit: cover; }
+    .card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; }
+    .card img { width: 100%; border-radius: 8px; margin-bottom: 1rem; }
     footer { background: #333; color: white; padding: 1rem; text-align: center; margin-top: 2rem; }
 
-    /* Login Modal */
-    .modal {
+    /* Popup */
+    .popup {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); justify-content: center; align-items: center;
+      background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
     }
-    .modal-content {
-      background: white; padding: 2rem; border-radius: 10px; width: 300px; text-align: center;
+    .popup-content {
+      background: white; padding: 2rem; border-radius: 10px; width: 320px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: left;
     }
-    .modal-content input {
-      width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;
+    .popup h2 { margin-top: 0; text-align: center; }
+    .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
+      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px;
     }
-    .modal-content button {
-      background: #764ba2; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;
+    .popup button {
+      width: 100%; padding: 10px; margin-top: 10px;
+      background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer;
     }
-    .modal-content button:hover { opacity: 0.9; }
+    .popup button:hover { opacity: 0.9; }
+    .popup .close { float: right; cursor: pointer; font-size: 18px; }
+    .toggle-link { color: #667eea; cursor: pointer; font-size: 14px; display: block; margin-top: 10px; text-align: center; }
+    .remember { display: flex; align-items: center; font-size: 14px; }
+    .remember input { margin-right: 6px; }
+    .password-box { position: relative; }
+    .password-box input { width: 100%; }
+    .toggle-password {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 13px; color: #667eea;
+    }
   </style>
 </head>
 <body>
@@ -56,7 +64,7 @@
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="#">Products</a></li>
+      <li><a href="#" onclick="goToProducts()">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><button class="logout-btn" onclick="logoutUser()">Logout</button></li>
     </ul>
@@ -81,15 +89,15 @@
   <div class="section">
     <h2>Explore Our Rooms</h2>
     <div class="cards">
-      <div class="card" onclick="goToSection('living')">
+      <div class="card" onclick="goToRoom('living')">
         <img src="images/living_room.jpg" alt="Living Room">
         <h3>Living Room</h3>
       </div>
-      <div class="card" onclick="goToSection('bedroom')">
+      <div class="card" onclick="goToRoom('bedroom')">
         <img src="images/bed_room.jpg" alt="Bedroom">
         <h3>Bedroom</h3>
       </div>
-      <div class="card" onclick="goToSection('kitchen')">
+      <div class="card" onclick="goToRoom('kitchen')">
         <img src="images/kitchen.jpg" alt="Kitchen">
         <h3>Kitchen</h3>
       </div>
@@ -101,59 +109,128 @@
     <p>&copy; 2025 Decor8 | Designed by Nandhana Shri & Nithyasri - Madurai</p>
   </footer>
 
-  <!-- Login Modal -->
-  <div class="modal" id="loginModal">
-    <div class="modal-content">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="loginUser()">Login</button>
-      <br><br>
-      <button onclick="closeModal()">Cancel</button>
+  <!-- Popup Login/Register -->
+  <div id="loginPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <h2 id="formTitle">Login</h2>
+      
+      <!-- Login Form -->
+      <div id="loginForm">
+        <input type="text" id="loginEmail" placeholder="Email" required>
+        <div class="password-box">
+          <input type="password" id="loginPassword" placeholder="Password" required>
+          <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
+        </div>
+        <label class="remember"><input type="checkbox" id="rememberMe"> Remember me</label>
+        <button onclick="loginUser()">Login</button>
+        <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" style="display:none;">
+        <input type="text" id="regName" placeholder="Full Name" required>
+        <input type="email" id="regEmail" placeholder="Email" required>
+        <div class="password-box">
+          <input type="password" id="regPassword" placeholder="Password" required>
+          <span class="toggle-password" onclick="togglePassword('regPassword', this)">Show</span>
+        </div>
+        <button onclick="registerUser()">Register</button>
+        <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
+      </div>
     </div>
   </div>
 
   <script>
-    function goToSection(section) {
+    let redirectRoom = null;
+
+    function goToProducts() {
       if (!localStorage.getItem("loggedIn")) {
-        localStorage.setItem("redirectAfterLogin", "products.html#" + section);
-        document.getElementById("loginModal").style.display = "flex";
+        redirectRoom = "products";
+        document.getElementById("loginPopup").style.display = "flex";
       } else {
-        window.location.href = "products.html#" + section;
+        window.location.href = "products.html";
+      }
+    }
+
+    function goToRoom(room) {
+      if (!localStorage.getItem("loggedIn")) {
+        redirectRoom = room;
+        document.getElementById("loginPopup").style.display = "flex";
+      } else {
+        window.location.href = "products.html#" + room;
+      }
+    }
+
+    function closePopup() {
+      document.getElementById("loginPopup").style.display = "none";
+    }
+
+    function switchToRegister() {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("registerForm").style.display = "block";
+      document.getElementById("formTitle").innerText = "Register";
+    }
+
+    function switchToLogin() {
+      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("formTitle").innerText = "Login";
+    }
+
+    function togglePassword(inputId, el) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        el.innerText = "Hide";
+      } else {
+        input.type = "password";
+        el.innerText = "Show";
       }
     }
 
     function loginUser() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-
-      if (username && password) {
-        localStorage.setItem("loggedIn", true);
-        const redirectPage = localStorage.getItem("redirectAfterLogin");
-        if (redirectPage) {
-          localStorage.removeItem("redirectAfterLogin");
-          closeModal();
-          window.location.href = redirectPage;
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      if (email && password) {
+        if (document.getElementById("rememberMe").checked) {
+          localStorage.setItem("loggedIn", email);
         } else {
-          closeModal();
-          window.location.href = "index.html";
+          sessionStorage.setItem("loggedIn", email);
+        }
+        closePopup();
+        if (redirectRoom === "products") {
+          window.location.href = "products.html";
+        } else if (redirectRoom) {
+          window.location.href = "products.html#" + redirectRoom;
         }
       } else {
-        alert("Please enter username and password!");
+        alert("Please enter email and password.");
       }
     }
 
-    function closeModal() {
-      document.getElementById("loginModal").style.display = "none";
+    function registerUser() {
+      const name = document.getElementById("regName").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      if (name && email && password) {
+        alert("Registered successfully! Please login now.");
+        switchToLogin();
+      } else {
+        alert("Please fill all fields.");
+      }
     }
 
     function logoutUser() {
       localStorage.removeItem("loggedIn");
+      sessionStorage.removeItem("loggedIn");
       window.location.href = "index.html";
     }
   </script>
 </body>
 </html>
+
+
 
 
 
