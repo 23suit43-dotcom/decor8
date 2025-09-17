@@ -3,113 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Decor8 - Contact</title>
+  <title>Contact Us - Decor8</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
     }
-    .contact-card {
-      background: white;
+    .contact-container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      width: 400px;
-      max-width: 95%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
     }
-    .contact-card img {
+    .contact-container img {
       width: 100%;
       height: 180px;
       object-fit: cover;
     }
-    .contact-card .content {
+    .contact-container .content {
       padding: 20px;
-      text-align: center;
     }
-    .contact-card h2 {
-      margin: 10px 0;
-      font-size: 1.8rem;
-      color: #333;
+    .contact-container h2 {
+      text-align: center;
+      margin-bottom: 10px;
     }
     .slogan {
-      font-family: "Cursive", sans-serif;
+      text-align: center;
       font-style: italic;
-      color: #764ba2;
+      font-weight: bold;
+      color: #6a1b9a;
       margin-bottom: 15px;
     }
     .contact-info {
-      text-align: left;
+      margin-bottom: 20px;
       font-size: 14px;
-      margin-bottom: 15px;
+      line-height: 1.6;
     }
-    .contact-info p { margin: 4px 0; }
-    form { text-align: left; }
-    input, textarea {
+    .contact-info b {
+      color: #000;
+    }
+    .contact-form input, 
+    .contact-form textarea {
       width: 100%;
-      padding: 12px;
       margin: 8px 0;
+      padding: 10px;
       border: none;
       border-bottom: 1px solid #ccc;
-      font-size: 14px;
       outline: none;
-      background: transparent;
+      font-size: 14px;
     }
-    button {
+    .contact-form button {
       width: 100%;
       padding: 12px;
-      background: #c2a85d;
-      color: white;
-      font-weight: bold;
+      background: #c5b358;
+      color: #fff;
       border: none;
-      border-radius: 30px;
+      border-radius: 25px;
+      font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
-      font-size: 15px;
     }
-    button:hover { opacity: 0.9; }
+    .contact-form button:hover {
+      background: #b39b4c;
+    }
+    /* Info section (like gold boxes) */
+    .info-section {
+      max-width: 400px;
+      margin: 20px auto;
+      background: #c5b358;
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .info-section h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
-  <div class="contact-card">
-    <!-- Top Image -->
-    <img src="images/sofa.jpg" alt="Decor Contact">
 
+  <div class="contact-container">
+    <img src="images/living-room.jpg" alt="Decor8 Contact">
     <div class="content">
       <h2>Contact Us</h2>
       <p class="slogan">"Let's Decorate Your Dream Together"</p>
-
-      <!-- Contact Info -->
+      
       <div class="contact-info">
-        <p><strong>Email:</strong></p>
-        <p>nandhanashri2006@gmail.com</p>
-        <p>manikandan.nithyasri494@gmail.com</p>
-        <p><strong>Location:</strong> Madurai, Tamil Nadu, India</p>
+        <b>Email:</b><br>
+        nandhanashri2006@gmail.com <br>
+        manikandan.nithyasri494@gmail.com <br><br>
+        <b>Location:</b> Madurai, Tamil Nadu, India
       </div>
 
-      <!-- Form -->
-      <form onsubmit="submitForm(event)">
-        <input type="text" id="name" placeholder="Enter your Name" required>
-        <input type="email" id="email" placeholder="Enter a valid email address" required>
-        <textarea id="message" rows="4" placeholder="Enter your message" required></textarea>
+      <form class="contact-form" onsubmit="showMessage(event)">
+        <input type="text" placeholder="Enter your Name" required>
+        <input type="email" placeholder="Enter a valid email address" required>
+        <textarea placeholder="Enter your message" rows="3" required></textarea>
         <button type="submit">SUBMIT</button>
       </form>
     </div>
   </div>
 
+  <div class="info-section">
+    <h3>📍 Location</h3>
+    Madurai, Tamil Nadu, India <br><br>
+    <h3>📧 Email</h3>
+    nandhanashri2006@gmail.com <br>
+    manikandan.nithyasri494@gmail.com
+  </div>
+
   <script>
-    function submitForm(event) {
-      event.preventDefault();
-      alert("Successfully Submitted!");
-      document.getElementById("name").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("message").value = "";
+    function showMessage(e) {
+      e.preventDefault();
+      alert("✅ Successfully Submitted!");
+      e.target.reset();
     }
   </script>
+
 </body>
 </html>
 
