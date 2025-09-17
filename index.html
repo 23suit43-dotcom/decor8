@@ -12,6 +12,7 @@
     nav a:hover { color: #667eea; }
     .logout-btn { background: #764ba2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
     .logout-btn:hover { opacity: 0.9; }
+
     header { position: relative; }
     header img { width: 100%; height: 500px; object-fit: cover; }
     header .overlay {
@@ -19,19 +20,38 @@
       background: rgba(0,0,0,0.5); display: flex; flex-direction: column;
       justify-content: center; align-items: center; color: white;
     }
-    header .overlay h1 {
-      font-size: 3rem; margin: 0; font-family: 'Georgia', serif;
-    }
-    header .overlay p {
-      font-size: 1.5rem; margin-top: 1rem; font-style: italic;
-      font-family: 'Cursive', sans-serif; color: #f8e8ff;
-    }
+    header .overlay h1 { font-size: 3rem; margin: 0; font-family: 'Georgia', serif; }
+    header .overlay p { font-size: 1.5rem; margin-top: 1rem; font-style: italic;
+      font-family: 'Cursive', sans-serif; color: #f8e8ff; }
+
     .section { padding: 3rem 2rem; text-align: center; }
     .section h2 { margin-bottom: 1.5rem; }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
     .card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .card img { width: 100%; border-radius: 8px; margin-bottom: 1rem; }
     footer { background: #333; color: white; padding: 1rem; text-align: center; margin-top: 2rem; }
+
+    /* Popup Modal */
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: white; padding: 2rem; border-radius: 10px; width: 320px; text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .modal-content h2 { margin-bottom: 1rem; }
+    .modal-content input {
+      width: 100%; padding: 10px; margin: 0.5rem 0; border: 1px solid #ccc; border-radius: 5px;
+    }
+    .modal-content button {
+      width: 100%; padding: 10px; background: #764ba2; border: none; color: white;
+      border-radius: 5px; cursor: pointer; margin-top: 0.5rem;
+    }
+    .modal-content button:hover { opacity: 0.9; }
+    .close-btn { margin-top: 0.5rem; color: #764ba2; cursor: pointer; }
+
+    .toggle-link { color: #764ba2; cursor: pointer; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -84,24 +104,73 @@
     <p>&copy; 2025 Decor8 | Designed by Nandhana Shri & Nithyasri - Madurai</p>
   </footer>
 
+  <!-- Login/Register Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2 id="formTitle">Login</h2>
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button onclick="loginUser()">Login</button>
+      <p class="toggle-link" onclick="toggleForm()">Don’t have an account? Register</p>
+      <div class="close-btn" onclick="closeModal()">Cancel</div>
+    </div>
+  </div>
+
   <script>
-    // Go to products with login check
+    let isRegister = false;
+
     function goToProducts() {
       if (!localStorage.getItem("loggedIn")) {
-        window.location.href = "login.html"; // not logged in → go to login
+        document.getElementById("loginModal").style.display = "flex";
       } else {
-        window.location.href = "products.html"; // logged in → go to products
+        window.location.href = "products.html";
       }
     }
 
-    // Logout
+    function loginUser() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username && password) {
+        localStorage.setItem("loggedIn", true);
+        closeModal();
+        window.location.href = "products.html";
+      } else {
+        alert("Please enter username and password!");
+      }
+    }
+
     function logoutUser() {
       localStorage.removeItem("loggedIn");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
+    }
+
+    function closeModal() {
+      document.getElementById("loginModal").style.display = "none";
+    }
+
+    function toggleForm() {
+      let title = document.getElementById("formTitle");
+      let btn = document.querySelector(".modal-content button");
+      let toggle = document.querySelector(".toggle-link");
+
+      if (!isRegister) {
+        title.innerText = "Register";
+        btn.innerText = "Register";
+        toggle.innerText = "Already have an account? Login";
+        isRegister = true;
+      } else {
+        title.innerText = "Login";
+        btn.innerText = "Login";
+        toggle.innerText = "Don’t have an account? Register";
+        isRegister = false;
+      }
     }
   </script>
 </body>
 </html>
+
+
 
 
 
