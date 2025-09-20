@@ -3,18 +3,417 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decor8 - Welcome</title>
-    <script>
-        // Redirect based on login status
-        const isLoggedIn = localStorage.getItem("loggedIn") || sessionStorage.getItem("loggedIn");
-        if (isLoggedIn) {
-            window.location.href = "products.html";
-        } else {
-            window.location.href = "login.html";
+    <title>Decor8 - 3D Furniture Models</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-    </script>
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3498db;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav a:hover {
+            color: #3498db;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #34495e;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+        
+        .user-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3498db;
+            padding: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+        
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-title p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .scene-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            height: 500px;
+        }
+        
+        #model-viewer {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #e74c3c;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 10;
+            display: none;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .model-thumb {
+            height: 180px;
+            background: #34495e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .model-info {
+            padding: 1.2rem;
+        }
+        
+        .model-info h3 {
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .model-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .scene-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .scene-container {
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <p>Redirecting to Decor8...</p>
+    <header>
+        <div class="logo">Decor8</div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAxMmMxLjEwIDAgMi0uODkgMi0ycy0uOS0yLTItMi0yIC45LTIgMiAuOSAyIDIgMnptMCAyYy0xLjEgMC0yIC45LTIgMiAwIC4yMi4wNC40Mi4xMi42MS0uODguMjItMS40NS44MS0xLjU0IDEuNDctLjAyLjA3LS4wMi4xNS0uMDIuMjIgMCAuNTUuNDUgMSAxIDFoOGMuNTUgMCAxLS40NSAxLTF2LS4xNmMtLjA5LS42Ni0uNjYtMS4yNS0xLjQ3LTEuNDYuMDgtLjE5LjEyLS4zOS4xMi0uNjEgMC0xLjEtLjktMi0yLTJzLTIgLjktMiAyIC45IDIgMiAyem0wLTEwYzIuMjEgMCA0IDEuNzkgNCA0cy0xLjc5IDQtNCA0LTQtMS43OS00LTQgMS43OS00IDQtNHoiLz48L3N2Zz4=" alt="User">
+            <span>23suit45@tcarts.in</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>3D Models</h1>
+            <p>Browse our collection of high-quality 3D furniture models</p>
+        </div>
+
+        <div class="scene-container">
+            <a-scene id="model-viewer" embedded>
+                <a-assets>
+                    <!-- We'll load assets here -->
+                </a-assets>
+                
+                <!-- Camera -->
+                <a-camera position="0 1.6 5" cursor="rayOrigin: mouse"></a-camera>
+                
+                <!-- Environment -->
+                <a-entity environment="preset: default; lighting: none; shadow: false"></a-entity>
+                
+                <!-- Lighting -->
+                <a-entity light="type: ambient; color: #BBB"></a-entity>
+                <a-entity light="type: directional; color: #FFF; intensity: 0.6" position="-0.5 1 1"></a-entity>
+                
+                <!-- Model will be placed here -->
+                <a-entity id="model-entity" position="0 0 0" scale="1 1 1" rotation="0 0 0">
+                    <!-- Fallback message if model fails to load -->
+                    <a-entity id="fallback" position="0 1 0" text="value: Model failed to load; color: red; align: center" visible="false"></a-entity>
+                </a-entity>
+                
+                <!-- Floor -->
+                <a-circle position="0 0 0" rotation="-90 0 0" radius="5" color="#CCC" shadow></a-circle>
+            </a-scene>
+            
+            <div class="error-message" id="error-msg">
+                <h3>Model failed to load</h3>
+                <p>We're experiencing technical difficulties. Please try another model.</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="rotateModel('left')">Rotate Left</button>
+            <button class="btn" onclick="rotateModel('right')">Rotate Right</button>
+            <button class="btn btn-secondary" onclick="resetModel()">Reset View</button>
+        </div>
+
+        <div class="gallery">
+            <div class="model-card" onclick="loadModel('dining')">
+                <div class="model-thumb">🪑</div>
+                <div class="model-info">
+                    <h3>Dining Set</h3>
+                    <p>Elegant dining table with chairs</p>
+                </div>
+            </div>
+            
+            <div class="model-card" onclick="loadModel('sofa')">
+                <div class="model-thumb">🛋️</div>
+                <div class="model-info">
+                    <h3>Modern Sofa</h3>
+                    <p>Comfortable 3-seater sofa</p>
+                </div>
+            </div>
+            
+            <div class="model-card" onclick="loadModel('bed')">
+                <div class="model-thumb">🛏️</div>
+                <div class="model-info">
+                    <h3>Queen Bed</h3>
+                    <p>Stylish bedroom centerpiece</p>
+                </div>
+            </div>
+            
+            <div class="model-card" onclick="loadModel('desk')">
+                <div class="model-thumb">🖥️</div>
+                <div class="model-info">
+                    <h3>Office Desk</h3>
+                    <p>Ergonomic workspace solution</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 Decor8 - 3D Furniture Models</p>
+        <p>A-Frame Version: 1.2.0 | THREE Version: ^0.125.1</p>
+    </footer>
+
+    <script>
+        // Current model rotation
+        let rotationY = 0;
+        
+        // Function to handle model loading
+        function loadModel(modelName) {
+            // Hide any previous error messages
+            document.getElementById('error-msg').style.display = 'none';
+            document.getElementById('fallback').setAttribute('visible', 'false');
+            
+            // Remove any existing model
+            const modelEntity = document.getElementById('model-entity');
+            const oldModel = modelEntity.querySelector('[gltf-model]');
+            if (oldModel) {
+                oldModel.parentNode.removeChild(oldModel);
+            }
+            
+            // Try to load the new model
+            const newModel = document.createElement('a-entity');
+            newModel.setAttribute('gltf-model', `models/${modelName}.glb`);
+            newModel.setAttribute('position', '0 0 0');
+            newModel.setAttribute('scale', '1 1 1');
+            newModel.setAttribute('rotation', `0 ${rotationY} 0`);
+            
+            // Add error event listener
+            newModel.addEventListener('error', function() {
+                document.getElementById('error-msg').style.display = 'block';
+                document.getElementById('fallback').setAttribute('visible', 'true');
+            });
+            
+            // Add loaded event listener
+            newModel.addEventListener('model-loaded', function() {
+                // Scale model to fit scene
+                const obj = newModel.getObject3D('mesh');
+                if (obj) {
+                    // Calculate bounding box and scale accordingly
+                    const bbox = new THREE.Box3().setFromObject(obj);
+                    const size = bbox.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 2 / maxDim;
+                    newModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
+                    
+                    // Center model
+                    const center = bbox.getCenter(new THREE.Vector3());
+                    newModel.object3D.position.sub(center);
+                }
+            });
+            
+            modelEntity.appendChild(newModel);
+        }
+        
+        // Function to rotate the model
+        function rotateModel(direction) {
+            rotationY += (direction === 'left') ? 30 : -30;
+            const modelEntity = document.getElementById('model-entity');
+            modelEntity.setAttribute('rotation', `0 ${rotationY} 0`);
+        }
+        
+        // Function to reset the model view
+        function resetModel() {
+            rotationY = 0;
+            const modelEntity = document.getElementById('model-entity');
+            modelEntity.setAttribute('rotation', '0 0 0');
+            
+            const camera = document.querySelector('a-camera');
+            camera.setAttribute('position', '0 1.6 5');
+        }
+        
+        // Initialize with the first model
+        window.onload = function() {
+            // Try to load dining model (will fail with 404 but show error handling)
+            loadModel('dining');
+        };
+    </script>
 </body>
 </html>
+
