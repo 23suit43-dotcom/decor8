@@ -3,462 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebXR Portal | Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Login - Decor8</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #2b5876, #4e4376);
-            height: 100vh;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            padding: 20px;
         }
-        
-        .container {
-            display: flex;
-            width: 850px;
-            height: 500px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-        
-        .graphic-side {
-            flex: 1;
-            background: linear-gradient(135deg, rgba(74, 107, 247, 0.7), rgba(106, 124, 146, 0.7));
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .xr-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            color: #fff;
-            text-shadow: 0 0 20px rgba(0, 150, 255, 0.7);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .graphic-side h2 {
-            font-size: 28px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .graphic-side p {
-            text-align: center;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.3;
-        }
-        
-        .shape-1 {
-            width: 100px;
-            height: 100px;
-            background: #4a6cf7;
-            top: 20%;
-            left: 30%;
-            animation: float 15s infinite;
-        }
-        
-        .shape-2 {
-            width: 150px;
-            height: 150px;
-            background: #6a7c92;
-            bottom: 10%;
-            right: 20%;
-            animation: float 18s infinite;
-        }
-        
-        .shape-3 {
-            width: 70px;
-            height: 70px;
-            background: #1d2144;
-            top: 60%;
-            left: 20%;
-            animation: float 12s infinite;
-        }
-        
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(20px, 20px) rotate(180deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
-        }
-        
-        .form-side {
-            flex: 1;
+        .login-container {
             background: white;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .form-side h2 {
-            color: #1d2144;
-            margin-bottom: 30px;
-            font-size: 28px;
-            text-align: center;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #1d2144;
-            font-weight: 500;
-        }
-        
-        .input-group input {
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
+            max-width: 400px;
         }
-        
-        .input-group input:focus {
-            border-color: #4a6cf7;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
-        }
-        
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 42px;
-            color: #6a7c92;
-        }
-        
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .remember-forgot label {
-            display: flex;
-            align-items: center;
-            color: #6a7c92;
-        }
-        
-        .remember-forgot input {
-            margin-right: 8px;
-        }
-        
-        .remember-forgot a {
-            color: #4a6cf7;
-            text-decoration: none;
-        }
-        
-        .remember-forgot a:hover {
-            text-decoration: underline;
-        }
-        
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #4a6cf7, #6a7c92);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.4);
-        }
-        
-        .separator {
-            text-align: center;
-            margin: 25px 0;
-            color: #6a7c92;
-            position: relative;
-        }
-        
-        .separator::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 42%;
-            height: 1px;
-            background: #ddd;
-        }
-        
-        .separator::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 50%;
-            width: 42%;
-            height: 1px;
-            background: #ddd;
-        }
-        
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .google {
-            background: #DB4437;
-        }
-        
-        .facebook {
-            background: #4267B2;
-        }
-        
-        .github {
-            background: #333;
-        }
-        
-        .social-btn:hover {
-            transform: translateY(-3px);
-        }
-        
-        .signup-link {
-            text-align: center;
-            font-size: 14px;
-            color: #6a7c92;
-        }
-        
-        .signup-link a {
-            color: #4a6cf7;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
-        
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            display: none;
-        }
-        
-        .success {
-            background-color: rgba(40, 167, 69, 0.1);
-            border: 1px solid #28a745;
-            color: #28a745;
-        }
-        
-        .error {
-            background-color: rgba(220, 53, 69, 0.1);
-            border: 1px solid #dc3545;
-            color: #dc3545;
-        }
-        
-        @media (max-width: 900px) {
-            .container {
-                width: 90%;
-                flex-direction: column;
-                height: auto;
-            }
-            
-            .graphic-side {
-                padding: 30px;
-            }
-            
-            .form-side {
-                padding: 30px;
-            }
-        }
+        .logo { text-align: center; margin-bottom: 2rem; }
+        .logo h1 { color: #333; font-size: 2rem; font-weight: bold; }
+        .logo span { color: #667eea; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500; }
+        .form-group input { width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; }
+        .btn-login { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 1rem; }
+        .signup-link { text-align: center; }
+        .signup-link a { color: #667eea; text-decoration: none; font-weight: 500; }
+        #errorMessage { color: #e74c3c; text-align: center; margin-top: 1rem; padding: 10px; background: #fee; border-radius: 5px; display: none; }
+        #successMessage { color: #27ae60; text-align: center; margin-top: 1rem; padding: 10px; background: #efc; border-radius: 5px; display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="graphic-side">
-            <div class="floating-shapes">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
-            </div>
-            <i class="fas fa-vr-cardboard xr-icon"></i>
-            <h2>Immersive WebXR Experience</h2>
-            <p>Login to access your personalized 3D and augmented reality content. Your portal to the future of web experiences.</p>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Decor<span>8</span></h1>
         </div>
-        
-        <div class="form-side">
-            <h2>Welcome Back</h2>
-            
-            <div id="message" class="message"></div>
-            
-            <form id="loginForm">
-                <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="email" required placeholder="Enter your email">
-                </div>
-                
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
-                </div>
-                
-                <div class="remember-forgot">
-                    <label>
-                        <input type="checkbox" name="remember"> Remember me
-                    </label>
-                    <a href="#">Forgot Password?</a>
-                </div>
-                
-                <button type="submit" class="btn">Sign In</button>
-            </form>
-            
-            <div class="separator">or continue with</div>
-            
-            <div class="social-login">
-                <div class="social-btn google">
-                    <i class="fab fa-google"></i>
-                </div>
-                <div class="social-btn facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </div>
-                <div class="social-btn github">
-                    <i class="fab fa-github"></i>
-                </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
-            
-            <div class="signup-link">
-                Don't have an account? <a href="#">Sign up now</a>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
+
+            <button type="submit" class="btn-login">Sign In</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html">Create one here</a>
         </div>
+
+        <div id="errorMessage"></div>
+        <div id="successMessage"></div>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
+            authDomain: "decor8-b14e8.firebaseapp.com",
+            projectId: "decor8-b14e8",
+            storageBucket: "decor8-b14e8.firebasestorage.app",
+            messagingSenderId: "301302844702",
+            appId: "1:301302844702:web:7376ed27571e8d40cccd0f"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Show message function
+        function showMessage(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            setTimeout(() => { element.style.display = 'none'; }, 4000);
+        }
+
+        // Login function - ONLY LOGIN
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const messageEl = document.getElementById('message');
             
-            // Simple validation
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            
             if (!email || !password) {
-                showMessage('Please fill in all fields', 'error');
+                showMessage('errorMessage', 'Please enter both email and password.');
                 return;
             }
-            
-            // Email validation
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(email)) {
-                showMessage('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            try {
-                // This would connect to your backend API
-                showMessage('Connecting to server...', 'success');
-                
-                // Simulate API call (replace with actual fetch to your backend)
-                setTimeout(() => {
-                    // This is a simulation - replace with actual API call
-                    if (email === 'user@example.com' && password === 'password') {
-                        showMessage('Login successful! Redirecting to your XR environment...', 'success');
-                        
-                        // Store authentication status (in a real app, you'd store a token)
-                        localStorage.setItem('isAuthenticated', 'true');
-                        
-                        // Redirect to your WebXR application after a delay
-                        setTimeout(() => {
-                            window.location.href = 'xr-environment.html'; // Your main WebXR page
-                        }, 1500);
+
+            // ONLY LOGIN - NO ACCOUNT CREATION
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showMessage('successMessage', 'Login successful! Redirecting...');
+                    setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/user-not-found') {
+                        showMessage('errorMessage', 'Account not found. Please sign up first.');
+                    } else if (error.code === 'auth/wrong-password') {
+                        showMessage('errorMessage', 'Incorrect password. Please try again.');
                     } else {
-                        showMessage('Invalid credentials. Please try again.', 'error');
+                        showMessage('errorMessage', error.message);
                     }
-                }, 1000);
-                
-            } catch (error) {
-                showMessage('Network error. Please check if the server is running.', 'error');
-                console.error('Login error:', error);
-            }
-        });
-        
-        function showMessage(text, type) {
-            const messageEl = document.getElementById('message');
-            messageEl.textContent = text;
-            messageEl.className = `message ${type}`;
-            messageEl.style.display = 'block';
-            
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Add interactivity to social buttons
-        document.querySelectorAll('.social-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const platform = this.classList.contains('google') ? 'Google' : 
-                                this.classList.contains('facebook') ? 'Facebook' : 'GitHub';
-                showMessage(`${platform} authentication would be implemented with backend.`, 'success');
-            });
+                });
         });
     </script>
 </body>
