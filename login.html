@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decor8 - Home</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f8f9fa; }
+    nav { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; margin: 0; padding: 0; }
+    nav a { text-decoration: none; color: #333; font-weight: 500; }
+    nav a:hover { color: #667eea; }
+    .logout-btn { background: #764ba2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+    .logout-btn:hover { opacity: 0.9; }
+    header { position: relative; }
+    header img { width: 100%; height: 500px; object-fit: cover; }
+    header .overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: flex; flex-direction: column;
+      justify-content: center; align-items: center; color: white;
+    }
+    header .overlay h1 { font-size: 3rem; margin: 0; font-family: 'Georgia', serif; }
+    header .overlay p { font-size: 1.5rem; margin-top: 1rem; font-style: italic;
+      font-family: 'Cursive', sans-serif; color: #f8e8ff; }
+    .section { padding: 3rem 2rem; text-align: center; }
+    .section h2 { margin-bottom: 1.5rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+    .card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; }
+    .card img { width: 100%; border-radius: 8px; margin-bottom: 1rem; }
+    footer { background: #333; color: white; padding: 1rem; text-align: center; margin-top: 2rem; }
+
+    /* Popup */
+    .popup {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
+      z-index: 1000;
+    }
+    .popup-content {
+      background: white; padding: 2rem; border-radius: 10px; width: 320px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: left;
+    }
+    .popup h2 { margin-top: 0; text-align: center; }
+    .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
+      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px;
+    }
+    .popup button {
+      width: 100%; padding: 10px; margin-top: 10px;
+      background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer;
+    }
+    .popup button:hover { opacity: 0.9; }
+    .popup .close { float: right; cursor: pointer; font-size: 18px; }
+    .toggle-link { color: #667eea; cursor: pointer; font-size: 14px; display: block; margin-top: 10px; text-align: center; }
+    .remember { display: flex; align-items: center; font-size: 14px; }
+    .remember input { margin-right: 6px; }
+    .password-box { position: relative; }
+    .password-box input { width: 100%; }
+    .toggle-password {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 13px; color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#" onclick="goToProducts()">Products</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><button class="logout-btn" onclick="logoutUser()">Logout</button></li>
+    </ul>
+  </nav>
+
+  <!-- Banner -->
+  <header>
+    <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Decor Banner">
+    <div class="overlay">
+      <h1>Welcome to Decor8</h1>
+      <p>"Style Your Home, Live Your Dream"</p>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <div class="section">
+    <h2>Transform Your Home with Style</h2>
+    <p>We bring you the perfect blend of modern furniture and elegant decor ideas to make your home unique and comfortable.</p>
+  </div>
+
+  <!-- Featured Rooms -->
+  <div class="section">
+    <h2>Explore Our Rooms</h2>
+    <div class="cards">
+      <div class="card" onclick="goToRoom('living')">
+        <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Living Room">
+        <h3>Living Room</h3>
+      </div>
+      <div class="card" onclick="goToRoom('bedroom')">
+        <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80" alt="Bedroom">
+        <h3>Bedroom</h3>
+      </div>
+      <div class="card" onclick="goToRoom('kitchen')">
+        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Kitchen">
+        <h3>Kitchen</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Decor8 | Designed by Nandhana Shri & Nithyasri - Madurai</p>
+  </footer>
+
+  <!-- Popup Login/Register -->
+  <div id="loginPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <h2 id="formTitle">Login</h2>
+      
+      <!-- Login Form -->
+      <div id="loginForm">
+        <input type="text" id="loginEmail" placeholder="Email" value="niki@gmail.com">
+        <div class="password-box">
+          <input type="password" id="loginPassword" placeholder="Password" value="password123">
+          <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
+        </div>
+        <label class="remember"><input type="checkbox" id="rememberMe"> Remember me</label>
+        <button onclick="loginUser()">Login</button>
+        <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" style="display:none;">
+        <input type="text" id="regName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email">
+        <div class="password-box">
+          <input type="password" id="regPassword" placeholder="Password">
+          <span class="toggle-password" onclick="togglePassword('regPassword', this)">Show</span>
+        </div>
+        <button onclick="registerUser()">Register</button>
+        <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let redirectRoom = null;
+
+    function goToProducts() {
+      if (!localStorage.getItem("loggedIn") && !sessionStorage.getItem("loggedIn")) {
+        redirectRoom = "products";
+        document.getElementById("loginPopup").style.display = "flex";
+      } else {
+        window.location.href = "products.html";
+      }
+    }
+
+    function goToRoom(room) {
+      if (!localStorage.getItem("loggedIn") && !sessionStorage.getItem("loggedIn")) {
+        redirectRoom = room;
+        document.getElementById("loginPopup").style.display = "flex";
+      } else {
+        window.location.href = "products.html#" + room;
+      }
+    }
+
+    function closePopup() {
+      document.getElementById("loginPopup").style.display = "none";
+    }
+
+    function switchToRegister() {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("registerForm").style.display = "block";
+      document.getElementById("formTitle").innerText = "Register";
+    }
+
+    function switchToLogin() {
+      document.getElementById("registerForm").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("formTitle").innerText = "Login";
+    }
+
+    function togglePassword(inputId, el) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        el.innerText = "Hide";
+      } else {
+        input.type = "password";
+        el.innerText = "Show";
+      }
+    }
+
+    function loginUser() {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      if (email && password) {
+        // Set the login status to "true" instead of the email
+        if (document.getElementById("rememberMe").checked) {
+          localStorage.setItem("loggedIn", "true");
+        } else {
+          sessionStorage.setItem("loggedIn", "true");
+        }
+        closePopup();
+        if (redirectRoom === "products") {
+          window.location.href = "products.html";
+        } else if (redirectRoom) {
+          window.location.href = "products.html#" + redirectRoom;
+        }
+      } else {
+        alert("Please enter email and password.");
+      }
+    }
+
+    function registerUser() {
+      const name = document.getElementById("regName").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      if (name && email && password) {
+        alert("Registered successfully! Please login now.");
+        switchToLogin();
+      } else {
+        alert("Please fill all fields.");
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem("loggedIn");
+      sessionStorage.removeItem("loggedIn");
+      window.location.href = "index.html";
+    }
+
+    // Check if user is already logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      const isLoggedIn = localStorage.getItem("loggedIn") || sessionStorage.getItem("loggedIn");
+      if (isLoggedIn) {
+        // User is logged in
+        console.log("User is logged in");
+      }
+    });
+  </script>
+</body>
+</html>
