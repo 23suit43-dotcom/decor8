@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products - Decor8 3D Models</title>
-  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; background: #f8f9fa; scroll-behavior: smooth; }
@@ -17,10 +17,6 @@
       background: none; border: none; cursor: pointer; font-size: 1rem;
     }
     nav a:hover, nav button:hover { color: #667eea; }
-    .logout-btn { 
-      background: #764ba2; color: white; border: none; padding: 8px 16px; 
-      border-radius: 5px; cursor: pointer; font-weight: 500;
-    }
 
     /* Header */
     .header { text-align: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
@@ -47,6 +43,7 @@
     /* Product Card */
     .product-card { background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .product-viewer { width: 100%; height: 250px; background: #f1f3f4; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
+    model-viewer { width: 100%; height: 100%; }
     .product-info h3 { color: #2c3e50; margin-bottom: 0.5rem; }
     .product-info p { color: #7f8c8d; margin-bottom: 1rem; line-height: 1.5; }
     .ar-button { 
@@ -61,11 +58,6 @@
       text-align: center;
     }
     .ar-button:hover { opacity: 0.9; }
-
-    /* Welcome message */
-    .welcome-message { 
-      text-align: center; margin: 1rem 0; color: #27ae60; font-weight: 500;
-    }
   </style>
 </head>
 <body>
@@ -75,13 +67,9 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="login.html" id="loginLink">Login</a></li>
-      <li><button class="logout-btn" onclick="logoutUser()" id="logoutBtn">Logout</button></li>
+      <li><button onclick="logoutUser()">Logout</button></li>
     </ul>
   </nav>
-
-  <!-- Welcome Message -->
-  <div class="welcome-message" id="welcomeMessage"></div>
 
   <!-- Header -->
   <div class="header">
@@ -105,60 +93,48 @@
       <!-- Lounge Chair -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/lounge_chair.glb" scale="0.8 0.8 0.8" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/lounge_chair.glb" alt="Lounge Chair" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Lounge Chair</h3>
           <p>Stylish lounge chair for modern living rooms.</p>
-          <a href="ar-viewer.html?model=lounge_chair" class="ar-button">View in AR</a>
+          <a href="./models/lounge_chair.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Bookshelf -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/bookshelf.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/bookshelf.glb" alt="Bookshelf" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Bookshelf</h3>
           <p>Minimalist bookshelf for your study room.</p>
-          <a href="ar-viewer.html?model=bookshelf" class="ar-button">View in AR</a>
+          <a href="./models/bookshelf.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- TV Unit -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/tv-unit.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/tv-unit.glb" alt="TV Unit" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>TV Unit</h3>
           <p>Modern TV unit with shelves and storage.</p>
-          <a href="ar-viewer.html?model=tv-unit" class="ar-button">View in AR</a>
+          <a href="./models/tv-unit.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Photo Frame -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/photoframe.glb" scale="1.0 1.0 1.0" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/photoframe.glb" alt="Photo Frame" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Photo Frame</h3>
           <p>Elegant photo frame for your favorite memories.</p>
-          <a href="ar-viewer.html?model=photoframe" class="ar-button">View in AR</a>
+          <a href="./models/photoframe.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
@@ -171,60 +147,48 @@
       <!-- Nightstand -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/lamp.glb" scale="0.7 0.7 0.7" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/lamp.glb" alt="lamp" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
-          <h3>Lamp</h3>
+          <h3>lamp</h3>
           <p>Compact lamp for your bedroom.</p>
-          <a href="ar-viewer.html?model=lamp" class="ar-button">View in AR</a>
+          <a href="./models/lamp.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Dresser -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/dresser.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/dresser.glb" alt="Dresser" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Dresser</h3>
           <p>Modern dresser with multiple drawers.</p>
-          <a href="ar-viewer.html?model=dresser" class="ar-button">View in AR</a>
+          <a href="./models/dresser.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Wardrobe -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/wardrobe.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/wardrobe.glb" alt="Wardrobe" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Wardrobe</h3>
           <p>Spacious wardrobe with sliding doors.</p>
-          <a href="ar-viewer.html?model=wardrobe" class="ar-button">View in AR</a>
+          <a href="./models/wardrobe.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Study Table -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/studytable.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/studytable.glb" alt="Study Table" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Study Table</h3>
           <p>Spacious study table with storage options.</p>
-          <a href="ar-viewer.html?model=studytable" class="ar-button">View in AR</a>
+          <a href="./models/studytable.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
@@ -237,75 +201,61 @@
       <!-- Bar Stool -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/bar-stool.glb" scale="0.9 0.9 0.9" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/bar-stool.glb" alt="Bar Stool" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Bar Stool</h3>
           <p>Stylish bar stool for kitchen counters.</p>
-          <a href="ar-viewer.html?model=bar-stool" class="ar-button">View in AR</a>
+          <a href="./models/bar-stool.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Cabinet -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/cabinet.glb" scale="0.6 0.6 0.6" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/cabinet.glb" alt="Cabinet" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Cabinet</h3>
           <p>Compact cabinet with storage space.</p>
-          <a href="ar-viewer.html?model=cabinet" class="ar-button">View in AR</a>
+          <a href="./models/cabinet.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Dining Table -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/dining.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/dining.glb" alt="Dining Table" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Dining Table</h3>
           <p>Stylish dining table perfect for family meals.</p>
-          <a href="ar-viewer.html?model=dining" class="ar-button">View in AR</a>
+          <a href="./models/dining.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Kitchen Island -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/kit_island.glb" scale="0.4 0.4 0.4" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/kit_island.glb" alt="Kitchen Island" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Kitchen Island</h3>
           <p>Functional kitchen island with storage.</p>
-          <a href="ar-viewer.html?model=kit_island" class="ar-button">View in AR</a>
+          <a href="./models/kit_island.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
       <!-- Modern Fridge -->
       <div class="product-card">
         <div class="product-viewer">
-          <a-scene embedded>
-            <a-entity gltf-model="./models/fridge.glb" scale="0.5 0.5 0.5" position="0 -1 0"></a-entity>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+          <model-viewer src="./models/fridge.glb" alt="Modern Fridge" ar auto-rotate camera-controls></model-viewer>
         </div>
         <div class="product-info">
           <h3>Modern Fridge</h3>
           <p>Stylish refrigerator with large capacity.</p>
-          <a href="ar-viewer.html?model=fridge" class="ar-button">View in AR</a>
+          <a href="./models/
+            fridge.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
@@ -313,33 +263,16 @@
   </div>
 
   <script>
-    // Check authentication and update UI
-    function checkAuth() {
-      const userEmail = localStorage.getItem("userEmail");
-      const welcomeMessage = document.getElementById("welcomeMessage");
-      const loginLink = document.getElementById("loginLink");
-      const logoutBtn = document.getElementById("logoutBtn");
-      
-      if (userEmail) {
-        // User is logged in
-        welcomeMessage.textContent = `Welcome back, ${userEmail}!`;
-        loginLink.style.display = "none";
-        logoutBtn.style.display = "block";
-      } else {
-        // User is not logged in - redirect to login
-        window.location.href = "login.html";
-      }
-    }
-
-    // Logout function
-    function logoutUser() {
-      localStorage.removeItem("loggedIn");
-      localStorage.removeItem("userEmail");
+    // Step 1: Check login
+    if (!localStorage.getItem("loggedIn")) {
       window.location.href = "login.html";
     }
 
-    // Check authentication on page load
-    checkAuth();
+    // Step 2: Logout
+    function logoutUser() {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "index.html";
+    }
   </script>
 </body>
 </html>
