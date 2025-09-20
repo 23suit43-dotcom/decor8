@@ -9,6 +9,32 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; background: #f8f9fa; scroll-behavior: smooth; }
 
+    /* User Welcome Bar */
+    .user-welcome-bar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user-welcome-bar span {
+      font-weight: 500;
+    }
+    .user-welcome-bar button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .user-welcome-bar button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
     /* Navigation */
     nav { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; flex-wrap: wrap; }
@@ -41,7 +67,8 @@
     .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 
     /* Product Card */
-    .product-card { background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .product-card { background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+    .product-card:hover { transform: translateY(-5px); }
     .product-viewer { width: 100%; height: 250px; background: #f1f3f4; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
     model-viewer { width: 100%; height: 100%; }
     .product-info h3 { color: #2c3e50; margin-bottom: 0.5rem; }
@@ -56,6 +83,7 @@
       display: inline-block; 
       font-weight: 500; 
       text-align: center;
+      cursor: pointer;
     }
     .ar-button:hover { opacity: 0.9; }
 
@@ -72,208 +100,247 @@
       display: none;
       z-index: 1000;
     }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      font-size: 18px;
+      color: #667eea;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-right: 15px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
+  <!-- User Welcome Bar -->
+  <div class="user-welcome-bar" id="userWelcomeBar" style="display: none;">
+    <span id="welcomeMessage">Welcome, User!</span>
+    <button onclick="logoutUser()">Logout</button>
+  </div>
+
   <div class="notification" id="notification">Please login to access this page</div>
 
-  <!-- Navigation -->
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="products.html">Products</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><button onclick="logoutUser()">Logout</button></li>
-    </ul>
-  </nav>
-
-  <!-- Header -->
-  <div class="header">
-    <h1>Decor8 3D Models</h1>
-    <p>Browse our collection of high-quality 3D furniture models</p>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-spinner">
+    <div class="spinner"></div>
+    <span>Checking authentication...</span>
   </div>
 
-  <!-- Jump Menu -->
-  <div class="jump-menu">
-    <a href="#living">Living Room</a> | 
-    <a href="#bedroom">Bedroom</a> | 
-    <a href="#kitchen">Kitchen</a>
-  </div>
+  <!-- Main Content (hidden until auth check completes) -->
+  <div id="mainContent" style="display: none;">
 
-  <div class="products-container">
+    <!-- Navigation -->
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><button onclick="logoutUser()">Logout</button></li>
+      </ul>
+    </nav>
 
-    <!-- Living Room -->
-    <h2 id="living" class="section-title">Living Room</h2>
-    <div class="products-grid">
-
-      <!-- Lounge Chair -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/lounge_chair.glb" alt="Lounge Chair" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Lounge Chair</h3>
-          <p>Stylish lounge chair for modern living rooms.</p>
-          <a href="./models/lounge_chair.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- Bookshelf -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/bookshelf.glb" alt="Bookshelf" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Bookshelf</h3>
-          <p>Minimalist bookshelf for your study room.</p>
-          <a href="./models/bookshelf.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- TV Unit -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/tv-unit.glb" alt="TV Unit" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>TV Unit</h3>
-          <p>Modern TV unit with shelves and storage.</p>
-          <a href="./models/tv-unit.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- Photo Frame -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/photoframe.glb" alt="Photo Frame" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Photo Frame</h3>
-          <p>Elegant photo frame for your favorite memories.</p>
-          <a href="./models/photoframe.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
+    <!-- Header -->
+    <div class="header">
+      <h1>Decor8 3D Models</h1>
+      <p>Browse our collection of high-quality 3D furniture models</p>
     </div>
 
-    <!-- Bedroom -->
-    <h2 id="bedroom" class="section-title">Bedroom</h2>
-    <div class="products-grid">
-
-      <!-- Nightstand -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/lamp.glb" alt="lamp" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>lamp</h3>
-          <p>Compact lamp for your bedroom.</p>
-          <a href="./models/lamp.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- Dresser -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/dresser.glb" alt="Dresser" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Dresser</h3>
-          <p>Modern dresser with multiple drawers.</p>
-          <a href="./models/dresser.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- Wardrobe -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/wardrobe.glb" alt="Wardrobe" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Wardrobe</h3>
-          <p>Spacious wardrobe with sliding doors.</p>
-          <a href="./models/wardrobe.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
-      <!-- Study Table -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/studytable.glb" alt="Study Table" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Study Table</h3>
-          <p>Spacious study table with storage options.</p>
-          <a href="./models/studytable.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
-
+    <!-- Jump Menu -->
+    <div class="jump-menu">
+      <a href="#living">Living Room</a> | 
+      <a href="#bedroom">Bedroom</a> | 
+      <a href="#kitchen">Kitchen</a>
     </div>
 
-    <!-- Kitchen -->
-    <h2 id="kitchen" class="section-title">Kitchen</h2>
-    <div class="products-grid">
+    <div class="products-container">
 
-      <!-- Bar Stool -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/bar-stool.glb" alt="Bar Stool" ar auto-rotate camera-controls></model-viewer>
+      <!-- Living Room -->
+      <h2 id="living" class="section-title">Living Room</h2>
+      <div class="products-grid">
+
+        <!-- Lounge Chair -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/lounge_chair.glb" alt="Lounge Chair" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Lounge Chair</h3>
+            <p>Stylish lounge chair for modern living rooms.</p>
+            <a href="./models/lounge_chair.glb" class="ar-button">View in AR</a>
+          </div>
         </div>
-        <div class="product-info">
-          <h3>Bar Stool</h3>
-          <p>Stylish bar stool for kitchen counters.</p>
-          <a href="./models/bar-stool.glb" class="ar-button">View in AR</a>
+
+        <!-- Bookshelf -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/bookshelf.glb" alt="Bookshelf" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Bookshelf</h3>
+            <p>Minimalist bookshelf for your study room.</p>
+            <a href="./models/bookshelf.glb" class="ar-button">View in AR</a>
+          </div>
         </div>
+
+        <!-- TV Unit -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/tv-unit.glb" alt="TV Unit" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>TV Unit</h3>
+            <p>Modern TV unit with shelves and storage.</p>
+            <a href="./models/tv-unit.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
+        <!-- Photo Frame -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/photoframe.glb" alt="Photo Frame" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Photo Frame</h3>
+            <p>Elegant photo frame for your favorite memories.</p>
+            <a href="./models/photoframe.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Cabinet -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/cabinet.glb" alt="Cabinet" ar auto-rotate camera-controls></model-viewer>
+      <!-- Bedroom -->
+      <h2 id="bedroom" class="section-title">Bedroom</h2>
+      <div class="products-grid">
+
+        <!-- Nightstand -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/lamp.glb" alt="lamp" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>lamp</h3>
+            <p>Compact lamp for your bedroom.</p>
+            <a href="./models/lamp.glb" class="ar-button">View in AR</a>
+          </div>
         </div>
-        <div class="product-info">
-          <h3>Cabinet</h3>
-          <p>Compact cabinet with storage space.</p>
-          <a href="./models/cabinet.glb" class="ar-button">View in AR</a>
+
+        <!-- Dresser -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/dresser.glb" alt="Dresser" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Dresser</h3>
+            <p>Modern dresser with multiple drawers.</p>
+            <a href="./models/dresser.glb" class="ar-button">View in AR</a>
+          </div>
         </div>
+
+        <!-- Wardrobe -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/wardrobe.glb" alt="Wardrobe" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Wardrobe</h3>
+            <p>Spacious wardrobe with sliding doors.</p>
+            <a href="./models/wardrobe.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
+        <!-- Study Table -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/studytable.glb" alt="Study Table" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Study Table</h3>
+            <p>Spacious study table with storage options.</p>
+            <a href="./models/studytable.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Dining Table -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/dining.glb" alt="Dining Table" ar auto-rotate camera-controls></model-viewer>
-        </div>
-        <div class="product-info">
-          <h3>Dining Table</h3>
-          <p>Stylish dining table perfect for family meals.</p>
-          <a href="./models/dining.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
+      <!-- Kitchen -->
+      <h2 id="kitchen" class="section-title">Kitchen</h2>
+      <div class="products-grid">
 
-      <!-- Kitchen Island -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/kit_island.glb" alt="Kitchen Island" ar auto-rotate camera-controls></model-viewer>
+        <!-- Bar Stool -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/bar-stool.glb" alt="Bar Stool" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Bar Stool</h3>
+            <p>Stylish bar stool for kitchen counters.</p>
+            <a href="./models/bar-stool.glb" class="ar-button">View in AR</a>
+          </div>
         </div>
-        <div class="product-info">
-          <h3>Kitchen Island</h3>
-          <p>Functional kitchen island with storage.</p>
-          <a href="./models/kit_island.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
 
-      <!-- Modern Fridge -->
-      <div class="product-card">
-        <div class="product-viewer">
-          <model-viewer src="./models/fridge.glb" alt="Modern Fridge" ar auto-rotate camera-controls></model-viewer>
+        <!-- Cabinet -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/cabinet.glb" alt="Cabinet" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Cabinet</h3>
+            <p>Compact cabinet with storage space.</p>
+            <a href="./models/cabinet.glb" class="ar-button">View in AR</a>
+          </div>
         </div>
-        <div class="product-info">
-          <h3>Modern Fridge</h3>
-          <p>Stylish refrigerator with large capacity.</p>
-          <a href="./models/fridge.glb" class="ar-button">View in AR</a>
-        </div>
-      </div>
 
+        <!-- Dining Table -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/dining.glb" alt="Dining Table" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Dining Table</h3>
+            <p>Stylish dining table perfect for family meals.</p>
+            <a href="./models/dining.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
+        <!-- Kitchen Island -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/kit_island.glb" alt="Kitchen Island" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Kitchen Island</h3>
+            <p>Functional kitchen island with storage.</p>
+            <a href="./models/kit_island.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
+        <!-- Modern Fridge -->
+        <div class="product-card">
+          <div class="product-viewer">
+            <model-viewer src="./models/fridge.glb" alt="Modern Fridge" ar auto-rotate camera-controls></model-viewer>
+          </div>
+          <div class="product-info">
+            <h3>Modern Fridge</h3>
+            <p>Stylish refrigerator with large capacity.</p>
+            <a href="./models/fridge.glb" class="ar-button">View in AR</a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -300,9 +367,28 @@
 
     // Check authentication state
     onAuthStateChanged(auth, (user) => {
-      if (!user) {
+      const loadingScreen = document.getElementById('loadingScreen');
+      const mainContent = document.getElementById('mainContent');
+      const userWelcomeBar = document.getElementById('userWelcomeBar');
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      
+      if (user) {
+        // User is signed in
+        console.log("User is logged in:", user.email);
+        
+        // Show welcome message with user email
+        welcomeMessage.textContent = `Welcome, ${user.email}`;
+        userWelcomeBar.style.display = 'flex';
+        
+        // Hide loading, show content
+        loadingScreen.style.display = 'none';
+        mainContent.style.display = 'block';
+        
+      } else {
         // User is not signed in, redirect to login page
+        console.log("User is not logged in, redirecting...");
         showNotification("Please login to access this page");
+        
         setTimeout(() => {
           window.location.href = "index.html";
         }, 2000);
@@ -316,6 +402,7 @@
         window.location.href = "index.html";
       } catch (error) {
         console.error("Logout error:", error);
+        showNotification("Logout failed. Please try again.");
       }
     }
 
@@ -323,6 +410,11 @@
       const notification = document.getElementById('notification');
       notification.textContent = message;
       notification.style.display = 'block';
+      
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
     }
 
     // Make logout function available globally
