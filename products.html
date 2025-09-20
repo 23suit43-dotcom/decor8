@@ -264,10 +264,9 @@
 
   <script>
     // Step 1: Check login
-    if (!localStorage.getItem("loggedIn")) {
-      window.location.href = "login.html";
+    if (!localStorage.getItem("loggedIn") && !sessionStorage.getItem("loggedIn")) {
+     window.location.href = "login.html";
     }
-
     // Step 2: Logout
     function logoutUser() {
       localStorage.removeItem("loggedIn");
