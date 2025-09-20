@@ -4,68 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Decor8</title>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
+            padding: 20px;
         }
-        .login-box {
+        .login-container {
             background: white;
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            width: 90%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
             max-width: 400px;
         }
-        .form-group { margin-bottom: 1rem; }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-        .error { color: red; margin-top: 1rem; }
-        .success { color: green; margin-top: 1rem; }
+        .logo { text-align: center; margin-bottom: 2rem; }
+        .logo h1 { color: #333; font-size: 2rem; font-weight: bold; }
+        .logo span { color: #667eea; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 500; }
+        .form-group input { width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; }
+        .btn-login { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 1rem; }
+        .signup-link { text-align: center; }
+        .signup-link a { color: #667eea; text-decoration: none; font-weight: 500; cursor: pointer; }
+        #errorMessage { color: #e74c3c; text-align: center; margin-top: 1rem; padding: 10px; background: #fee; border-radius: 5px; display: none; }
+        #successMessage { color: #27ae60; text-align: center; margin-top: 1rem; padding: 10px; background: #efc; border-radius: 5px; display: none; }
+        .home-link { text-align: center; margin-top: 1rem; }
+        .home-link a { color: #667eea; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>Login to Decor8</h2>
+    <div class="login-container">
+        <div class="logo">
+            <h1>Decor<span>8</span></h1>
+        </div>
+
         <form id="loginForm">
             <div class="form-group">
-                <label>Email:</label>
-                <input type="email" id="email" required>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
+
             <div class="form-group">
-                <label>Password:</label>
-                <input type="password" id="password" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit">Login</button>
+
+            <button type="submit" class="btn-login">Sign In</button>
         </form>
-        <p>No account? <a href="#" onclick="signUp()">Sign up here</a></p>
-        <div id="message" class="error"></div>
+
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html">Create one here</a>
+        </div>
+
+        <div class="home-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+
+        <div id="errorMessage"></div>
+        <div id="successMessage"></div>
     </div>
 
     <script>
-        // Firebase Config - USE YOUR EXACT CONFIG
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
             authDomain: "decor8-b14e8.firebaseapp.com",
@@ -77,49 +86,53 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Show message function
+        function showMessage(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            setTimeout(() => { element.style.display = 'none'; }, 4000);
+        }
 
         // Login function
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            try {
-                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-                showMessage('Login successful!', 'success');
-                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        });
-
-        // Sign up function
-        async function signUp() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
             
             if (!email || !password) {
-                showMessage('Please enter email and password', 'error');
+                showMessage('errorMessage', 'Please enter both email and password.');
                 return;
             }
 
-            try {
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                showMessage('Account created successfully! Please login.', 'success');
-                console.log('User created with ID:', userCredential.user.uid);
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        }
-
-        function showMessage(message, type) {
-            const msgDiv = document.getElementById('message');
-            msgDiv.textContent = message;
-            msgDiv.className = type;
-        }
-
-        // Debug: Check if Firebase is working
-        console.log('Firebase initialized:', firebase.app().name);
+            // Login with Firebase
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showMessage('successMessage', 'Login successful! Redirecting...');
+                    
+                    // Store login state
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("userEmail", email);
+                    
+                    setTimeout(() => { 
+                        window.location.href = "products.html"; 
+                    }, 2000);
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/user-not-found') {
+                        showMessage('errorMessage', 'Account not found. Please sign up first.');
+                    } else if (error.code === 'auth/wrong-password') {
+                        showMessage('errorMessage', 'Incorrect password. Please try again.');
+                    } else {
+                        showMessage('errorMessage', error.message);
+                    }
+                });
+        });
     </script>
 </body>
 </html>
