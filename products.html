@@ -67,7 +67,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><button onclick="logoutUser()">Logout</button></li>
+      <li><a href="login.html">Login</a></li>
     </ul>
   </nav>
 
@@ -255,7 +255,6 @@
           <h3>Modern Fridge</h3>
           <p>Stylish refrigerator with large capacity.</p>
           <a href="./models/fridge.glb" class="ar-button">View in AR</a>
- 
         </div>
       </div>
 
@@ -263,18 +262,23 @@
   </div>
 
   <script>
-    // Step 1: Check login
-    if (!localStorage.getItem("loggedIn")) {
-      window.location.href = "login.html";
-    }
-
-    // Step 2: Logout
+    // Logout function (only for logged-in users)
     function logoutUser() {
       localStorage.removeItem("loggedIn");
       window.location.href = "index.html";
     }
+
+    // Check if user is logged in and show/hide logout button
+    function checkAuth() {
+      const user = localStorage.getItem("loggedIn");
+      const logoutBtn = document.querySelector('nav button');
+      if (logoutBtn) {
+        logoutBtn.style.display = user ? 'block' : 'none';
+      }
+    }
+
+    // Check authentication on page load
+    checkAuth();
   </script>
 </body>
 </html>
-
-
