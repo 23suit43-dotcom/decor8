@@ -65,58 +65,72 @@
 
         <div id="errorMessage"></div>
     </div>
+     <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
+        authDomain: "decor8-b14e8.firebaseapp.com",
+        projectId: "decor8-b14e8",
+        storageBucket: "decor8-b14e8.firebasestorage.app",
+        messagingSenderId: "301302844702",
+        appId: "1:301302844702:web:7376ed27571e8d40cccd0f"
+    };
 
-    <script>
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
-            authDomain: "decor8-b14e8.firebaseapp.com",
-            projectId: "decor8-b14e8",
-            storageBucket: "decor8-b14e8.firebasestorage.app",
-            messagingSenderId: "301302844702",
-            appId: "1:301302844702:web:7376ed27571e8d40cccd0f"
-        };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+    // Login function - FIXED
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // FIRST try to sign in
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                alert('Login successful! Redirecting...');
+                window.location.href = 'index.html';
+            })
+            .catch((error) => {
+                // If login fails, show error (don't auto-create account!)
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorMessage').textContent = 'Invalid email or password. Please sign up first.';
+            });
+    });
 
-        // Login function
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
+    // PROPER Signup function - SEPARATED from login
+    document.getElementById('signupLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if (email && password) {
+            // CREATE NEW ACCOUNT (this should fail if email exists)
+            auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    alert('Login successful! Redirecting...');
-                    window.location.href = 'index.html';
+                    alert('Account created successfully! Please check your email for verification.');
+                    // Optional: Send email verification
+                    userCredential.user.sendEmailVerification();
                 })
                 .catch((error) => {
                     document.getElementById('errorMessage').style.display = 'block';
                     document.getElementById('errorMessage').textContent = error.message;
                 });
-        });
+        } else {
+            alert('Please enter both email and password to sign up.');
+        }
+    });
 
-        // Signup function
-        document.getElementById('signupLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (email && password) {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        alert('Account created successfully! You can now login.');
-                    })
-                    .catch((error) => {
-                        document.getElementById('errorMessage').style.display = 'block';
-                        document.getElementById('errorMessage').textContent = error.message;
-                    });
-            } else {
-                alert('Please enter both email and password to sign up.');
-            }
-        });
-    </script>
+    // DEBUG: Check auth state
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            console.log('User logged in:', user.email, user.uid);
+        } else {
+            console.log('No user logged in');
+        }
+    });
+</script>
+             
 </body>
 </html>
