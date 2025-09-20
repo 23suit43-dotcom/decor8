@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Home Decor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,36 +15,53 @@
         
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
         }
         
         .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
             background: white;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 420px;
             overflow: hidden;
         }
         
-        .header {
-            background: #2c3e50;
+        .login-section {
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .promo-section {
+            flex: 1;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: white;
-            padding: 25px 30px;
-            text-align: center;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
-        .header h1 {
-            font-weight: 600;
-            font-size: 28px;
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
         }
         
-        .form-container {
-            padding: 30px;
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
         }
         
         .input-group {
@@ -85,30 +102,14 @@
             color: #7f8c8d;
         }
         
-        .remember-forgot {
+        .remember {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
         }
         
-        .remember {
-            display: flex;
-            align-items: center;
-        }
-        
         .remember input {
             margin-right: 8px;
-        }
-        
-        .forgot-password {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .forgot-password:hover {
-            text-decoration: underline;
         }
         
         .login-btn {
@@ -122,6 +123,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
+            margin-bottom: 20px;
         }
         
         .login-btn:hover {
@@ -130,7 +132,6 @@
         
         .register-link {
             text-align: center;
-            margin-top: 25px;
             color: #7f8c8d;
         }
         
@@ -165,7 +166,7 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
         
         .social-btn {
@@ -188,54 +189,104 @@
             background: #4267B2;
         }
         
-        .twitter {
-            background: #1DA1F2;
+        .promo-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .promo-text {
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .products-page {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img {
+            height: 180px;
+            background: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .promo-section {
+                order: -1;
+                padding: 30px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         
         @media (max-width: 480px) {
-            .form-container {
-                padding: 20px;
+            .products-grid {
+                grid-template-columns: 1fr;
             }
             
-            .remember-forgot {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+            .login-section, .promo-section {
+                padding: 25px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
+    <!-- Login Page -->
+    <div class="container" id="loginPage">
+        <div class="login-section">
+            <div class="logo">Decor8</div>
             <h1>Login</h1>
-        </div>
-        
-        <div class="form-container">
+            <p class="subtitle">Enter your credentials to access your account</p>
+            
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
+                <input type="email" id="email" class="input-field" placeholder="Enter your email" value="niki@gmail.com">
             </div>
             
             <div class="input-group">
                 <label for="password">Password</label>
                 <div class="password-container">
-                    <input type="password" id="password" class="input-field" placeholder="Enter your password" required>
+                    <input type="password" id="password" class="input-field" placeholder="Enter your password" value="password123">
                     <span class="toggle-password" id="togglePassword">
                         <i class="far fa-eye"></i>
                     </span>
                 </div>
             </div>
             
-            <div class="remember-forgot">
-                <div class="remember">
-                    <input type="checkbox" id="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-                <a href="#" class="forgot-password">Forgot password?</a>
+            <div class="remember">
+                <input type="checkbox" id="remember" checked>
+                <label for="remember">Remember me</label>
             </div>
             
-            <button type="submit" class="login-btn" id="loginBtn">Log in</button>
+            <button class="login-btn" id="loginBtn">Login</button>
             
             <div class="divider">
                 <span></span>
@@ -250,14 +301,77 @@
                 <div class="social-btn facebook">
                     <i class="fab fa-facebook-f"></i>
                 </div>
-                <div class="social-btn twitter">
-                    <i class="fab fa-twitter"></i>
-                </div>
             </div>
             
             <div class="register-link">
                 Don't have an account? <a href="#">Register Now</a>
             </div>
+        </div>
+        
+        <div class="promo-section">
+            <h2 class="promo-title">Transform Your Home with Style</h2>
+            <p class="promo-text">We bring you the perfect blend of modern furniture and elegant decor ideas to make your home unique and comfortable.</p>
+        </div>
+    </div>
+    
+    <!-- Products Page (hidden initially) -->
+    <div class="container" id="productsPage">
+        <div class="products-page" style="width: 100%;">
+            <div class="logo">Decor8</div>
+            <h1>Our Products</h1>
+            <p class="subtitle">Browse our collection of premium home decor</p>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-img">🛋️</div>
+                    <div class="product-info">
+                        <h3>Modern Sofas</h3>
+                        <p>Comfortable and stylish seating</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">🛏️</div>
+                    <div class="product-info">
+                        <h3>Luxury Beds</h3>
+                        <p>Elegant bedroom centerpieces</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">🍽️</div>
+                    <div class="product-info">
+                        <h3>Dining Sets</h3>
+                        <p>Perfect for family gatherings</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">💺</div>
+                    <div class="product-info">
+                        <h3>Accent Chairs</h3>
+                        <p>Add character to any room</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">🖼️</div>
+                    <div class="product-info">
+                        <h3>Wall Art</h3>
+                        <p>Beautiful decorative pieces</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">💡</div>
+                    <div class="product-info">
+                        <h3>Lighting</h3>
+                        <p>Set the perfect ambiance</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="login-btn" id="logoutBtn" style="max-width: 200px; margin-top: 30px;">Logout</button>
         </div>
     </div>
 
@@ -279,9 +393,7 @@
         });
         
         // Login button functionality
-        document.getElementById('loginBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
+        document.getElementById('loginBtn').addEventListener('click', function() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
@@ -301,15 +413,24 @@
             this.textContent = 'Logging in...';
             this.disabled = true;
             
-            // In a real application, you would send this data to your server
+            // Simulate API call
             setTimeout(() => {
-                alert('Login successful! Redirecting to dashboard...');
-                this.textContent = 'Log in';
-                this.disabled = false;
-                
-                // In a real application, you would redirect to the dashboard
-                // window.location.href = 'dashboard.html';
-            }, 1500);
+                // Hide login page, show products page
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('productsPage').style.display = 'block';
+                document.querySelector('#productsPage .products-page').style.display = 'block';
+            }, 1000);
+        });
+        
+        // Logout button functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Show login page, hide products page
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('productsPage').style.display = 'none';
+            
+            // Reset login button
+            document.getElementById('loginBtn').textContent = 'Login';
+            document.getElementById('loginBtn').disabled = false;
         });
     </script>
 </body>
