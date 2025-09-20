@@ -10,7 +10,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -56,11 +56,6 @@
                 <input type="password" id="password" name="password" placeholder="Create a password (min. 6 characters)" required>
             </div>
 
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
-            </div>
-
             <button type="submit" class="btn-signup">Create Account</button>
         </form>
 
@@ -95,18 +90,16 @@
             setTimeout(() => { element.style.display = 'none'; }, 4000);
         }
 
-        // Signup function - ONLY SIGNUP
+        // Signup function
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
             
             document.getElementById('errorMessage').style.display = 'none';
             document.getElementById('successMessage').style.display = 'none';
             
-            // Validation
-            if (!email || !password || !confirmPassword) {
+            if (!email || !password) {
                 showMessage('errorMessage', 'Please fill all fields.');
                 return;
             }
@@ -116,16 +109,13 @@
                 return;
             }
 
-            if (password !== confirmPassword) {
-                showMessage('errorMessage', 'Passwords do not match.');
-                return;
-            }
-
-            // CREATE ACCOUNT ONLY
+            // Create account with Firebase
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     showMessage('successMessage', 'Account created successfully! Redirecting to login...');
-                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                    setTimeout(() => { 
+                        window.location.href = "login.html"; 
+                    }, 2000);
                 })
                 .catch((error) => {
                     if (error.code === 'auth/email-already-in-use') {
