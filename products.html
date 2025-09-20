@@ -58,9 +58,25 @@
       text-align: center;
     }
     .ar-button:hover { opacity: 0.9; }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      background: #e74c3c;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
   </style>
 </head>
 <body>
+  <div class="notification" id="notification">Please login to access this page</div>
+
   <!-- Navigation -->
   <nav>
     <ul>
@@ -254,24 +270,63 @@
         <div class="product-info">
           <h3>Modern Fridge</h3>
           <p>Stylish refrigerator with large capacity.</p>
-          <a href="./models/
-            fridge.glb" class="ar-button">View in AR</a>
+          <a href="./models/fridge.glb" class="ar-button">View in AR</a>
         </div>
       </div>
 
     </div>
   </div>
 
-  <script>
-    // Step 1: Check login
-    if (!localStorage.getItem("loggedIn") && !sessionStorage.getItem("loggedIn")) {
-     window.location.href = "login.html";
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Import the functions you need from the SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKUeSyv0-fMeyMHwXVmUVerGE8nalpJxs",
+      authDomain: "decor8-b14e8.firebaseapp.com",
+      projectId: "decor8-b14e8",
+      storageBucket: "decor8-b14e8.firebasestorage.app",
+      messagingSenderId: "301302844702",
+      appId: "1:301302844702:web:7376ed27571e8d40cccd0f",
+      measurementId: "G-NGJ1DN3SCY"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // User is not signed in, redirect to login page
+        showNotification("Please login to access this page");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+      }
+    });
+
+    // Logout function
+    async function logoutUser() {
+      try {
+        await signOut(auth);
+        window.location.href = "index.html";
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
     }
-    // Step 2: Logout
-    function logoutUser() {
-      localStorage.removeItem("loggedIn");
-      window.location.href = "index.html";
+
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.display = 'block';
     }
+
+    // Make logout function available globally
+    window.logoutUser = logoutUser;
   </script>
 </body>
 </html>
