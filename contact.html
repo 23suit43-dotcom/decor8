@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - Decor8</title>
+  <script type="module" src="auth.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -62,7 +64,6 @@
     .contact-form button:hover {
       background: #b39b4c;
     }
-    /* Info section (gold box) */
     .info-section {
       max-width: 400px;
       margin: 20px auto;
@@ -77,9 +78,37 @@
       margin: 0 0 10px;
       font-size: 18px;
     }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .social-icons a {
+      color: #fff;
+      font-size: 24px;
+      text-decoration: none;
+      background: #6a1b9a;
+      padding: 10px;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+    .social-icons a:hover {
+      background: #4a148c;
+    }
+    #welcome {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #6a1b9a;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Welcome Message -->
+  <div id="welcome">Welcome, Guest</div>
 
   <!-- Contact Form Card -->
   <div class="contact-container">
@@ -95,6 +124,13 @@
         <button type="submit">SUBMIT</button>
       </form>
     </div>
+  </div>
+
+  <!-- Social Icons -->
+  <div class="social-icons" id="socialIcons" style="display:none;">
+    <a id="emailLink" href="#" title="Email"><i class="fas fa-envelope"></i></a>
+    <a href="https://wa.me/1234567890" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://instagram.com/yourprofile" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
   </div>
 
   <!-- Info Section (Below the Form) -->
