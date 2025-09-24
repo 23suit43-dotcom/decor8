@@ -3,10 +3,10 @@ import {
     getAuth, 
     signInWithEmailAndPassword, 
     signOut,
-    onAuthStateChanged 
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-// Firebase config
+// Your actual Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
     authDomain: "decor8-b14e8.firebaseapp.com",
@@ -20,37 +20,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Check authentication state on page load
+// Monitor auth state
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', user.email);
-        displayUserInfo();
+        // User is signed in
+        displayUserInfo(user);
     } else {
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('userEmail');
+        // User is signed out
+        displayUserInfo(null);
     }
 });
-
-// Protect pages - call this on every protected page
-export async function protectPage() {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-        window.location.href = 'login.html';
-        return false;
-    }
-    return true;
-}
 
 // Login function
 export async function login(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', user.email);
-
+        displayUserInfo(user);
         window.location.href = 'products.html';
     } catch (error) {
         console.error('Login error:', error.code, error.message);
@@ -62,17 +48,25 @@ export async function login(email, password) {
 export async function logout() {
     try {
         await signOut(auth);
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('userEmail');
+        displayUserInfo(null);
         window.location.href = 'index.html';
     } catch (error) {
         console.error('Logout error:', error);
     }
 }
 
+// Protect page
+export async function protectPage() {
+    const user = auth.currentUser;
+    if (!user) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+}
+
 // Show error message
 function showError(message) {
-    // Remove existing error messages
     const existing = document.querySelector('.error-message');
     if (existing) existing.remove();
 
@@ -85,32 +79,34 @@ function showError(message) {
     errorDiv.style.borderRadius = '5px';
     errorDiv.textContent = message;
 
-    // Append to body or above form if exists
     const form = document.querySelector('form');
     if (form) form.parentNode.insertBefore(errorDiv, form);
     else document.body.prepend(errorDiv);
 }
 
-// Display user info on protected pages
-export function displayUserInfo() {
-    const userEmail = localStorage.getItem('userEmail');
+// Display user info
+export function displayUserInfo(user) {
     const userInfoElement = document.getElementById('user-info');
-    if (userEmail && userInfoElement) {
+    if (!userInfoElement) return;
+
+    if (user) {
+        const nameOrEmail = user.displayName || user.email;
         userInfoElement.innerHTML = `
             <div style="background: #f0f0f0; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
-                <span>Welcome, ${userEmail}</span>
+                <span>Welcome, ${nameOrEmail}</span>
                 <button onclick="logout()" style="float: right; padding: 5px 10px; background: #ff4444; color: white; border: none; border-radius: 3px; cursor: pointer;">
                     Logout
                 </button>
             </div>
         `;
+    } else {
+        userInfoElement.innerHTML = '';
     }
 }
 
-// Make functions globally available
+// Make functions global
 window.login = login;
 window.logout = logout;
 window.protectPage = protectPage;
 window.displayUserInfo = displayUserInfo;
-
 
