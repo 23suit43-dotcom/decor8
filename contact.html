@@ -181,23 +181,25 @@
       <div class="contact-form-container">
         <div class="contact-form">
           <form id="contact-form">
-            <div class="form-group">
-              <label for="name">Enter your Name</label>
-              <input type="text" id="name" name="from_name" placeholder="Your full name" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="email">Enter a valid email address</label>
-              <input type="email" id="email" name="reply_to" placeholder="your.email@example.com" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="message">Enter your message</label>
-              <textarea id="message" name="message" rows="5" placeholder="Please fill out this field." required></textarea>
-            </div>
-            
-            <button type="submit">Send Message</button>
-          </form>
+            <!-- Add this hidden field - YOUR EMAIL as recipient -->
+  <input type="hidden" name="to_email" value="manikandan.nithyasri494@gmail.com">
+  
+  <div class="form-group">
+    <label for="name">Enter your Name</label>
+    <input type="text" id="name" name="from_name" placeholder="Your full name" required>
+  </div>
+  
+  <div class="form-group">
+    <label for="email">Enter a valid email address</label>
+    <input type="email" id="email" name="reply_to" placeholder="your.email@example.com" required>
+  </div>
+  
+  <div class="form-group">
+    <label for="message">Enter your message</label>
+    <textarea id="message" name="message" rows="5" placeholder="Please fill out this field." required></textarea>
+  </div>
+  <button type="submit">Send Message</button>
+  </form>
         </div>
       </div>
       
