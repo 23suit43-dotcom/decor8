@@ -4,188 +4,138 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - Decor8</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f8f8f8;
+      background: #f5f5f5;
     }
-
-    .contact-wrapper {
+    .contact-section {
       display: flex;
-      max-width: 1000px;
-      margin: 50px auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-
-    .contact-form {
-      flex: 1;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
       padding: 40px;
     }
-
+    .contact-form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      margin: 20px;
+    }
     .contact-form h2 {
       margin-bottom: 20px;
-      font-size: 26px;
-      color: #333;
       text-align: center;
+      color: #333;
     }
-
-    .contact-form input,
-    .contact-form textarea {
+    .contact-form input, .contact-form textarea {
       width: 100%;
       padding: 12px;
-      margin: 12px 0;
-      border: none;
-      border-bottom: 2px solid #ddd;
-      font-size: 15px;
-      outline: none;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
-
     .contact-form button {
       width: 100%;
       padding: 12px;
-      background: #c5b358;
-      color: #fff;
-      font-size: 16px;
+      background: #b5a268;
       border: none;
-      border-radius: 25px;
-      margin-top: 20px;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
     }
-
     .contact-form button:hover {
-      background: #b39b4c;
+      background: #9a8855;
     }
-
     .contact-img {
       flex: 1;
-      background: url("images/your-image.jpg") center/cover no-repeat;
+      min-width: 300px;
+      margin: 20px;
     }
-
+    .contact-img img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
     .contact-info {
-      display: flex;
-      justify-content: space-around;
-      background: #c5b358;
-      color: #fff;
+      background: #b5a268;
+      color: white;
       padding: 20px;
-      flex-wrap: wrap;
       text-align: center;
     }
-
     .contact-info div {
-      margin: 10px;
-      flex: 1;
-      min-width: 200px;
+      margin: 10px 0;
     }
-
     .contact-info i {
-      font-size: 22px;
-      margin-bottom: 8px;
-      display: block;
+      margin-right: 8px;
     }
-
     .contact-info a {
-      color: #fff;
+      color: white;
       text-decoration: none;
     }
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
   </style>
-  <!-- FontAwesome for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <!-- Main Contact Section -->
-  <div class="contact-wrapper">
+  <section class="contact-section">
+    <!-- Contact Form -->
     <div class="contact-form">
       <h2>Contact Us</h2>
-      <form onsubmit="submitContact(event)">
-        <input type="text" id="name" placeholder="Enter your Name" required>
-        <input type="email" id="email" placeholder="Enter a valid email address" required>
-        <textarea id="message" placeholder="Enter your message" rows="5" required></textarea>
-        <button type="submit">Submit</button>
+      <form id="contact-form">
+        <input type="text" name="from_name" placeholder="Enter your Name" required>
+        <input type="email" name="reply_to" placeholder="Enter your Email" required>
+        <textarea name="message" rows="5" placeholder="Enter your Message" required></textarea>
+        <button type="submit">Send Message</button>
       </form>
     </div>
-    <div class="contact-img"></div>
-  </div>
 
-  <!-- Info Section -->
+    <!-- Image -->
+    <div class="contact-img">
+    <img src="images/sofa.jpg" alt="Decor8 Contact Image">
+    </div>
+  </section>
+
+  <!-- Contact Info -->
   <div class="contact-info">
-    <div>
-      <i class="fas fa-phone"></i>
-      <h4>Call Us</h4>
-      <p><a href="tel:+919876543210">+91 98765 43210</a></p>
-      <p><a href="tel:+911234567890">+91 12345 67890</a></p>
-    </div>
-    <div>
-      <i class="fas fa-map-marker-alt"></i>
-      <h4>Location</h4>
-      <p><a href="https://goo.gl/maps/yourmaplink" target="_blank">Madurai, Tamil Nadu, India</a></p>
-    </div>
-    <div>
-      <i class="fas fa-envelope"></i>
-      <h4>Email</h4>
-      <p><a href="mailto:nandhanashri2006@gmail.com">nandhanashri2006@gmail.com</a></p>
-      <p><a href="mailto:manikandan.nithyasri494@gmail.com">manikandan.nithyasri494@gmail.com</a></p>
-    </div>
-    <div>
-      <i class="fas fa-clock"></i>
-      <h4>Hours</h4>
-      <p>Mon - Fri: 11am - 8pm</p>
-      <p>Sat - Sun: 6am - 8pm</p>
-    </div>
+    <div><i class="fas fa-phone"></i> Call Us: <a href="tel:8807648478">8807648478</a>, <a href="tel:8098260354">8098260354</a></div>
+    <div><i class="fas fa-envelope"></i> Email: <a href="mailto:manikandan.nithyasri494@gmail.com">manikandan.nithyasri494@gmail.com</a></div>
+    <div><i class="fas fa-map-marker-alt"></i> Location: Madurai,Tamilnadu,India.</div>
   </div>
 
-  <!-- Firebase + Firestore + EmailJS -->
-  <script type="module">
-    import { db } from './firebase.js';
-    import { collection, addDoc, serverTimestamp } 
-      from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-    async function submitContact(e){
-      e.preventDefault();
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const message = document.getElementById("message").value;
-
-      try {
-        // Save in Firestore
-        await addDoc(collection(db, "contacts"), {
-          name, email, message,
-          createdAt: serverTimestamp()
-        });
-
-        // Send Email using EmailJS (free & easy)
-        emailjs.send("your_service_id", "your_template_id", {
-          from_name: name,
-          from_email: email,
-          message: message
-        }, "your_public_key");
-
-        alert("✅ Message sent successfully!");
-        e.target.reset();
-      } catch (err) {
-        console.error("Error:", err);
-        alert("❌ Failed to send message. Try again.");
-      }
-    }
-    window.submitContact = submitContact;
-  </script>
-
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
+    // Init EmailJS
     (function(){
-      emailjs.init("your_public_key"); // replace with EmailJS Public Key
+      emailjs.init("4NouW_e35hJLmsz92"); // Your Public Key
     })();
+
+    // Handle form submit
+    document.getElementById("contact-form").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      emailjs.sendForm("service_s9jyt1m", "template_dtz8ow8", this)
+      .then(() => {
+        alert("✅ Message sent successfully!");
+        this.reset();
+      }, (err) => {
+        alert("❌ Failed to send: " + JSON.stringify(err));
+      });
+    });
   </script>
 
 </body>
 </html>
+
 
 
 
