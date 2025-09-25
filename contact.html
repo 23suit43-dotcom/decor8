@@ -243,16 +243,17 @@
   </div>
 
   <script>
-    // Init EmailJS
+    // Init EmailJS with your Public Key
     (function(){
-      emailjs.init("4NouW_e35hJLmsz92"); // Your Public Key
+      emailjs.init("4NouW_e35hJLmsz92");
     })();
 
-    // Handle form submit
+    // Handle form submit with your correct Service ID and Template ID
     document.getElementById("contact-form").addEventListener("submit", function(e){
       e.preventDefault();
 
-      emailjs.sendForm("service_s9jyt1m", "template_dtz8ow8", this)
+      // Send email using your correct IDs
+      emailjs.sendForm("service_z4xlkbd", "template_uspyfi", this)
       .then(() => {
         alert("✅ Message sent successfully!");
         this.reset();
