@@ -181,8 +181,7 @@
   </div>
 
   <!-- Firebase SDKs -->
-  <!-- Firebase SDKs -->
-<script type="module">
+  <script type="module">
     // Import the functions you need from the SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
@@ -226,6 +225,18 @@
             console.log("User is logged in:", user.email);
             currentUser = user;
             window.currentUser = user;
+            
+            // AUTO-REDIRECT AFTER LOGIN/REGISTER - ADDED THIS
+            if (window.redirectRoom) {
+                setTimeout(() => {
+                    if (window.redirectRoom === "products") {
+                        window.location.href = "products.html";
+                    } else {
+                        window.location.href = "products.html#" + window.redirectRoom;
+                    }
+                    window.redirectRoom = null; // Clear redirect
+                }, 1000);
+            }
         } else {
             console.log("User is logged out");
             currentUser = null;
@@ -273,13 +284,6 @@
             document.getElementById("loginPopup").style.display = "none";
             showNotification("Login successful! Redirecting...");
             
-            setTimeout(() => {
-                if (redirectRoom === "products") {
-                    window.location.href = "products.html";
-                } else if (redirectRoom) {
-                    window.location.href = "products.html#" + redirectRoom;
-                }
-            }, 1000);
         } catch (error) {
             console.error("Login error:", error.message);
             let errorMessage = "Login failed. Please try again.";
@@ -298,7 +302,7 @@
         }
     }
 
-    // Firebase register function
+    // Firebase register function - FIXED VERSION
     async function registerUserHandler() {
         const name = document.getElementById("regName").value;
         const email = document.getElementById("regEmail").value;
@@ -320,11 +324,10 @@
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             console.log("User registered:", userCredential.user);
             
-            showNotification("Registration successful! Please login now.");
-            // Switch to login form
-            document.getElementById("registerForm").style.display = "none";
-            document.getElementById("loginForm").style.display = "block";
-            document.getElementById("formTitle").innerText = "Login";
+            // AUTO-LOGIN AFTER REGISTRATION - FIXED
+            showNotification("Registration successful! Logging you in...");
+            document.getElementById("loginPopup").style.display = "none";
+            
         } catch (error) {
             console.error("Registration error:", error.message);
             let errorMessage = "Registration failed. Please try again.";
@@ -418,6 +421,6 @@
     window.loginUserHandler = loginUserHandler;
     window.registerUserHandler = registerUserHandler;
     window.logoutUserHandler = logoutUserHandler;
-</script>
+  </script>
 </body>
 </html>
