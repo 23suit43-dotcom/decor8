@@ -181,28 +181,29 @@
   </div>
 
   <!-- Firebase SDKs -->
-  <script type="module">
+  <!-- Firebase SDKs -->
+<script type="module">
     // Import the functions you need from the SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
     import { 
-      getAuth, 
-      createUserWithEmailAndPassword, 
-      signInWithEmailAndPassword, 
-      signOut,
-      onAuthStateChanged 
+        getAuth, 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword, 
+        signOut,
+        onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
-  apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
-  authDomain: "decor8-b14e8.firebaseapp.com",
-  projectId: "decor8-b14e8",
-  storageBucket: "decor8-b14e8.appspot.com",
-  messagingSenderId: "301302844702",
-  appId: "1:301302844702:web:7376ed27571e8d40cccd0f",
-  measurementId: "G-NGJ1DN3SCY"
- };
+        apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
+        authDomain: "decor8-b14e8.firebaseapp.com",
+        projectId: "decor8-b14e8",
+        storageBucket: "decor8-b14e8.appspot.com",
+        messagingSenderId: "301302844702",
+        appId: "1:301302844702:web:7376ed27571e8d40cccd0f",
+        measurementId: "G-NGJ1DN3SCY"
+    };
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -214,189 +215,200 @@
     let redirectRoom = null;
     let currentUser = null;
 
+    // Make these variables global
+    window.auth = auth;
+    window.currentUser = currentUser;
+    window.redirectRoom = redirectRoom;
+
     // Check authentication state when page loads
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User is logged in:", user.email);
-        currentUser = user;
-      } else {
-        console.log("User is logged out");
-        currentUser = null;
-      }
+        if (user) {
+            console.log("User is logged in:", user.email);
+            currentUser = user;
+            window.currentUser = user;
+        } else {
+            console.log("User is logged out");
+            currentUser = null;
+            window.currentUser = null;
+        }
     });
 
     function showNotification(message, isSuccess = true) {
-      const notification = document.getElementById('notification');
-      notification.textContent = message;
-      notification.className = isSuccess ? 'notification' : 'notification error';
-      notification.style.display = 'block';
-      
-      setTimeout(() => {
-        notification.style.display = 'none';
-      }, 3000);
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = isSuccess ? 'notification' : 'notification error';
+        notification.style.display = 'block';
+        
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
     }
 
     function showLoader(show, type = 'login') {
-      if (type === 'login') {
-        document.getElementById('loginLoader').style.display = show ? 'block' : 'none';
-        document.getElementById('loginButton').style.display = show ? 'none' : 'block';
-      } else {
-        document.getElementById('registerLoader').style.display = show ? 'block' : 'none';
-        document.getElementById('registerButton').style.display = show ? 'none' : 'block';
-      }
-    }
-
-    function goToProducts() {
-      if (!currentUser) {
-        redirectRoom = "products";
-        document.getElementById("loginPopup").style.display = "flex";
-        showNotification("Please login first", false);
-      } else {
-        showNotification("Redirecting to products...");
-        setTimeout(() => {
-          window.location.href = "products.html";
-        }, 500);
-      }
-    }
-
-    function goToRoom(room) {
-      if (!currentUser) {
-        redirectRoom = room;
-        document.getElementById("loginPopup").style.display = "flex";
-        showNotification("Please login first", false);
-      } else {
-        showNotification("Redirecting to " + room + " products...");
-        setTimeout(() => {
-          window.location.href = "products.html#" + room;
-        }, 500);
-      }
-    }
-
-    function closePopup() {
-      document.getElementById("loginPopup").style.display = "none";
-    }
-
-    function switchToRegister() {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("registerForm").style.display = "block";
-      document.getElementById("formTitle").innerText = "Register";
-    }
-
-    function switchToLogin() {
-      document.getElementById("registerForm").style.display = "none";
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("formTitle").innerText = "Login";
-    }
-
-    function togglePassword(inputId, el) {
-      const input = document.getElementById(inputId);
-      if (input.type === "password") {
-        input.type = "text";
-        el.innerText = "Hide";
-      } else {
-        input.type = "password";
-        el.innerText = "Show";
-      }
+        if (type === 'login') {
+            document.getElementById('loginLoader').style.display = show ? 'block' : 'none';
+            document.getElementById('loginButton').style.display = show ? 'none' : 'block';
+        } else {
+            document.getElementById('registerLoader').style.display = show ? 'block' : 'none';
+            document.getElementById('registerButton').style.display = show ? 'none' : 'block';
+        }
     }
 
     // Firebase login function
     async function loginUserHandler() {
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-      
-      if (!email || !password) {
-        showNotification("Please enter email and password.", false);
-        return;
-      }
-      
-      showLoader(true, 'login');
-      
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log("User logged in:", userCredential.user);
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
         
-        closePopup();
-        showNotification("Login successful! Redirecting...");
-        
-        setTimeout(() => {
-          if (redirectRoom === "products") {
-            window.location.href = "products.html";
-          } else if (redirectRoom) {
-            window.location.href = "products.html#" + redirectRoom;
-          }
-        }, 1000);
-      } catch (error) {
-        console.error("Login error:", error.message);
-        let errorMessage = "Login failed. Please try again.";
-        
-        if (error.code === "auth/invalid-email") {
-          errorMessage = "Invalid email address.";
-        } else if (error.code === "auth/user-not-found") {
-          errorMessage = "No account found with this email.";
-        } else if (error.code === "auth/wrong-password") {
-          errorMessage = "Incorrect password.";
+        if (!email || !password) {
+            showNotification("Please enter email and password.", false);
+            return;
         }
         
-        showNotification(errorMessage, false);
-      } finally {
-        showLoader(false, 'login');
-      }
+        showLoader(true, 'login');
+        
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("User logged in:", userCredential.user);
+            
+            document.getElementById("loginPopup").style.display = "none";
+            showNotification("Login successful! Redirecting...");
+            
+            setTimeout(() => {
+                if (redirectRoom === "products") {
+                    window.location.href = "products.html";
+                } else if (redirectRoom) {
+                    window.location.href = "products.html#" + redirectRoom;
+                }
+            }, 1000);
+        } catch (error) {
+            console.error("Login error:", error.message);
+            let errorMessage = "Login failed. Please try again.";
+            
+            if (error.code === "auth/invalid-email") {
+                errorMessage = "Invalid email address.";
+            } else if (error.code === "auth/user-not-found") {
+                errorMessage = "No account found with this email.";
+            } else if (error.code === "auth/wrong-password") {
+                errorMessage = "Incorrect password.";
+            }
+            
+            showNotification(errorMessage, false);
+        } finally {
+            showLoader(false, 'login');
+        }
     }
 
     // Firebase register function
     async function registerUserHandler() {
-      const name = document.getElementById("regName").value;
-      const email = document.getElementById("regEmail").value;
-      const password = document.getElementById("regPassword").value;
-      
-      if (!name || !email || !password) {
-        showNotification("Please fill all fields.", false);
-        return;
-      }
-      
-      if (password.length < 6) {
-        showNotification("Password must be at least 6 characters.", false);
-        return;
-      }
-      
-      showLoader(true, 'register');
-      
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("User registered:", userCredential.user);
+        const name = document.getElementById("regName").value;
+        const email = document.getElementById("regEmail").value;
+        const password = document.getElementById("regPassword").value;
         
-        showNotification("Registration successful! Please login now.");
-        switchToLogin();
-      } catch (error) {
-        console.error("Registration error:", error.message);
-        let errorMessage = "Registration failed. Please try again.";
-        
-        if (error.code === "auth/email-already-in-use") {
-          errorMessage = "This email is already registered.";
-        } else if (error.code === "auth/invalid-email") {
-          errorMessage = "Invalid email address.";
-        } else if (error.code === "auth/weak-password") {
-          errorMessage = "Password is too weak.";
+        if (!name || !email || !password) {
+            showNotification("Please fill all fields.", false);
+            return;
         }
         
-        showNotification(errorMessage, false);
-      } finally {
-        showLoader(false, 'register');
-      }
+        if (password.length < 6) {
+            showNotification("Password must be at least 6 characters.", false);
+            return;
+        }
+        
+        showLoader(true, 'register');
+        
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log("User registered:", userCredential.user);
+            
+            showNotification("Registration successful! Please login now.");
+            // Switch to login form
+            document.getElementById("registerForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("formTitle").innerText = "Login";
+        } catch (error) {
+            console.error("Registration error:", error.message);
+            let errorMessage = "Registration failed. Please try again.";
+            
+            if (error.code === "auth/email-already-in-use") {
+                errorMessage = "This email is already registered.";
+            } else if (error.code === "auth/invalid-email") {
+                errorMessage = "Invalid email address.";
+            } else if (error.code === "auth/weak-password") {
+                errorMessage = "Password is too weak.";
+            }
+            
+            showNotification(errorMessage, false);
+        } finally {
+            showLoader(false, 'register');
+        }
     }
 
     // Firebase logout function
     async function logoutUserHandler() {
-      try {
-        await signOut(auth);
-        showNotification("You have been logged out.");
-      } catch (error) {
-        console.error("Logout error:", error.message);
-        showNotification("Logout failed. Please try again.", false);
-      }
+        try {
+            await signOut(auth);
+            showNotification("You have been logged out.");
+        } catch (error) {
+            console.error("Logout error:", error.message);
+            showNotification("Logout failed. Please try again.", false);
+        }
     }
 
-    // Make functions globally available for HTML onclick handlers
+    // Navigation functions
+    function goToProducts() {
+        if (!window.currentUser) {
+            window.redirectRoom = "products";
+            document.getElementById("loginPopup").style.display = "flex";
+            showNotification("Please login first", false);
+        } else {
+            showNotification("Redirecting to products...");
+            setTimeout(() => {
+                window.location.href = "products.html";
+            }, 500);
+        }
+    }
+
+    function goToRoom(room) {
+        if (!window.currentUser) {
+            window.redirectRoom = room;
+            document.getElementById("loginPopup").style.display = "flex";
+            showNotification("Please login first", false);
+        } else {
+            showNotification("Redirecting to " + room + " products...");
+            setTimeout(() => {
+                window.location.href = "products.html#" + room;
+            }, 500);
+        }
+    }
+
+    function closePopup() {
+        document.getElementById("loginPopup").style.display = "none";
+    }
+
+    function switchToRegister() {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+        document.getElementById("formTitle").innerText = "Register";
+    }
+
+    function switchToLogin() {
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("formTitle").innerText = "Login";
+    }
+
+    function togglePassword(inputId, el) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            el.innerText = "Hide";
+        } else {
+            input.type = "password";
+            el.innerText = "Show";
+        }
+    }
+
+    // Make functions globally available
     window.goToProducts = goToProducts;
     window.goToRoom = goToRoom;
     window.closePopup = closePopup;
@@ -406,6 +418,6 @@
     window.loginUserHandler = loginUserHandler;
     window.registerUserHandler = registerUserHandler;
     window.logoutUserHandler = logoutUserHandler;
-  </script>
+</script>
 </body>
 </html>
