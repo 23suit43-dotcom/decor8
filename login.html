@@ -147,38 +147,38 @@
   </footer>
 
   <!-- Popup Login/Register -->
-  <div id="loginPopup" class="popup">
+<div id="loginPopup" class="popup">
     <div class="popup-content">
-      <span class="close" onclick="closePopup()">&times;</span>
-      <h2 id="formTitle">Login</h2>
-      
-      <!-- Login Form -->
-      <div id="loginForm">
-        <input type="text" id="loginEmail" placeholder="Email" value="test@example.com">
-        <div class="password-box">
-          <input type="password" id="loginPassword" placeholder="Password" value="password123">
-          <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h2 id="formTitle">Login</h2>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <input type="text" id="loginEmail" name="loginEmail" placeholder="Email" value="test@example.com">
+            <div class="password-box">
+                <input type="password" id="loginPassword" name="loginPassword" placeholder="Password" value="password123">
+                <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
+            </div>
+            <label class="remember"><input type="checkbox" id="rememberMe" name="rememberMe" checked> Remember me</label>
+            <button onclick="loginUserHandler()" id="loginButton">Login</button>
+            <div class="loader" id="loginLoader"></div>
+            <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
         </div>
-        <label class="remember"><input type="checkbox" id="rememberMe" checked> Remember me</label>
-        <button onclick="loginUserHandler()" id="loginButton">Login</button>
-        <div class="loader" id="loginLoader"></div>
-        <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
-      </div>
 
-      <!-- Register Form -->
-      <div id="registerForm" style="display:none;">
-        <input type="text" id="regName" placeholder="Full Name">
-        <input type="email" id="regEmail" placeholder="Email">
-        <div class="password-box">
-          <input type="password" id="regPassword" placeholder="Password">
-          <span class="toggle-password" onclick="togglePassword('regPassword', this)">Show</span>
+        <!-- Register Form -->
+        <div id="registerForm" style="display:none;">
+            <input type="text" id="regName" name="regName" placeholder="Full Name">
+            <input type="email" id="regEmail" name="regEmail" placeholder="Email">
+            <div class="password-box">
+                <input type="password" id="regPassword" name="regPassword" placeholder="Password">
+                <span class="toggle-password" onclick="togglePassword('regPassword', this)">Show</span>
+            </div>
+            <button onclick="registerUserHandler()" id="registerButton">Register</button>
+            <div class="loader" id="registerLoader"></div>
+            <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
         </div>
-        <button onclick="registerUserHandler()" id="registerButton">Register</button>
-        <div class="loader" id="registerLoader"></div>
-        <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
-      </div>
     </div>
-  </div>
+</div>
 
  <!-- Firebase SDKs -->
 <script type="module">
