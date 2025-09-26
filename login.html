@@ -34,10 +34,52 @@
       background: #2ecc71; color: white; border-radius: 8px; display: none; z-index: 1000;
     }
     .notification.error { background: #e74c3c; }
+    
+    /* Forgot Password Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .modal-buttons button {
+      flex: 1;
+      padding: 8px;
+    }
   </style>
 </head>
 <body>
   <div class="notification" id="notification"></div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+      <h3>Reset Password</h3>
+      <p>Enter your email address and we'll send you a password reset link.</p>
+      <input type="email" id="resetEmail" placeholder="Your email" style="width: 100%; padding: 8px; margin: 10px 0;">
+      <div class="modal-buttons">
+        <button onclick="closeModal()" style="background: #ccc;">Cancel</button>
+        <button onclick="sendResetEmail()" style="background: #764ba2; color: white;">Send Reset Link</button>
+      </div>
+    </div>
+  </div>
 
   <div id="loginPopup" class="popup">
     <div class="popup-content">
@@ -51,7 +93,7 @@
           <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
         </div>
         <button onclick="loginUserHandler()" id="loginButton">Login</button>
-        <span class="toggle-link" onclick="resetPasswordHandler()">Forgot Password?</span>
+        <span class="toggle-link" onclick="openForgotPasswordModal()">Forgot Password?</span>
         <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
       </div>
 
@@ -74,7 +116,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { 
       getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-      sendPasswordResetEmail, onAuthStateChanged
+      sendPasswordResetEmail, onAuthStateChanged, updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
     const firebaseConfig = {
@@ -98,62 +140,140 @@
       setTimeout(() => { notification.style.display = 'none'; }, 3000);
     }
 
-    // Login function
+    // Login function - FIXED REDIRECTION
     window.loginUserHandler = async function() {
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        showNotification("Login successful!");
-        console.log("Logged in:", userCredential.user.email);
-        setTimeout(() => window.location.href = "products.html", 1000);
-      } catch (error) {
-        console.error("Login error:", error.code, error.message);
-        if (error.code === "auth/invalid-credential") {
-          showNotification("Invalid credentials. Please check email/password.", false);
-        } else {
-          showNotification("Error: " + error.message, false);
-        }
-      }
-    };
-
-    // Register function with auto login
-    window.registerUserHandler = async function() {
-      const email = document.getElementById("regEmail").value;
-      const password = document.getElementById("regPassword").value;
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        showNotification("Registration successful! Logging in...");
-        console.log("Registered:", userCredential.user.email);
-        // Auto-login
-        await signInWithEmailAndPassword(auth, email, password);
-        setTimeout(() => window.location.href = "products.html", 1000);
-      } catch (error) {
-        console.error("Register error:", error.code, error.message);
-        if (error.code === "auth/email-already-in-use") {
-          showNotification("Email already registered. Please login.", false);
-          switchToLogin();
-          document.getElementById("loginEmail").value = email;
-        } else {
-          showNotification("Error: " + error.message, false);
-        }
-      }
-    };
-
-    // Forgot password
-    window.resetPasswordHandler = async function() {
-      const email = document.getElementById("loginEmail").value;
-      if (!email) {
-        showNotification("Enter your email first", false);
+      
+      if (!email || !password) {
+        showNotification("Please enter both email and password", false);
         return;
       }
+      
+      const loginButton = document.getElementById("loginButton");
+      const originalText = loginButton.textContent;
+      loginButton.textContent = "Logging in...";
+      loginButton.disabled = true;
+      
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        showNotification("Login successful! Redirecting...");
+        console.log("Logged in:", userCredential.user.email);
+        
+        // FIXED: Proper redirection to products page
+        setTimeout(() => {
+          window.location.href = "products.html";
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Login error:", error.code, error.message);
+        loginButton.textContent = originalText;
+        loginButton.disabled = false;
+        
+        if (error.code === "auth/invalid-credential") {
+          showNotification("Invalid email or password. Please try again.", false);
+        } else if (error.code === "auth/user-not-found") {
+          showNotification("No account found with this email.", false);
+        } else if (error.code === "auth/wrong-password") {
+          showNotification("Incorrect password.", false);
+        } else {
+          showNotification("Login error: " + error.message, false);
+        }
+      }
+    };
+
+    // Register function with auto login - FIXED USER FRIENDLY FLOW
+    window.registerUserHandler = async function() {
+      const name = document.getElementById("regName").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      
+      if (!name || !email || !password) {
+        showNotification("Please fill in all fields", false);
+        return;
+      }
+      
+      if (password.length < 6) {
+        showNotification("Password should be at least 6 characters", false);
+        return;
+      }
+      
+      const registerButton = document.getElementById("registerButton");
+      const originalText = registerButton.textContent;
+      registerButton.textContent = "Registering...";
+      registerButton.disabled = true;
+      
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Set display name for the user
+        await updateProfile(userCredential.user, {
+          displayName: name
+        });
+        
+        showNotification("Registration successful! Logging you in...");
+        console.log("Registered:", userCredential.user.email);
+        
+        // FIXED: Auto-fill login form and switch to login
+        setTimeout(() => {
+          document.getElementById("loginEmail").value = email;
+          document.getElementById("loginPassword").value = password;
+          switchToLogin();
+          showNotification("Auto-filled your credentials. Click Login to continue.");
+        }, 1000);
+        
+      } catch (error) {
+        console.error("Register error:", error.code, error.message);
+        registerButton.textContent = originalText;
+        registerButton.disabled = false;
+        
+        if (error.code === "auth/email-already-in-use") {
+          showNotification("Email already registered. Switching to login...", false);
+          // Auto-fill login form
+          document.getElementById("loginEmail").value = email;
+          switchToLogin();
+        } else if (error.code === "auth/weak-password") {
+          showNotification("Password is too weak. Use at least 6 characters.", false);
+        } else if (error.code === "auth/invalid-email") {
+          showNotification("Invalid email address.", false);
+        } else {
+          showNotification("Registration error: " + error.message, false);
+        }
+      }
+    };
+
+    // Forgot password modal functions - FIXED PASSWORD RESET
+    window.openForgotPasswordModal = function() {
+      const email = document.getElementById("loginEmail").value;
+      if (email) {
+        document.getElementById("resetEmail").value = email;
+      }
+      document.getElementById("forgotPasswordModal").style.display = "block";
+    };
+
+    window.closeModal = function() {
+      document.getElementById("forgotPasswordModal").style.display = "none";
+      document.getElementById("resetEmail").value = "";
+    };
+
+    window.sendResetEmail = async function() {
+      const email = document.getElementById("resetEmail").value;
+      
+      if (!email) {
+        showNotification("Please enter your email address", false);
+        return;
+      }
+      
       try {
         await sendPasswordResetEmail(auth, email);
-        showNotification("Password reset email sent. Check your inbox.");
+        showNotification("Password reset email sent! Check your inbox and spam folder.");
+        closeModal();
       } catch (error) {
         console.error("Reset error:", error.code, error.message);
         if (error.code === "auth/user-not-found") {
           showNotification("No account found with this email", false);
+        } else if (error.code === "auth/invalid-email") {
+          showNotification("Invalid email address", false);
         } else {
           showNotification("Error: " + error.message, false);
         }
@@ -165,6 +285,10 @@
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("registerForm").style.display = "block";
       document.getElementById("formTitle").innerText = "Register";
+      // Clear register form when switching
+      document.getElementById("regName").value = "";
+      document.getElementById("regEmail").value = "";
+      document.getElementById("regPassword").value = "";
     };
 
     window.switchToLogin = function() {
@@ -173,7 +297,7 @@
       document.getElementById("formTitle").innerText = "Login";
     };
 
-    // Toggle password
+    // Toggle password visibility
     window.togglePassword = function(inputId, el) {
       const input = document.getElementById(inputId);
       if (input.type === "password") {
@@ -185,10 +309,33 @@
       }
     };
 
-    // Auto check login
+    // Auto check if user is already logged in
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("User already logged in:", user.email);
+        showNotification("Welcome back! Redirecting to products...");
+        setTimeout(() => {
+          window.location.href = "products.html";
+        }, 1000);
+      }
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('forgotPasswordModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
+
+    // Enter key support for forms
+    document.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        if (document.getElementById('loginForm').style.display !== 'none') {
+          loginUserHandler();
+        } else if (document.getElementById('registerForm').style.display !== 'none') {
+          registerUserHandler();
+        }
       }
     });
   </script>
