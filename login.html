@@ -179,8 +179,7 @@
         </div>
     </div>
 </div>
-
- <!-- Firebase SDKs -->
+<!-- Firebase SDKs - FIXED VERSION -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { 
@@ -217,32 +216,85 @@
     });
 
     function showNotification(message, isSuccess = true) {
-        alert(message);
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = isSuccess ? 'notification' : 'notification error';
+        notification.style.display = 'block';
+        setTimeout(() => { notification.style.display = 'none'; }, 3000);
     }
 
+    // FIXED LOGIN FUNCTION
     window.loginUserHandler = async function() {
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
         
+        console.log("Login attempt:", email);
+        
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            showNotification("Login successful!");
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("Login SUCCESS:", userCredential.user.email);
+            showNotification("Login successful! Redirecting...");
             document.getElementById("loginPopup").style.display = "none";
+            
+            // Force redirect
+            setTimeout(() => {
+                window.location.href = "products.html";
+            }, 1000);
+            
         } catch (error) {
-            showNotification("Login failed: " + error.message, false);
+            console.error("Login ERROR:", error.code, error.message);
+            
+            let errorMessage = "Login failed: ";
+            if (error.code === "auth/invalid-email") errorMessage += "Invalid email format";
+            else if (error.code === "auth/user-not-found") errorMessage += "No account found. Please register first.";
+            else if (error.code === "auth/wrong-password") errorMessage += "Incorrect password";
+            else if (error.code === "auth/too-many-requests") errorMessage += "Too many attempts. Try again later.";
+            else errorMessage += error.message;
+            
+            showNotification(errorMessage, false);
         }
     };
 
+    // FIXED REGISTER FUNCTION
     window.registerUserHandler = async function() {
+        const name = document.getElementById("regName").value;
         const email = document.getElementById("regEmail").value;
         const password = document.getElementById("regPassword").value;
         
+        console.log("Register attempt:", email);
+        
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            showNotification("Registration successful!");
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            console.log("Register SUCCESS:", userCredential.user.email);
+            
+            // AUTO LOGIN AFTER REGISTRATION
+            showNotification("Registration successful! Logging you in...");
+            
+            // Login immediately after registration
+            const loginCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("Auto-login SUCCESS:", loginCredential.user.email);
+            
             document.getElementById("loginPopup").style.display = "none";
+            showNotification("Welcome! Redirecting...");
+            
+            setTimeout(() => {
+                window.location.href = "products.html";
+            }, 1000);
+            
         } catch (error) {
-            showNotification("Registration failed: " + error.message, false);
+            console.error("Register ERROR:", error.code, error.message);
+            
+            let errorMessage = "Registration failed: ";
+            if (error.code === "auth/email-already-in-use") {
+                errorMessage += "Email already registered. Please login instead.";
+                switchToLogin();
+                document.getElementById("loginEmail").value = email;
+            }
+            else if (error.code === "auth/invalid-email") errorMessage += "Invalid email address";
+            else if (error.code === "auth/weak-password") errorMessage += "Password too weak (min 6 characters)";
+            else errorMessage += error.message;
+            
+            showNotification(errorMessage, false);
         }
     };
 
@@ -302,6 +354,6 @@
             showNotification("Logout error: " + error.message, false);
         }
     };
-</script> 
+</script>
 </body>
 </html>
