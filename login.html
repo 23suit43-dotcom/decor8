@@ -3,357 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Decor8 - Home</title>
+  <title>Decor8 - Login</title>
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #f8f9fa; }
-    nav { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; margin: 0; padding: 0; }
-    nav a { text-decoration: none; color: #333; font-weight: 500; }
-    nav a:hover { color: #667eea; }
-    .logout-btn { background: #764ba2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
-    .logout-btn:hover { opacity: 0.9; }
-    header { position: relative; }
-    header img { width: 100%; height: 500px; object-fit: cover; }
-    header .overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); display: flex; flex-direction: column;
-      justify-content: center; align-items: center; color: white;
-    }
-    header .overlay h1 { font-size: 3rem; margin: 0; font-family: 'Georgia', serif; }
-    header .overlay p { font-size: 1.5rem; margin-top: 1rem; font-style: italic;
-      font-family: 'Cursive', sans-serif; color: #f8e8ff; }
-    .section { padding: 3rem 2rem; text-align: center; }
-    .section h2 { margin-bottom: 1.5rem; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; }
-    .card img { width: 100%; border-radius: 8px; margin-bottom: 1rem; }
-    footer { background: #333; color: white; padding: 1rem; text-align: center; margin-top: 2rem; }
-
-    /* Popup */
-    .popup {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
-      z-index: 1000;
-    }
+    .popup { display:flex; justify-content:center; align-items:center; height:100vh; }
     .popup-content {
-      background: white; padding: 2rem; border-radius: 10px; width: 320px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: left;
+      background:white; padding:2rem; border-radius:10px; width:320px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.3);
     }
-    .popup h2 { margin-top: 0; text-align: center; }
-    .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
-      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px;
-    }
+    .popup h2 { margin-top:0; text-align:center; }
+    .popup input { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px; }
     .popup button {
-      width: 100%; padding: 10px; margin-top: 10px;
-      background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer;
+      width:100%; padding:10px; margin-top:10px;
+      background:#764ba2; color:white; border:none; border-radius:5px; cursor:pointer;
     }
-    .popup button:hover { opacity: 0.9; }
-    .popup .close { float: right; cursor: pointer; font-size: 18px; }
-    .toggle-link { color: #667eea; cursor: pointer; font-size: 14px; display: block; margin-top: 10px; text-align: center; }
-    .remember { display: flex; align-items: center; font-size: 14px; }
-    .remember input { margin-right: 6px; }
-    .password-box { position: relative; }
-    .password-box input { width: 100%; }
-    .toggle-password {
-      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-      cursor: pointer; font-size: 13px; color: #667eea;
-    }
-    
-    /* Notification */
+    .popup button:hover { opacity:0.9; }
+    .toggle-link { color:#667eea; cursor:pointer; font-size:14px; display:block; margin-top:10px; text-align:center; }
     .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px 20px;
-      background: #2ecc71;
-      color: white;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      display: none;
-      z-index: 1000;
+      position: fixed; top: 20px; right: 20px; padding: 12px 18px;
+      background:#2ecc71; color:white; border-radius:8px; display:none; z-index:1000;
     }
-    
-    .notification.error {
-      background: #e74c3c;
-    }
-    
-    .loader {
-      border: 3px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 3px solid #764ba2;
-      width: 20px;
-      height: 20px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-      display: none;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    .notification.error { background:#e74c3c; }
   </style>
 </head>
 <body>
-  <div class="notification" id="notification"></div>
 
-  <!-- Navigation -->
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="#" onclick="goToProducts()">Products</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><button class="logout-btn" onclick="logoutUserHandler()">Logout</button></li>
-    </ul>
-  </nav>
+<div class="notification" id="notification"></div>
 
-  <!-- Banner -->
-  <header>
-    <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Decor Banner">
-    <div class="overlay">
-      <h1>Welcome to Decor8</h1>
-      <p>"Style Your Home, Live Your Dream"</p>
-    </div>
-  </header>
-
-  <!-- About Section -->
-  <div class="section">
-    <h2>Transform Your Home with Style</h2>
-    <p>We bring you the perfect blend of modern furniture and elegant decor ideas to make your home unique and comfortable.</p>
-  </div>
-
-  <!-- Featured Rooms -->
-  <div class="section">
-    <h2>Explore Our Rooms</h2>
-    <div class="cards">
-      <div class="card" onclick="goToRoom('living')">
-        <img src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Living Room">
-        <h3>Living Room</h3>
-      </div>
-      <div class="card" onclick="goToRoom('bedroom')">
-        <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80" alt="Bedroom">
-        <h3>Bedroom</h3>
-      </div>
-      <div class="card" onclick="goToRoom('kitchen')">
-        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Kitchen">
-        <h3>Kitchen</h3>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Decor8 | Designed by Nandhana Shri & Nithyasri - Madurai</p>
-  </footer>
-
-  <!-- Popup Login/Register -->
 <div id="loginPopup" class="popup">
-    <div class="popup-content">
-        <span class="close" onclick="closePopup()">&times;</span>
-        <h2 id="formTitle">Login</h2>
-        
-        <!-- Login Form -->
-        <div id="loginForm">
-            <input type="text" id="loginEmail" name="loginEmail" placeholder="Email" value="test@example.com">
-            <div class="password-box">
-                <input type="password" id="loginPassword" name="loginPassword" placeholder="Password" value="password123">
-                <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
-            </div>
-            <label class="remember"><input type="checkbox" id="rememberMe" name="rememberMe" checked> Remember me</label>
-            <button onclick="loginUserHandler()" id="loginButton">Login</button>
-            <div class="loader" id="loginLoader"></div>
-            <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
-        </div>
+  <div class="popup-content">
+    <h2 id="formTitle">Login</h2>
 
-        <!-- Register Form -->
-        <div id="registerForm" style="display:none;">
-            <input type="text" id="regName" name="regName" placeholder="Full Name">
-            <input type="email" id="regEmail" name="regEmail" placeholder="Email">
-            <div class="password-box">
-                <input type="password" id="regPassword" name="regPassword" placeholder="Password">
-                <span class="toggle-password" onclick="togglePassword('regPassword', this)">Show</span>
-            </div>
-            <button onclick="registerUserHandler()" id="registerButton">Register</button>
-            <div class="loader" id="registerLoader"></div>
-            <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
-        </div>
+    <!-- Login Form -->
+    <div id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button onclick="loginUserHandler()">Login</button>
+      <span class="toggle-link" onclick="switchToRegister()">Don’t have an account? Register</span>
     </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" style="display:none;">
+      <input type="text" id="regName" placeholder="Full Name">
+      <input type="email" id="regEmail" placeholder="Email">
+      <input type="password" id="regPassword" placeholder="Password">
+      <button onclick="registerUserHandler()">Register</button>
+      <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
+    </div>
+  </div>
 </div>
-<!-- Firebase SDKs - FIXED VERSION -->
+
+<!-- Firebase SDK -->
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { 
-        getAuth, 
-        createUserWithEmailAndPassword, 
-        signInWithEmailAndPassword, 
-        signOut,
-        onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+  import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      signOut,
+      onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
-        authDomain: "decor8-b14e8.firebaseapp.com",
-        projectId: "decor8-b14e8",
-        storageBucket: "decor8-b14e8.appspot.com",
-        messagingSenderId: "301302844702",
-        appId: "1:301302844702:web:7376ed27571e8d40cccd0f",
-        measurementId: "G-NGJ1DN3SCY"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
+    authDomain: "decor8-b14e8.firebaseapp.com",
+    projectId: "decor8-b14e8",
+    storageBucket: "decor8-b14e8.appspot.com",
+    messagingSenderId: "301302844702",
+    appId: "1:301302844702:web:7376ed27571e8d40cccd0f"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    window.auth = auth;
-    window.currentUser = null;
-    window.redirectRoom = null;
+  function showNotification(msg, success=true){
+    const note=document.getElementById("notification");
+    note.textContent=msg;
+    note.className = success ? "notification" : "notification error";
+    note.style.display="block";
+    setTimeout(()=>{ note.style.display="none"; },3000);
+  }
 
-    onAuthStateChanged(auth, (user) => {
-        console.log("Auth state:", user ? user.email : "No user");
-        window.currentUser = user;
-        if (user && window.redirectRoom) {
-            setTimeout(() => window.location.href = "products.html", 1000);
-        }
-    });
-
-    function showNotification(message, isSuccess = true) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.className = isSuccess ? 'notification' : 'notification error';
-        notification.style.display = 'block';
-        setTimeout(() => { notification.style.display = 'none'; }, 3000);
+  // 🔹 LOGIN FUNCTION
+  window.loginUserHandler = async function(){
+    const email=document.getElementById("loginEmail").value;
+    const password=document.getElementById("loginPassword").value;
+    try{
+      await signInWithEmailAndPassword(auth,email,password);
+      showNotification("Login successful!");
+      setTimeout(()=> window.location.href="products.html",1000);
+    }catch(err){
+      console.error("Login Error:",err);
+      let msg="Login failed: ";
+      if(err.code==="auth/user-not-found") msg+="No account found. Please register.";
+      else if(err.code==="auth/wrong-password") msg+="Incorrect password.";
+      else if(err.code==="auth/invalid-email") msg+="Invalid email format.";
+      else msg+=err.message;
+      showNotification(msg,false);
     }
+  }
 
-    // FIXED LOGIN FUNCTION
-    window.loginUserHandler = async function() {
-        const email = document.getElementById("loginEmail").value;
-        const password = document.getElementById("loginPassword").value;
-        
-        console.log("Login attempt:", email);
-        
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("Login SUCCESS:", userCredential.user.email);
-            showNotification("Login successful! Redirecting...");
-            document.getElementById("loginPopup").style.display = "none";
-            
-            // Force redirect
-            setTimeout(() => {
-                window.location.href = "products.html";
-            }, 1000);
-            
-        } catch (error) {
-            console.error("Login ERROR:", error.code, error.message);
-            
-            let errorMessage = "Login failed: ";
-            if (error.code === "auth/invalid-email") errorMessage += "Invalid email format";
-            else if (error.code === "auth/user-not-found") errorMessage += "No account found. Please register first.";
-            else if (error.code === "auth/wrong-password") errorMessage += "Incorrect password";
-            else if (error.code === "auth/too-many-requests") errorMessage += "Too many attempts. Try again later.";
-            else errorMessage += error.message;
-            
-            showNotification(errorMessage, false);
-        }
-    };
+  // 🔹 REGISTER FUNCTION (auto login + prefill login form)
+  window.registerUserHandler = async function(){
+    const name=document.getElementById("regName").value;
+    const email=document.getElementById("regEmail").value;
+    const password=document.getElementById("regPassword").value;
+    try{
+      await createUserWithEmailAndPassword(auth,email,password);
+      showNotification("Registered & logged in successfully!");
+      // Auto-fill login fields
+      document.getElementById("loginEmail").value=email;
+      document.getElementById("loginPassword").value=password;
+      switchToLogin();
+      setTimeout(()=> window.location.href="products.html",1000);
+    }catch(err){
+      console.error("Register Error:",err);
+      let msg="Registration failed: ";
+      if(err.code==="auth/email-already-in-use") msg+="Email already registered. Please login.";
+      else if(err.code==="auth/weak-password") msg+="Password should be at least 6 characters.";
+      else msg+=err.message;
+      showNotification(msg,false);
+      if(err.code==="auth/email-already-in-use"){
+        switchToLogin();
+        document.getElementById("loginEmail").value=email;
+      }
+    }
+  }
 
-    // FIXED REGISTER FUNCTION
-    window.registerUserHandler = async function() {
-        const name = document.getElementById("regName").value;
-        const email = document.getElementById("regEmail").value;
-        const password = document.getElementById("regPassword").value;
-        
-        console.log("Register attempt:", email);
-        
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log("Register SUCCESS:", userCredential.user.email);
-            
-            // AUTO LOGIN AFTER REGISTRATION
-            showNotification("Registration successful! Logging you in...");
-            
-            // Login immediately after registration
-            const loginCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("Auto-login SUCCESS:", loginCredential.user.email);
-            
-            document.getElementById("loginPopup").style.display = "none";
-            showNotification("Welcome! Redirecting...");
-            
-            setTimeout(() => {
-                window.location.href = "products.html";
-            }, 1000);
-            
-        } catch (error) {
-            console.error("Register ERROR:", error.code, error.message);
-            
-            let errorMessage = "Registration failed: ";
-            if (error.code === "auth/email-already-in-use") {
-                errorMessage += "Email already registered. Please login instead.";
-                switchToLogin();
-                document.getElementById("loginEmail").value = email;
-            }
-            else if (error.code === "auth/invalid-email") errorMessage += "Invalid email address";
-            else if (error.code === "auth/weak-password") errorMessage += "Password too weak (min 6 characters)";
-            else errorMessage += error.message;
-            
-            showNotification(errorMessage, false);
-        }
-    };
+  // 🔹 Switch Forms
+  window.switchToRegister=function(){
+    document.getElementById("loginForm").style.display="none";
+    document.getElementById("registerForm").style.display="block";
+    document.getElementById("formTitle").innerText="Register";
+  }
+  window.switchToLogin=function(){
+    document.getElementById("registerForm").style.display="none";
+    document.getElementById("loginForm").style.display="block";
+    document.getElementById("formTitle").innerText="Login";
+  }
 
-    // Keep all your existing navigation functions below...
-    window.goToProducts = function() {
-        if (!window.currentUser) {
-            window.redirectRoom = "products";
-            document.getElementById("loginPopup").style.display = "flex";
-            showNotification("Please login first", false);
-        } else {
-            window.location.href = "products.html";
-        }
-    };
+  // 🔹 Logout function (optional use on navbar)
+  window.logoutUserHandler=async function(){
+    try{ await signOut(auth); showNotification("Logged out"); }
+    catch(err){ showNotification("Logout error: "+err.message,false); }
+  }
 
-    window.goToRoom = function(room) {
-        if (!window.currentUser) {
-            window.redirectRoom = room;
-            document.getElementById("loginPopup").style.display = "flex";
-            showNotification("Please login first", false);
-        } else {
-            window.location.href = "products.html#" + room;
-        }
-    };
-
-    window.closePopup = function() {
-        document.getElementById("loginPopup").style.display = "none";
-    };
-
-    window.switchToRegister = function() {
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("registerForm").style.display = "block";
-        document.getElementById("formTitle").innerText = "Register";
-    };
-
-    window.switchToLogin = function() {
-        document.getElementById("registerForm").style.display = "none";
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("formTitle").innerText = "Login";
-    };
-
-    window.togglePassword = function(inputId, el) {
-        const input = document.getElementById(inputId);
-        if (input.type === "password") {
-            input.type = "text";
-            el.innerText = "Hide";
-        } else {
-            input.type = "password";
-            el.innerText = "Show";
-        }
-    };
-
-    window.logoutUserHandler = async function() {
-        try {
-            await signOut(auth);
-            showNotification("Logged out successfully");
-        } catch (error) {
-            showNotification("Logout error: " + error.message, false);
-        }
-    };
+  // 🔹 Auto-redirect if already logged in
+  onAuthStateChanged(auth,(user)=>{
+    if(user){
+      console.log("Already logged in:",user.email);
+      // If user is on login page, redirect directly
+      if(window.location.pathname.includes("login.html")){
+        setTimeout(()=> window.location.href="products.html",1000);
+      }
+    }
+  });
 </script>
 </body>
 </html>
