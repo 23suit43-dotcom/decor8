@@ -87,7 +87,7 @@
 
       <!-- Login Form -->
       <div id="loginForm">
-        <input type="text" id="loginEmail" placeholder="Email">
+        <input type="email" id="loginEmail" placeholder="Email">
         <div class="password-box">
           <input type="password" id="loginPassword" placeholder="Password">
           <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
@@ -140,7 +140,7 @@
       setTimeout(() => { notification.style.display = 'none'; }, 3000);
     }
 
-    // Login function - FIXED REDIRECTION
+    // Login function
     window.loginUserHandler = async function() {
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
@@ -160,7 +160,7 @@
         showNotification("Login successful! Redirecting...");
         console.log("Logged in:", userCredential.user.email);
         
-        // FIXED: Proper redirection to products page
+        // Redirect to products page
         setTimeout(() => {
           window.location.href = "products.html";
         }, 1500);
@@ -173,16 +173,19 @@
         if (error.code === "auth/invalid-credential") {
           showNotification("Invalid email or password. Please try again.", false);
         } else if (error.code === "auth/user-not-found") {
-          showNotification("No account found with this email.", false);
+          showNotification("No account found with this email. Please register first.", false);
+          // Auto-switch to register form
+          switchToRegister();
+          document.getElementById("regEmail").value = email;
         } else if (error.code === "auth/wrong-password") {
-          showNotification("Incorrect password.", false);
+          showNotification("Incorrect password. Please try again or use 'Forgot Password'.", false);
         } else {
           showNotification("Login error: " + error.message, false);
         }
       }
     };
 
-    // Register function with auto login - FIXED USER FRIENDLY FLOW
+    // Register function
     window.registerUserHandler = async function() {
       const name = document.getElementById("regName").value;
       const email = document.getElementById("regEmail").value;
@@ -214,13 +217,22 @@
         showNotification("Registration successful! Logging you in...");
         console.log("Registered:", userCredential.user.email);
         
-        // FIXED: Auto-fill login form and switch to login
-        setTimeout(() => {
-          document.getElementById("loginEmail").value = email;
-          document.getElementById("loginPassword").value = password;
-          switchToLogin();
-          showNotification("Auto-filled your credentials. Click Login to continue.");
-        }, 1000);
+        // Auto-login after registration
+        setTimeout(async () => {
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            showNotification("Login successful! Redirecting...");
+            setTimeout(() => {
+              window.location.href = "products.html";
+            }, 1000);
+          } catch (loginError) {
+            console.error("Auto-login error:", loginError);
+            showNotification("Registered! Please login manually.", true);
+            document.getElementById("loginEmail").value = email;
+            document.getElementById("loginPassword").value = password;
+            switchToLogin();
+          }
+        }, 500);
         
       } catch (error) {
         console.error("Register error:", error.code, error.message);
@@ -229,7 +241,6 @@
         
         if (error.code === "auth/email-already-in-use") {
           showNotification("Email already registered. Switching to login...", false);
-          // Auto-fill login form
           document.getElementById("loginEmail").value = email;
           switchToLogin();
         } else if (error.code === "auth/weak-password") {
@@ -242,7 +253,7 @@
       }
     };
 
-    // Forgot password modal functions - FIXED PASSWORD RESET
+    // Forgot password functions
     window.openForgotPasswordModal = function() {
       const email = document.getElementById("loginEmail").value;
       if (email) {
@@ -285,10 +296,6 @@
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("registerForm").style.display = "block";
       document.getElementById("formTitle").innerText = "Register";
-      // Clear register form when switching
-      document.getElementById("regName").value = "";
-      document.getElementById("regEmail").value = "";
-      document.getElementById("regPassword").value = "";
     };
 
     window.switchToLogin = function() {
@@ -338,6 +345,8 @@
         }
       }
     });
+
+    console.log("Firebase authentication system loaded successfully!");
   </script>
 </body>
 </html>
