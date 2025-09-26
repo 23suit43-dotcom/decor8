@@ -180,11 +180,9 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    // Import the functions you need from the SDKs
+ <!-- Firebase SDKs -->
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-analytics.js";
     import { 
         getAuth, 
         createUserWithEmailAndPassword, 
@@ -193,7 +191,6 @@
         onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyAKUe5yv0-fMeyMHwXVmUVerGE8nalpJxs",
         authDomain: "decor8-b14e8.firebaseapp.com",
@@ -204,203 +201,89 @@
         measurementId: "G-NGJ1DN3SCY"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-    console.log("Firebase connected successfully!");
-
-    let redirectRoom = null;
-    let currentUser = null;
-
-    // Make these variables global
     window.auth = auth;
-    window.currentUser = currentUser;
-    window.redirectRoom = redirectRoom;
+    window.currentUser = null;
+    window.redirectRoom = null;
 
-    // Check authentication state when page loads
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("User is logged in:", user.email);
-            currentUser = user;
-            window.currentUser = user;
-            
-            // AUTO-REDIRECT AFTER LOGIN/REGISTER - ADDED THIS
-            if (window.redirectRoom) {
-                setTimeout(() => {
-                    if (window.redirectRoom === "products") {
-                        window.location.href = "products.html";
-                    } else {
-                        window.location.href = "products.html#" + window.redirectRoom;
-                    }
-                    window.redirectRoom = null; // Clear redirect
-                }, 1000);
-            }
-        } else {
-            console.log("User is logged out");
-            currentUser = null;
-            window.currentUser = null;
+        console.log("Auth state:", user ? user.email : "No user");
+        window.currentUser = user;
+        if (user && window.redirectRoom) {
+            setTimeout(() => window.location.href = "products.html", 1000);
         }
     });
 
     function showNotification(message, isSuccess = true) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.className = isSuccess ? 'notification' : 'notification error';
-        notification.style.display = 'block';
-        
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
+        alert(message);
     }
 
-    function showLoader(show, type = 'login') {
-        if (type === 'login') {
-            document.getElementById('loginLoader').style.display = show ? 'block' : 'none';
-            document.getElementById('loginButton').style.display = show ? 'none' : 'block';
-        } else {
-            document.getElementById('registerLoader').style.display = show ? 'block' : 'none';
-            document.getElementById('registerButton').style.display = show ? 'none' : 'block';
-        }
-    }
-
-    // Firebase login function
-    async function loginUserHandler() {
+    window.loginUserHandler = async function() {
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
         
-        if (!email || !password) {
-            showNotification("Please enter email and password.", false);
-            return;
-        }
-        
-        showLoader(true, 'login');
-        
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("User logged in:", userCredential.user);
-            
+            await signInWithEmailAndPassword(auth, email, password);
+            showNotification("Login successful!");
             document.getElementById("loginPopup").style.display = "none";
-            showNotification("Login successful! Redirecting...");
-            
         } catch (error) {
-            console.error("Login error:", error.message);
-            let errorMessage = "Login failed. Please try again.";
-            
-            if (error.code === "auth/invalid-email") {
-                errorMessage = "Invalid email address.";
-            } else if (error.code === "auth/user-not-found") {
-                errorMessage = "No account found with this email.";
-            } else if (error.code === "auth/wrong-password") {
-                errorMessage = "Incorrect password.";
-            }
-            
-            showNotification(errorMessage, false);
-        } finally {
-            showLoader(false, 'login');
+            showNotification("Login failed: " + error.message, false);
         }
-    }
+    };
 
-    // Firebase register function - FIXED VERSION
-    async function registerUserHandler() {
-        const name = document.getElementById("regName").value;
+    window.registerUserHandler = async function() {
         const email = document.getElementById("regEmail").value;
         const password = document.getElementById("regPassword").value;
         
-        if (!name || !email || !password) {
-            showNotification("Please fill all fields.", false);
-            return;
-        }
-        
-        if (password.length < 6) {
-            showNotification("Password must be at least 6 characters.", false);
-            return;
-        }
-        
-        showLoader(true, 'register');
-        
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log("User registered:", userCredential.user);
-            
-            // AUTO-LOGIN AFTER REGISTRATION - FIXED
-            showNotification("Registration successful! Logging you in...");
+            await createUserWithEmailAndPassword(auth, email, password);
+            showNotification("Registration successful!");
             document.getElementById("loginPopup").style.display = "none";
-            
         } catch (error) {
-            console.error("Registration error:", error.message);
-            let errorMessage = "Registration failed. Please try again.";
-            
-            if (error.code === "auth/email-already-in-use") {
-                errorMessage = "This email is already registered.";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "Invalid email address.";
-            } else if (error.code === "auth/weak-password") {
-                errorMessage = "Password is too weak.";
-            }
-            
-            showNotification(errorMessage, false);
-        } finally {
-            showLoader(false, 'register');
+            showNotification("Registration failed: " + error.message, false);
         }
-    }
+    };
 
-    // Firebase logout function
-    async function logoutUserHandler() {
-        try {
-            await signOut(auth);
-            showNotification("You have been logged out.");
-        } catch (error) {
-            console.error("Logout error:", error.message);
-            showNotification("Logout failed. Please try again.", false);
-        }
-    }
-
-    // Navigation functions
-    function goToProducts() {
+    // Keep all your existing navigation functions below...
+    window.goToProducts = function() {
         if (!window.currentUser) {
             window.redirectRoom = "products";
             document.getElementById("loginPopup").style.display = "flex";
             showNotification("Please login first", false);
         } else {
-            showNotification("Redirecting to products...");
-            setTimeout(() => {
-                window.location.href = "products.html";
-            }, 500);
+            window.location.href = "products.html";
         }
-    }
+    };
 
-    function goToRoom(room) {
+    window.goToRoom = function(room) {
         if (!window.currentUser) {
             window.redirectRoom = room;
             document.getElementById("loginPopup").style.display = "flex";
             showNotification("Please login first", false);
         } else {
-            showNotification("Redirecting to " + room + " products...");
-            setTimeout(() => {
-                window.location.href = "products.html#" + room;
-            }, 500);
+            window.location.href = "products.html#" + room;
         }
-    }
+    };
 
-    function closePopup() {
+    window.closePopup = function() {
         document.getElementById("loginPopup").style.display = "none";
-    }
+    };
 
-    function switchToRegister() {
+    window.switchToRegister = function() {
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("registerForm").style.display = "block";
         document.getElementById("formTitle").innerText = "Register";
-    }
+    };
 
-    function switchToLogin() {
+    window.switchToLogin = function() {
         document.getElementById("registerForm").style.display = "none";
         document.getElementById("loginForm").style.display = "block";
         document.getElementById("formTitle").innerText = "Login";
-    }
+    };
 
-    function togglePassword(inputId, el) {
+    window.togglePassword = function(inputId, el) {
         const input = document.getElementById(inputId);
         if (input.type === "password") {
             input.type = "text";
@@ -409,18 +292,16 @@
             input.type = "password";
             el.innerText = "Show";
         }
-    }
+    };
 
-    // Make functions globally available
-    window.goToProducts = goToProducts;
-    window.goToRoom = goToRoom;
-    window.closePopup = closePopup;
-    window.switchToRegister = switchToRegister;
-    window.switchToLogin = switchToLogin;
-    window.togglePassword = togglePassword;
-    window.loginUserHandler = loginUserHandler;
-    window.registerUserHandler = registerUserHandler;
-    window.logoutUserHandler = logoutUserHandler;
-  </script>
+    window.logoutUserHandler = async function() {
+        try {
+            await signOut(auth);
+            showNotification("Logged out successfully");
+        } catch (error) {
+            showNotification("Logout error: " + error.message, false);
+        }
+    };
+</script> 
 </body>
 </html>
