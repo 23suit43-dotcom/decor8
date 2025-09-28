@@ -376,8 +376,8 @@
         // User is signed in
         console.log("User is logged in:", user.email);
         
-        // Show welcome message with user email
-        welcomeMessage.textContent = `Welcome, ${user.email}`;
+        // Show welcome message with username if available, else fallback to email
+        welcomeMessage.textContent = `Welcome, ${user.displayName || user.email}`;
         userWelcomeBar.style.display = 'flex';
         
         // Hide loading, show content
