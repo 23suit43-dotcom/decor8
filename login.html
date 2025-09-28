@@ -196,10 +196,10 @@
         <div id="loginForm">
           <h2>Login</h2>
           <div class="input-group">
-            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="email" id="loginEmail" placeholder="Email" value="test@example.com">
           </div>
           <div class="input-group password-container">
-            <input type="password" id="loginPassword" placeholder="Password">
+            <input type="password" id="loginPassword" placeholder="Password" value="123456">
             <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</button>
           </div>
           <div class="remember-forgot">
@@ -280,8 +280,10 @@
           lastLogin: new Date()
         });
         console.log("User saved to Firestore");
+        showNotification("User data saved to cloud!");
       } catch (error) {
         console.error("Error saving user to Firestore:", error);
+        showNotification("Note: User data not saved to cloud", false);
       }
     }
 
@@ -300,9 +302,13 @@
         showNotification("Login successful! Redirecting...");
         
         // Update last login in Firestore
-        await setDoc(doc(db, "users", userCredential.user.uid), {
-          lastLogin: new Date()
-        }, { merge: true });
+        try {
+          await setDoc(doc(db, "users", userCredential.user.uid), {
+            lastLogin: new Date()
+          }, { merge: true });
+        } catch (firestoreError) {
+          console.log("Firestore update skipped");
+        }
         
         setTimeout(() => {
           window.location.href = "products.html";
