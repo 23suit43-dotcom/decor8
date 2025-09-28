@@ -5,357 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Decor8 - Login</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    body { margin: 0; font-family: Arial, sans-serif; background: #f8f9fa; }
+    .popup {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; background: #f0f0f0;
     }
-
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .popup-content {
+      background: white; padding: 2rem; border-radius: 10px; width: 320px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: left;
     }
-
-    .container {
-      display: flex;
-      max-width: 1000px;
-      width: 90%;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      overflow: hidden;
-      min-height: 600px;
+    .popup h2 { text-align: center; margin-bottom: 1rem; }
+    .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
+      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px;
     }
-
-    .hero-section {
-      flex: 1;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .popup button {
+      width: 100%; padding: 10px; margin-top: 10px;
+      background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer;
     }
-
-    .hero-section h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      font-weight: 300;
-    }
-
-    .hero-section p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
-
-    .form-section {
-      flex: 1;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .form-container {
-      width: 100%;
-      max-width: 320px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #333;
-      font-weight: 300;
-      font-size: 2rem;
-    }
-
-    .input-group {
-      margin-bottom: 20px;
-    }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="text"] {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #e1e1e1;
-      border-radius: 8px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-
-    .password-container {
-      position: relative;
-    }
-
+    .popup button:hover { opacity: 0.9; }
+    .toggle-link { color: #667eea; cursor: pointer; font-size: 14px; display: block; margin-top: 10px; text-align: center; }
+    .password-box { position: relative; }
     .toggle-password {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #667eea;
-      cursor: pointer;
-      font-size: 12px;
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 13px; color: #667eea;
     }
-
-    .remember-forgot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 15px 0;
-      font-size: 14px;
-    }
-
-    .remember-me {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .forgot-password {
-      color: #667eea;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .forgot-password:hover {
-      text-decoration: underline;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .switch-form {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-
-    .switch-form span {
-      color: #667eea;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
     .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 15px 20px;
-      background: #2ecc71;
-      color: white;
-      border-radius: 8px;
-      display: none;
-      z-index: 1000;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      position: fixed; top: 20px; right: 20px; padding: 15px 20px;
+      background: #2ecc71; color: white; border-radius: 8px; display: none; z-index: 1000;
     }
-
-    .notification.error {
-      background: #e74c3c;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1001;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .modal h3 {
-      margin-bottom: 15px;
-      color: #333;
-    }
-
-    .modal p {
-      margin-bottom: 20px;
-      color: #666;
-      line-height: 1.5;
-    }
-
-    .modal-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .modal-btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      flex: 1;
-    }
-
-    .modal-btn.cancel {
-      background: #f1f1f1;
-      color: #333;
-    }
-
-    .modal-btn.confirm {
-      background: #667eea;
-      color: white;
-    }
-
-    .modal-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .error-message {
-      color: #e74c3c;
-      font-size: 12px;
-      margin-top: 5px;
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        width: 95%;
-      }
-      
-      .hero-section {
-        padding: 30px;
-        text-align: center;
-      }
-      
-      .hero-section h1 {
-        font-size: 2rem;
-      }
-      
-      .form-section {
-        padding: 30px;
-      }
-    }
+    .notification.error { background: #e74c3c; }
   </style>
 </head>
 <body>
   <div class="notification" id="notification"></div>
 
-  <!-- Forgot Password Modal -->
-  <div id="forgotPasswordModal" class="modal">
-    <div class="modal-content">
-      <h3>Reset Password</h3>
-      <p>Enter your email address and we'll send you a password reset link to create a new password.</p>
-      <div class="input-group">
-        <input type="email" id="resetEmail" placeholder="Enter your email address">
-        <div class="error-message" id="resetEmailError"></div>
-      </div>
-      <div class="modal-buttons">
-        <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
-        <button class="modal-btn confirm" onclick="sendResetEmail()" id="resetButton">Send Reset Link</button>
-      </div>
-    </div>
-  </div>
+  <div id="loginPopup" class="popup">
+    <div class="popup-content">
+      <h2 id="formTitle">Login</h2>
 
-  <div class="container">
-    <div class="hero-section">
-      <h1>Transform Your Home with Style</h1>
-      <p>The perfect blend of modern furniture and elegant decor ideas to make your space unique and comfortable.</p>
-    </div>
-
-    <div class="form-section">
-      <div class="form-container">
-        <!-- Login Form -->
-        <div id="loginForm">
-          <h2>Login</h2>
-          <div class="input-group">
-            <input type="email" id="loginEmail" placeholder="Email">
-            <div class="error-message" id="loginEmailError"></div>
-          </div>
-          <div class="input-group password-container">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</button>
-            <div class="error-message" id="loginPasswordError"></div>
-          </div>
-          <div class="remember-forgot">
-            <div class="remember-me">
-              <input type="checkbox" id="rememberMe">
-              <label for="rememberMe">Remember me</label>
-            </div>
-            <a class="forgot-password" onclick="openForgotPasswordModal()">Forgot Password?</a>
-          </div>
-          <button class="btn" onclick="loginUserHandler()" id="loginButton">Login</button>
-          <div class="switch-form">
-            Don't have an account? <span onclick="switchToRegister()">Register</span>
-          </div>
+      <!-- Login Form -->
+      <div id="loginForm">
+        <input type="text" id="loginEmail" placeholder="Email">
+        <div class="password-box">
+          <input type="password" id="loginPassword" placeholder="Password">
+          <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
         </div>
+        <button onclick="loginUserHandler()" id="loginButton">Login</button>
+        <span class="toggle-link" onclick="resetPasswordHandler()">Forgot Password?</span>
+        <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
+      </div>
 
-        <!-- Register Form -->
-        <div id="registerForm" style="display:none;">
-          <h2>Register</h2>
-          <div class="input-group">
-            <input type="text" id="regName" placeholder="Full Name">
-            <div class="error-message" id="regNameError"></div>
-          </div>
-          <div class="input-group">
-            <input type="email" id="regEmail" placeholder="Email">
-            <div class="error-message" id="regEmailError"></div>
-          </div>
-          <div class="input-group password-container">
-            <input type="password" id="regPassword" placeholder="Password">
-            <button type="button" class="toggle-password" onclick="togglePassword('regPassword', this)">Show</button>
-            <div class="error-message" id="regPasswordError"></div>
-          </div>
-          <div class="remember-forgot">
-            <div class="remember-me">
-              <input type="checkbox" id="rememberMeRegister">
-              <label for="rememberMeRegister">Remember me</label>
-            </div>
-          </div>
-          <button class="btn" onclick="registerUserHandler()" id="registerButton">Register</button>
-          <div class="switch-form">
-            Already have an account? <span onclick="switchToLogin()">Login</span>
-          </div>
+      <!-- Register Form -->
+      <div id="registerForm" style="display:none;">
+        <input type="text" id="regName" placeholder="Full Name">
+        <input type="email" id="regEmail" placeholder="Email">
+        <div class="password-box">
+          <input type="password" id="regPassword" placeholder="Password">
+          <span class="toggle-password" onclick="togglePassword('regPassword', this)">Show</span>
         </div>
+        <button onclick="registerUserHandler()" id="registerButton">Register</button>
+        <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
       </div>
     </div>
   </div>
@@ -365,8 +74,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { 
       getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-      sendPasswordResetEmail, onAuthStateChanged, updateProfile,
-      setPersistence, browserSessionPersistence, browserLocalPersistence
+      sendPasswordResetEmail, onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
     const firebaseConfig = {
@@ -382,285 +90,81 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Hide Firebase connection messages from users
-    console.log = function() {}; // Disable console logs for production
-    console.error = function() {}; // Disable error logs for production
-
     function showNotification(message, isSuccess = true) {
       const notification = document.getElementById('notification');
       notification.textContent = message;
       notification.className = isSuccess ? 'notification' : 'notification error';
       notification.style.display = 'block';
-      setTimeout(() => { notification.style.display = 'none'; }, 4000);
-    }
-
-    function showError(elementId, message) {
-      const errorElement = document.getElementById(elementId);
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
-    }
-
-    function hideError(elementId) {
-      const errorElement = document.getElementById(elementId);
-      errorElement.style.display = 'none';
-    }
-
-    function clearAllErrors() {
-      const errorElements = document.querySelectorAll('.error-message');
-      errorElements.forEach(element => {
-        element.style.display = 'none';
-      });
-    }
-
-    function validateEmail(email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    }
-
-    // Load saved credentials
-    function loadSavedCredentials() {
-      const savedEmail = localStorage.getItem('savedEmail');
-      const savedPassword = localStorage.getItem('savedPassword');
-      const rememberMe = localStorage.getItem('rememberMe') === 'true';
-      
-      if (rememberMe && savedEmail) {
-        document.getElementById('loginEmail').value = savedEmail;
-        if (savedPassword) {
-          document.getElementById('loginPassword').value = savedPassword;
-        }
-        document.getElementById('rememberMe').checked = true;
-      }
-    }
-
-    // Save credentials
-    function saveCredentials(email, password) {
-      localStorage.setItem('savedEmail', email);
-      localStorage.setItem('savedPassword', password);
-      localStorage.setItem('rememberMe', 'true');
-    }
-
-    // Clear saved credentials
-    function clearSavedCredentials() {
-      localStorage.removeItem('savedEmail');
-      localStorage.removeItem('savedPassword');
-      localStorage.removeItem('rememberMe');
+      setTimeout(() => { notification.style.display = 'none'; }, 3000);
     }
 
     // Login function
     window.loginUserHandler = async function() {
-      const email = document.getElementById("loginEmail").value.trim();
+      const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
-      const rememberMe = document.getElementById("rememberMe").checked;
-      
-      // Clear previous errors
-      clearAllErrors();
-      
-      // Validation
-      let hasError = false;
-      
-      if (!email) {
-        showError('loginEmailError', 'Email is required');
-        hasError = true;
-      } else if (!validateEmail(email)) {
-        showError('loginEmailError', 'Please enter a valid email address');
-        hasError = true;
-      }
-      
-      if (!password) {
-        showError('loginPasswordError', 'Password is required');
-        hasError = true;
-      }
-      
-      if (hasError) return;
-      
-      const loginButton = document.getElementById("loginButton");
-      const originalText = loginButton.textContent;
-      loginButton.textContent = "Logging in...";
-      loginButton.disabled = true;
-      
       try {
-        // Set persistence
-        if (rememberMe) {
-          await setPersistence(auth, browserLocalPersistence);
-          saveCredentials(email, password);
-        } else {
-          await setPersistence(auth, browserSessionPersistence);
-          clearSavedCredentials();
-        }
-        
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        showNotification("Login successful! Redirecting...");
-        
-        setTimeout(() => {
-          window.location.href = "products.html";
-        }, 1500);
-        
+
+        // Get username from localStorage
+        const storedName = localStorage.getItem("username") || "User";
+        showNotification("Welcome " + storedName + "!");
+
+        setTimeout(() => window.location.href = "products.html", 1000);
       } catch (error) {
-        console.error("Login error:", error.code, error.message);
-        loginButton.textContent = originalText;
-        loginButton.disabled = false;
-        
-        if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password") {
-          showError('loginPasswordError', 'Invalid email or password. Please try again.');
-          showNotification("Invalid email or password", false);
-        } else if (error.code === "auth/user-not-found") {
-          showError('loginEmailError', 'No account found with this email. Please register first.');
-          showNotification("No account found. Please register first.", false);
-        } else if (error.code === "auth/too-many-requests") {
-          showNotification("Too many failed attempts. Please try again later.", false);
+        if (error.code === "auth/invalid-credential") {
+          showNotification("Invalid email or password.", false);
         } else {
-          showNotification("Login failed. Please try again.", false);
+          showNotification("Error: " + error.message, false);
         }
       }
     };
 
-    // Register function
+    // Register function with auto login
     window.registerUserHandler = async function() {
-      const name = document.getElementById("regName").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
+      const name = document.getElementById("regName").value;
+      const email = document.getElementById("regEmail").value;
       const password = document.getElementById("regPassword").value;
-      const rememberMe = document.getElementById("rememberMeRegister").checked;
-      
-      // Clear previous errors
-      clearAllErrors();
-      
-      // Validation
-      let hasError = false;
-      
-      if (!name) {
-        showError('regNameError', 'Full name is required');
-        hasError = true;
-      }
-      
-      if (!email) {
-        showError('regEmailError', 'Email is required');
-        hasError = true;
-      } else if (!validateEmail(email)) {
-        showError('regEmailError', 'Please enter a valid email address');
-        hasError = true;
-      }
-      
-      if (!password) {
-        showError('regPasswordError', 'Password is required');
-        hasError = true;
-      } else if (password.length < 6) {
-        showError('regPasswordError', 'Password must be at least 6 characters');
-        hasError = true;
-      }
-      
-      if (hasError) return;
-      
-      const registerButton = document.getElementById("registerButton");
-      const originalText = registerButton.textContent;
-      registerButton.textContent = "Registering...";
-      registerButton.disabled = true;
-      
+
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        
-        await updateProfile(userCredential.user, {
-          displayName: name
-        });
-        
+
+        // Save name to localStorage
+        localStorage.setItem("username", name);
+
         showNotification("Registration successful! Logging you in...");
-        
-        // Set persistence for auto-login
-        if (rememberMe) {
-          await setPersistence(auth, browserLocalPersistence);
-          saveCredentials(email, password);
-        }
-        
-        // Auto-login after registration
-        setTimeout(async () => {
-          try {
-            await signInWithEmailAndPassword(auth, email, password);
-            showNotification("Login successful! Redirecting...");
-            setTimeout(() => {
-              window.location.href = "products.html";
-            }, 1000);
-          } catch (loginError) {
-            console.error("Auto-login error:", loginError);
-            showNotification("Registered! Please login.", true);
-            document.getElementById("loginEmail").value = email;
-            document.getElementById("loginPassword").value = password;
-            switchToLogin();
-          }
-        }, 500);
-        
+
+        // Auto-login
+        await signInWithEmailAndPassword(auth, email, password);
+
+        setTimeout(() => window.location.href = "products.html", 1000);
       } catch (error) {
-        console.error("Register error:", error.code, error.message);
-        registerButton.textContent = originalText;
-        registerButton.disabled = false;
-        
         if (error.code === "auth/email-already-in-use") {
-          showError('regEmailError', 'Email already registered. Please login instead.');
-          showNotification("Email already registered. Switching to login...", false);
-          document.getElementById("loginEmail").value = email;
+          showNotification("Email already registered. Please login.", false);
           switchToLogin();
-        } else if (error.code === "auth/weak-password") {
-          showError('regPasswordError', 'Password is too weak. Use at least 6 characters.');
-        } else if (error.code === "auth/invalid-email") {
-          showError('regEmailError', 'Invalid email address.');
+          document.getElementById("loginEmail").value = email;
         } else {
-          showNotification("Registration failed. Please try again.", false);
+          showNotification("Error: " + error.message, false);
         }
       }
     };
 
-    // Forgot password functions
-    window.openForgotPasswordModal = function() {
+    // Forgot password
+    window.resetPasswordHandler = async function() {
       const email = document.getElementById("loginEmail").value;
-      if (email) {
-        document.getElementById("resetEmail").value = email;
-      }
-      document.getElementById("forgotPasswordModal").style.display = "flex";
-      clearAllErrors();
-    };
-
-    window.closeModal = function() {
-      document.getElementById("forgotPasswordModal").style.display = "none";
-      document.getElementById("resetEmail").value = "";
-      hideError('resetEmailError');
-    };
-
-    window.sendResetEmail = async function() {
-      const email = document.getElementById("resetEmail").value.trim();
-      
-      hideError('resetEmailError');
-      
       if (!email) {
-        showError('resetEmailError', 'Email is required');
+        showNotification("Enter your email first", false);
         return;
       }
-      
-      if (!validateEmail(email)) {
-        showError('resetEmailError', 'Please enter a valid email address');
-        return;
-      }
-      
-      const resetButton = document.getElementById("resetButton");
-      const originalText = resetButton.textContent;
-      resetButton.textContent = "Sending...";
-      resetButton.disabled = true;
-      
       try {
         await sendPasswordResetEmail(auth, email);
-        showNotification("Password reset email sent! Check your inbox and spam folder.");
-        closeModal();
+        showNotification("Password reset email sent. Check your inbox.");
+        setTimeout(() => window.location.href = "products.html", 1000);
       } catch (error) {
-        console.error("Reset error:", error.code, error.message);
         if (error.code === "auth/user-not-found") {
-          showError('resetEmailError', 'No account found with this email');
-        } else if (error.code === "auth/invalid-email") {
-          showError('resetEmailError', 'Invalid email address');
-        } else if (error.code === "auth/too-many-requests") {
-          showError('resetEmailError', 'Too many attempts. Please try again later.');
+          showNotification("No account found with this email", false);
         } else {
-          showError('resetEmailError', 'Failed to send reset email. Please try again.');
+          showNotification("Error: " + error.message, false);
         }
-      } finally {
-        resetButton.textContent = originalText;
-        resetButton.disabled = false;
       }
     };
 
@@ -668,79 +172,35 @@
     window.switchToRegister = function() {
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("registerForm").style.display = "block";
-      clearAllErrors();
+      document.getElementById("formTitle").innerText = "Register";
     };
 
     window.switchToLogin = function() {
       document.getElementById("registerForm").style.display = "none";
       document.getElementById("loginForm").style.display = "block";
-      clearAllErrors();
+      document.getElementById("formTitle").innerText = "Login";
     };
 
-    // Toggle password visibility
+    // Toggle password
     window.togglePassword = function(inputId, el) {
       const input = document.getElementById(inputId);
       if (input.type === "password") {
         input.type = "text";
-        el.textContent = "Hide";
+        el.innerText = "Hide";
       } else {
         input.type = "password";
-        el.textContent = "Show";
+        el.innerText = "Show";
       }
     };
 
-    // Auto check if user is already logged in
+    // Auth state listener (remove debug logs from UI)
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setTimeout(() => {
-          window.location.href = "products.html";
-        }, 1000);
-      } else {
-        loadSavedCredentials();
+        // No logs shown to user, only internal
+        console.log("User logged in:", user.email);
       }
     });
-
-    // Close modal when clicking outside
-    window.onclick = function(event) {
-      const modal = document.getElementById('forgotPasswordModal');
-      if (event.target === modal) {
-        closeModal();
-      }
-    };
-
-    // Enter key support
-    document.addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        if (document.getElementById('loginForm').style.display !== 'none') {
-          loginUserHandler();
-        } else if (document.getElementById('registerForm').style.display !== 'none') {
-          registerUserHandler();
-        }
-      }
-    });
-
-    // Real-time validation
-    document.getElementById('loginEmail').addEventListener('input', function() {
-      hideError('loginEmailError');
-    });
-
-    document.getElementById('loginPassword').addEventListener('input', function() {
-      hideError('loginPasswordError');
-    });
-
-    document.getElementById('regEmail').addEventListener('input', function() {
-      hideError('regEmailError');
-    });
-
-    document.getElementById('regPassword').addEventListener('input', function() {
-      hideError('regPasswordError');
-    });
-
-    document.getElementById('resetEmail').addEventListener('input', function() {
-      hideError('resetEmailError');
-    });
-
-    console.log("Decor8 Login System loaded successfully!");
   </script>
 </body>
 </html>
+
