@@ -12,6 +12,14 @@
     nav a:hover { color: #667eea; }
     .logout-btn { background: #764ba2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; display: none; }
     .logout-btn:hover { opacity: 0.9; }
+    .welcome-user { 
+      background: #667eea; 
+      color: white; 
+      padding: 8px 16px; 
+      border-radius: 5px; 
+      display: none;
+      font-weight: 500;
+    }
     header { position: relative; }
     header img { width: 100%; height: 500px; object-fit: cover; }
     header .overlay {
@@ -100,6 +108,58 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Forgot Password Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1001;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .modal h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .modal p {
+      margin-bottom: 20px;
+      color: #666;
+      line-height: 1.5;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .modal-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      flex: 1;
+    }
+    .modal-btn.cancel {
+      background: #f1f1f1;
+      color: #333;
+    }
+    .modal-btn.confirm {
+      background: #667eea;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -109,6 +169,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="#" onclick="goToProducts()">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><span class="welcome-user" id="welcomeUser">Welcome, User</span></li>
       <li><button class="logout-btn" onclick="logoutUser()">Logout</button></li>
     </ul>
   </nav>
@@ -168,6 +229,7 @@
         <label class="remember"><input type="checkbox" id="rememberMe"> Remember me</label>
         <button onclick="loginUser()" id="loginBtn">Login</button>
         <div class="loader" id="loginLoader"></div>
+        <span class="toggle-link" onclick="openForgotPasswordModal()">Forgot Password?</span>
         <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
       </div>
 
@@ -186,6 +248,19 @@
     </div>
   </div>
 
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+      <h3>Reset Your Password</h3>
+      <p>Enter your email address and we'll send you a link to reset your password.</p>
+      <input type="email" id="resetEmail" placeholder="Enter your email address" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
+      <div class="modal-buttons">
+        <button class="modal-btn cancel" onclick="closeForgotPasswordModal()">Cancel</button>
+        <button class="modal-btn confirm" onclick="sendResetEmail()">Send Reset Link</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Firebase SDK -->
   <script type="module">
     // Import Firebase functions
@@ -196,7 +271,8 @@
       signInWithEmailAndPassword, 
       signOut,
       onAuthStateChanged,
-      deleteUser // Added missing import
+      sendPasswordResetEmail,
+      updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
     // Your Firebase configuration
@@ -219,16 +295,38 @@
     let redirectRoom = null;
     let currentUser = null;
 
+    // Get username from displayName or email
+    function getUsername(user) {
+      if (user.displayName) {
+        return user.displayName;
+      } else if (user.email) {
+        // Extract name from email (e.g., "test" from "test@example.com")
+        return user.email.split('@')[0];
+      }
+      return 'User';
+    }
+
+    // Update welcome message with username
+    function updateWelcomeMessage(user) {
+      const usernameElement = document.getElementById('welcomeUser');
+      const username = getUsername(user);
+      // Capitalize first letter
+      usernameElement.textContent = 'Welcome, ' + (username.charAt(0).toUpperCase() + username.slice(1));
+      usernameElement.style.display = 'block';
+    }
+
     // Check authentication state when page loads
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("User is logged in:", user.email);
         currentUser = user;
         document.querySelector('.logout-btn').style.display = 'block';
+        updateWelcomeMessage(user);
       } else {
         console.log("User is logged out");
         currentUser = null;
         document.querySelector('.logout-btn').style.display = 'none';
+        document.getElementById('welcomeUser').style.display = 'none';
       }
     });
 
@@ -321,6 +419,44 @@
       }
     }
 
+    // Forgot Password Functions
+    function openForgotPasswordModal() {
+      const email = document.getElementById("loginEmail").value;
+      if (email) {
+        document.getElementById("resetEmail").value = email;
+      }
+      document.getElementById("forgotPasswordModal").style.display = "flex";
+    }
+
+    function closeForgotPasswordModal() {
+      document.getElementById("forgotPasswordModal").style.display = "none";
+      document.getElementById("resetEmail").value = "";
+    }
+
+    async function sendResetEmail() {
+      const email = document.getElementById("resetEmail").value;
+      
+      if (!email) {
+        showNotification("Please enter your email address", false);
+        return;
+      }
+      
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showNotification("Password reset email sent! Check your inbox and spam folder.");
+        closeForgotPasswordModal();
+      } catch (error) {
+        console.error("Reset error:", error);
+        if (error.code === "auth/user-not-found") {
+          showNotification("No account found with this email", false);
+        } else if (error.code === "auth/invalid-email") {
+          showNotification("Invalid email address", false);
+        } else {
+          showNotification("Error sending reset email. Please try again.", false);
+        }
+      }
+    }
+
     // Firebase login function
     async function loginUser() {
       const email = document.getElementById("loginEmail").value;
@@ -338,7 +474,7 @@
         console.log("User logged in:", userCredential.user);
         
         closePopup();
-        showNotification("Login successful! Redirecting...");
+        showNotification("Login successful! Welcome back.");
         
         setTimeout(() => {
           if (redirectRoom === "products") {
@@ -385,10 +521,26 @@
       
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Set display name for the user
+        await updateProfile(userCredential.user, {
+          displayName: name
+        });
+        
         console.log("User registered:", userCredential.user);
         
-        showNotification("Registration successful! Please login now.");
-        switchToLogin();
+        showNotification("Registration successful! Welcome to Decor8!");
+        closePopup();
+        
+        // Auto login after registration
+        setTimeout(() => {
+          if (redirectRoom === "products") {
+            window.location.href = "products.html";
+          } else if (redirectRoom) {
+            window.location.href = "products.html#" + redirectRoom;
+          }
+        }, 1000);
+        
       } catch (error) {
         console.error("Registration error:", error.message);
         let errorMessage = "Registration failed. Please try again.";
@@ -418,47 +570,6 @@
       }
     }
 
-    // DEBUG: Test Firebase connection
-    async function testFirebaseConnection() {
-      console.log("🔥 Testing Firebase connection...");
-      
-      try {
-        // Test with a unique email each time
-        const testEmail = "test" + Date.now() + "@example.com";
-        const testPassword = "password123";
-        
-        console.log("🔧 Creating test user:", testEmail);
-        const userCredential = await createUserWithEmailAndPassword(auth, testEmail, testPassword);
-        console.log("✅ SUCCESS: User created:", userCredential.user);
-        
-        // Show success message
-        showNotification("✅ Firebase is WORKING! Test successful.");
-        
-        // Clean up test user
-        await deleteUser(userCredential.user);
-        console.log("🧹 Test user cleaned up");
-        
-      } catch (error) {
-        console.error("❌ Firebase Error:", error);
-        console.error("❌ Error code:", error.code);
-        console.error("❌ Error message:", error.message);
-        
-        // Show specific error message
-        let errorMessage = "FIREBASE ERROR: ";
-        if (error.code === "auth/operation-not-allowed") {
-          errorMessage = "EMAIL/PASSWORD AUTH NOT ENABLED. Please check Firebase Console.";
-        } else if (error.code === "auth/network-request-failed") {
-          errorMessage = "NETWORK ERROR. Check your internet connection.";
-        } else if (error.code === "auth/invalid-api-key") {
-          errorMessage = "INVALID API KEY. Check Firebase configuration.";
-        } else {
-          errorMessage += error.message;
-        }
-        
-        showNotification(errorMessage, false);
-      }
-    }
-
     // Make functions globally available for HTML onclick handlers
     window.goToProducts = goToProducts;
     window.goToRoom = goToRoom;
@@ -469,25 +580,25 @@
     window.loginUser = loginUser;
     window.registerUser = registerUser;
     window.logoutUser = logoutUser;
-    window.testFirebaseConnection = testFirebaseConnection; // For testing
+    window.openForgotPasswordModal = openForgotPasswordModal;
+    window.closeForgotPasswordModal = closeForgotPasswordModal;
+    window.sendResetEmail = sendResetEmail;
 
     // Close popup when clicking outside
     window.addEventListener('click', function(event) {
       const popup = document.getElementById('loginPopup');
+      const modal = document.getElementById('forgotPasswordModal');
+      
       if (event.target === popup) {
         closePopup();
+      }
+      if (event.target === modal) {
+        closeForgotPasswordModal();
       }
     });
 
     // Add test credentials for easy testing
     console.log("Test credentials: test@example.com / password123");
-    
-    // Test Firebase connection after page loads
-    setTimeout(testFirebaseConnection, 2000);
   </script>
 </body>
 </html>
-
-
-
-
