@@ -5,48 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Decor8 - Login</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #f8f9fa; }
-    nav { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; margin: 0; padding: 0; }
-    nav a { text-decoration: none; color: #333; font-weight: 500; }
-    nav a:hover { color: #667eea; }
-    header { position: relative; }
-    header img { width: 100%; height: 500px; object-fit: cover; }
-    header .overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); display: flex; flex-direction: column;
-      justify-content: center; align-items: center; color: white;
-    }
-    header .overlay h1 { font-size: 3rem; margin: 0; }
-    header .overlay p { font-size: 1.5rem; margin-top: 1rem; font-style: italic; }
-
-    /* Popup */
-    .popup {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
-      z-index: 1000;
-    }
+    body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; }
+    .popup { display: flex; justify-content: center; align-items: center; height: 100vh; }
     .popup-content {
-      background: white; padding: 2rem; border-radius: 10px; width: 320px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: left;
+      background: #fff; padding: 2rem; border-radius: 10px;
+      width: 320px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    .popup h2 { margin-top: 0; text-align: center; }
-    .popup input[type="text"], .popup input[type="password"], .popup input[type="email"] {
-      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px;
-    }
-    .popup button {
+    h2 { text-align: center; }
+    input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; }
+    button {
       width: 100%; padding: 10px; margin-top: 10px;
       background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer;
     }
-    .popup button:hover { opacity: 0.9; }
-    .popup .close { float: right; cursor: pointer; font-size: 18px; }
+    button:hover { opacity: 0.9; }
     .toggle-link { color: #667eea; cursor: pointer; font-size: 14px; display: block; margin-top: 10px; text-align: center; }
-
-    /* Notification */
     .notification {
       position: fixed; top: 20px; right: 20px;
-      padding: 15px 20px; background: #2ecc71; color: white;
-      border-radius: 8px; display: none; z-index: 1000;
+      padding: 12px 16px; border-radius: 8px;
+      background: #2ecc71; color: #fff; display: none; z-index: 1000;
     }
     .notification.error { background: #e74c3c; }
   </style>
@@ -54,19 +30,17 @@
 <body>
   <div class="notification" id="notification"></div>
 
-  <!-- Popup Login/Register -->
-  <div id="loginPopup" class="popup" style="display:flex;">
+  <div id="loginPopup" class="popup">
     <div class="popup-content">
-      <span class="close" onclick="closePopup()">&times;</span>
       <h2 id="formTitle">Login</h2>
 
       <!-- Login Form -->
       <div id="loginForm">
-        <input type="text" id="loginEmail" placeholder="Email">
+        <input type="email" id="loginEmail" placeholder="Email">
         <input type="password" id="loginPassword" placeholder="Password">
-        <button onclick="loginUserHandler()">Login</button>
+        <button onclick="loginUser()">Login</button>
         <span class="toggle-link" onclick="switchToRegister()">Don't have an account? Register</span>
-        <span class="toggle-link" onclick="resetPasswordHandler()">Forgot Password?</span>
+        <span class="toggle-link" onclick="resetPassword()">Forgot Password?</span>
       </div>
 
       <!-- Register Form -->
@@ -74,18 +48,17 @@
         <input type="text" id="regName" placeholder="Full Name">
         <input type="email" id="regEmail" placeholder="Email">
         <input type="password" id="regPassword" placeholder="Password">
-        <button onclick="registerUserHandler()">Register</button>
+        <button onclick="registerUser()">Register</button>
         <span class="toggle-link" onclick="switchToLogin()">Already have an account? Login</span>
       </div>
     </div>
   </div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { 
       getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-      signOut, sendPasswordResetEmail, updateProfile
+      sendPasswordResetEmail, updateProfile 
     } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
     const firebaseConfig = {
@@ -101,7 +74,7 @@
     const auth = getAuth(app);
 
     // Notification helper
-    function showNotification(msg, success=true) {
+    function notify(msg, success=true) {
       const n = document.getElementById("notification");
       n.textContent = msg;
       n.className = success ? "notification" : "notification error";
@@ -110,42 +83,40 @@
     }
 
     // Login
-    window.loginUserHandler = async function() {
+    window.loginUser = async function() {
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        showNotification("Login successful!");
         window.location.href = "products.html";
       } catch (err) {
-        showNotification("Login failed: " + err.message, false);
+        notify("Login failed: " + err.message, false);
       }
     };
 
-    // Register + auto login
-    window.registerUserHandler = async function() {
+    // Register (auto login)
+    window.registerUser = async function() {
       const name = document.getElementById("regName").value;
       const email = document.getElementById("regEmail").value;
       const password = document.getElementById("regPassword").value;
       try {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCred.user, { displayName: name });
-        showNotification("Registered successfully!");
         window.location.href = "products.html";
       } catch (err) {
-        showNotification("Registration failed: " + err.message, false);
+        notify("Registration failed: " + err.message, false);
       }
     };
 
-    // Reset password
-    window.resetPasswordHandler = async function() {
+    // Forget Password
+    window.resetPassword = async function() {
       const email = document.getElementById("loginEmail").value;
-      if (!email) { showNotification("Enter your email to reset password", false); return; }
+      if (!email) { notify("Enter your email to reset password", false); return; }
       try {
         await sendPasswordResetEmail(auth, email);
-        showNotification("Password reset email sent!");
+        notify("Password reset email sent!");
       } catch (err) {
-        showNotification("Reset failed: " + err.message, false);
+        notify("Error: " + err.message, false);
       }
     };
 
@@ -160,9 +131,9 @@
       document.getElementById("loginForm").style.display="block";
       document.getElementById("formTitle").innerText="Login";
     };
-    window.closePopup = () => { document.getElementById("loginPopup").style.display="none"; };
   </script>
 </body>
 </html>
+
 
 
