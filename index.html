@@ -239,7 +239,7 @@
         <h3>Bedroom</h3>
       </div>
       <div class="card" onclick="goToRoom('kitchen')">
-        <img src="images/kitchen.jpg" alt="Kitchen" onerror="this.src='https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'">
+        <img src="images/kitchen.jpg" alt="Kitchen" onerror="this.src='https://images.unsplash.com-1556911220-e15b29be8c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'">
         <h3>Kitchen</h3>
       </div>
     </div>
@@ -340,7 +340,7 @@
 
     let redirectRoom = null;
     let currentUser = null;
-    let showWelcomeOnLoad = false;
+    let hasSeenWelcome = false;
 
     // Check authentication state when page loads
     onAuthStateChanged(auth, (user) => {
@@ -348,12 +348,6 @@
         console.log("User is logged in:", user.email);
         currentUser = user;
         document.querySelector('.logout-btn').style.display = 'block';
-        
-        // Show welcome popup on page load if user is logged in
-        if (showWelcomeOnLoad) {
-          showWelcomePopup(user);
-          showWelcomeOnLoad = false;
-        }
       } else {
         console.log("User is logged out");
         currentUser = null;
@@ -362,14 +356,26 @@
     });
 
     function showWelcomePopup(user) {
+      // Don't show welcome popup if user has already seen it
+      if (hasSeenWelcome) return;
+      
       const welcomeMessage = document.getElementById('welcomeMessage');
       const username = user.displayName || user.email.split('@')[0];
       welcomeMessage.textContent = `Welcome, ${username}! We're excited to have you join our community of home decor enthusiasts.`;
       document.getElementById('welcomePopup').style.display = 'flex';
+      hasSeenWelcome = true;
     }
 
     function closeWelcomePopup() {
       document.getElementById('welcomePopup').style.display = 'none';
+      
+      // Redirect after user clicks "Get Started" if there's a redirect room
+      if (redirectRoom === "products") {
+        window.location.href = "products.html";
+      } else if (redirectRoom) {
+        window.location.href = "products.html#" + redirectRoom;
+      }
+      redirectRoom = null; // Reset redirect room
     }
 
     function showNotification(message, isSuccess = true) {
@@ -414,10 +420,7 @@
         document.getElementById("loginPopup").style.display = "flex";
         showNotification("Please login first", false);
       } else {
-        showNotification("Redirecting to products...");
-        setTimeout(() => {
-          window.location.href = "products.html";
-        }, 500);
+        window.location.href = "products.html";
       }
     }
 
@@ -427,10 +430,7 @@
         document.getElementById("loginPopup").style.display = "flex";
         showNotification("Please login first", false);
       } else {
-        showNotification("Redirecting to " + room + " products...");
-        setTimeout(() => {
-          window.location.href = "products.html#" + room;
-        }, 500);
+        window.location.href = "products.html#" + room;
       }
     }
 
@@ -518,13 +518,8 @@
         closePopup();
         showWelcomePopup(userCredential.user);
         
-        setTimeout(() => {
-          if (redirectRoom === "products") {
-            window.location.href = "products.html";
-          } else if (redirectRoom) {
-            window.location.href = "products.html#" + redirectRoom;
-          }
-        }, 1000);
+        // Removed the automatic redirect - now it only happens when user clicks "Get Started"
+        
       } catch (error) {
         console.error("Login error:", error.message);
         let errorMessage = "Login failed. Please try again.";
@@ -574,14 +569,7 @@
         showWelcomePopup(userCredential.user);
         closePopup();
         
-        // Auto login after registration
-        setTimeout(() => {
-          if (redirectRoom === "products") {
-            window.location.href = "products.html";
-          } else if (redirectRoom) {
-            window.location.href = "products.html#" + redirectRoom;
-          }
-        }, 1000);
+        // Removed the automatic redirect - now it only happens when user clicks "Get Started"
         
       } catch (error) {
         console.error("Registration error:", error.message);
@@ -606,6 +594,8 @@
       try {
         await signOut(auth);
         showNotification("You have been logged out.");
+        // Reset the welcome flag when user logs out
+        hasSeenWelcome = false;
       } catch (error) {
         console.error("Logout error:", error.message);
         showNotification("Logout failed. Please try again.", false);
@@ -643,12 +633,6 @@
         closeWelcomePopup();
       }
     });
-
-    // Show welcome popup if user is already logged in when page loads
-    window.addEventListener('load', function() {
-      showWelcomeOnLoad = true;
-    });
   </script>
 </body>
 </html>
-
