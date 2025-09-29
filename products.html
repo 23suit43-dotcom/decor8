@@ -11,7 +11,7 @@
 
     /* User Welcome Bar */
     .user-welcome-bar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #8B7355 0%, #D2B48C 100%);
       color: white;
       padding: 12px 20px;
       text-align: center;
@@ -35,46 +35,203 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    /* Navigation */
-    nav { background: white; padding: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    nav ul { display: flex; justify-content: center; list-style: none; gap: 2rem; flex-wrap: wrap; }
-    nav a, nav button { 
-      text-decoration: none; color: #333; font-weight: 500; padding: 0.5rem 1rem; 
-      background: none; border: none; cursor: pointer; font-size: 1rem;
+    /* Header with Logo */
+    .header { 
+      background: linear-gradient(135deg, #8B7355 0%, #D2B48C 100%); 
+      color: white; 
+      padding: 2rem 1rem; 
+      text-align: center;
+      position: relative;
     }
-    nav a:hover, nav button:hover { color: #667eea; }
+    
+    .logo-container {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .logo-main {
+      font-family: 'Georgia', serif;
+      font-size: 42px;
+      font-weight: bold;
+      color: #2F4F4F;
+      letter-spacing: 1.5px;
+    }
+    
+    .logo-tagline {
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      color: #8B7355;
+      letter-spacing: 3px;
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+    
+    .logo-accent {
+      color: #8B4513;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
 
-    /* Header */
-    .header { text-align: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    /* Navigation */
+    nav { 
+      background: white; 
+      padding: 1rem; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-logo {
+      font-family: 'Georgia', serif;
+      font-size: 24px;
+      font-weight: bold;
+      color: #2F4F4F;
+    }
+    
+    .nav-logo span {
+      color: #8B4513;
+    }
+    
+    nav ul { 
+      display: flex; 
+      justify-content: center; 
+      list-style: none; 
+      gap: 2rem; 
+      flex-wrap: wrap; 
+    }
+    
+    nav a, nav button { 
+      text-decoration: none; 
+      color: #333; 
+      font-weight: 500; 
+      padding: 0.5rem 1rem; 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    
+    nav a:hover, nav button:hover { 
+      color: #8B7355; 
+    }
 
     /* Jump Menu */
-    .jump-menu { text-align: center; margin: 1.5rem 0; }
-    .jump-menu a {
-      text-decoration: none; color: #667eea; font-weight: bold; margin: 0 1rem;
+    .jump-menu { 
+      text-align: center; 
+      margin: 1.5rem 0; 
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .jump-menu a:hover { text-decoration: underline; }
+    
+    .jump-menu a {
+      text-decoration: none; 
+      color: #8B7355; 
+      font-weight: bold; 
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+    
+    .jump-menu a:hover { 
+      color: #2F4F4F; 
+      text-decoration: underline; 
+    }
 
     /* Section Titles */
     h2.section-title {
-      margin: 3rem 0 1rem;
+      margin: 3rem 0 1.5rem;
       text-align: center;
-      color: #2c3e50;
+      color: #2F4F4F;
       font-size: 2rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    h2.section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: #D2B48C;
     }
 
     /* Products */
-    .products-container { max-width: 1300px; margin: 0 auto; padding: 0 1rem; }
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .products-container { 
+      max-width: 1300px; 
+      margin: 0 auto; 
+      padding: 0 1rem; 
+    }
+    
+    .products-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+      gap: 2rem; 
+    }
 
     /* Product Card */
-    .product-card { background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
-    .product-card:hover { transform: translateY(-5px); }
-    .product-viewer { width: 100%; height: 250px; background: #f1f3f4; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
-    model-viewer { width: 100%; height: 100%; }
-    .product-info h3 { color: #2c3e50; margin-bottom: 0.5rem; }
-    .product-info p { color: #7f8c8d; margin-bottom: 1rem; line-height: 1.5; }
+    .product-card { 
+      background: white; 
+      border-radius: 10px; 
+      padding: 1.5rem; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 4px solid #D2B48C;
+    }
+    
+    .product-card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .product-viewer { 
+      width: 100%; 
+      height: 250px; 
+      background: #f1f3f4; 
+      border-radius: 8px; 
+      margin-bottom: 1rem; 
+      overflow: hidden; 
+    }
+    
+    model-viewer { 
+      width: 100%; 
+      height: 100%; 
+    }
+    
+    .product-info h3 { 
+      color: #2F4F4F; 
+      margin-bottom: 0.5rem; 
+      font-size: 1.3rem;
+    }
+    
+    .product-info p { 
+      color: #7f8c8d; 
+      margin-bottom: 1rem; 
+      line-height: 1.5; 
+    }
+    
     .ar-button { 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      background: linear-gradient(135deg, #8B7355 0%, #D2B48C 100%); 
       color: white; 
       padding: 10px 20px; 
       border: none; 
@@ -84,8 +241,12 @@
       font-weight: 500; 
       text-align: center;
       cursor: pointer;
+      transition: opacity 0.3s;
     }
-    .ar-button:hover { opacity: 0.9; }
+    
+    .ar-button:hover { 
+      opacity: 0.9; 
+    }
 
     /* Notification */
     .notification {
@@ -93,7 +254,7 @@
       top: 20px;
       right: 20px;
       padding: 15px 20px;
-      background: #e74c3c;
+      background: #8B7355;
       color: white;
       border-radius: 8px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -108,20 +269,97 @@
       align-items: center;
       height: 200px;
       font-size: 18px;
-      color: #667eea;
+      color: #8B7355;
     }
+    
     .spinner {
       border: 4px solid #f3f3f3;
-      border-top: 4px solid #667eea;
+      border-top: 4px solid #8B7355;
       border-radius: 50%;
       width: 40px;
       height: 40px;
       animation: spin 1s linear infinite;
       margin-right: 15px;
     }
+    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+    
+    /* Footer */
+    footer {
+      background: #2F4F4F;
+      color: white;
+      padding: 40px 0 20px;
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-column h3 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #D2B48C;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-column ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-column ul li a:hover {
+      color: #D2B48C;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #444;
+      color: #ccc;
+      font-size: 14px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      nav ul {
+        gap: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .logo-main {
+        font-size: 32px;
+      }
+      
+      .logo-tagline {
+        font-size: 12px;
+        letter-spacing: 2px;
+      }
     }
   </style>
 </head>
@@ -145,6 +383,7 @@
 
     <!-- Navigation -->
     <nav>
+      <div class="nav-logo">DECOR<span>8</span></div>
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
@@ -155,7 +394,11 @@
 
     <!-- Header -->
     <div class="header">
-      <h1>Decor8 3D Models</h1>
+      <div class="logo-container">
+        <div class="logo-main">DECOR<span class="logo-accent">8</span></div>
+        <div class="logo-tagline">HOME DÉCOR & INTERIOR DESIGN</div>
+      </div>
+      <h1>3D Furniture Models</h1>
       <p>Browse our collection of high-quality 3D furniture models</p>
     </div>
 
@@ -342,6 +585,38 @@
 
       </div>
     </div>
+    
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>DECOR8</h3>
+          <p>Transforming spaces into beautiful, functional homes with premium interior design solutions and home décor products.</p>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>📞 8807648478 / 8098260354</li>
+            <li>✉️ decor8848@gmail.com</li>
+            <li>📍 Madurai,Tamilnadu,India.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 DECOR8 - Home Décor & Interior Design. All rights reserved.</p>
+      </div>
+    </footer>
   </div>
 
   <!-- Firebase SDKs -->
