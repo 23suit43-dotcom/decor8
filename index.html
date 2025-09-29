@@ -12,13 +12,14 @@
     nav a:hover { color: #667eea; }
     .logout-btn { background: #764ba2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; display: none; }
     .logout-btn:hover { opacity: 0.9; }
-    .welcome-user { 
+    .user-email { 
       background: #667eea; 
       color: white; 
       padding: 8px 16px; 
       border-radius: 5px; 
       display: none;
       font-weight: 500;
+      font-size: 14px;
     }
     header { position: relative; }
     header img { width: 100%; height: 500px; object-fit: cover; }
@@ -169,7 +170,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="#" onclick="goToProducts()">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><span class="welcome-user" id="welcomeUser">Welcome, User</span></li>
+      <li><span class="user-email" id="userEmail"></span></li>
       <li><button class="logout-btn" onclick="logoutUser()">Logout</button></li>
     </ul>
   </nav>
@@ -221,9 +222,9 @@
       
       <!-- Login Form -->
       <div id="loginForm">
-        <input type="email" id="loginEmail" placeholder="Email" required value="test@example.com">
+        <input type="email" id="loginEmail" placeholder="Email" required>
         <div class="password-box">
-          <input type="password" id="loginPassword" placeholder="Password" required value="password123">
+          <input type="password" id="loginPassword" placeholder="Password" required>
           <span class="toggle-password" onclick="togglePassword('loginPassword', this)">Show</span>
         </div>
         <label class="remember"><input type="checkbox" id="rememberMe"> Remember me</label>
@@ -295,24 +296,11 @@
     let redirectRoom = null;
     let currentUser = null;
 
-    // Get username from displayName or email
-    function getUsername(user) {
-      if (user.displayName) {
-        return user.displayName;
-      } else if (user.email) {
-        // Extract name from email (e.g., "test" from "test@example.com")
-        return user.email.split('@')[0];
-      }
-      return 'User';
-    }
-
-    // Update welcome message with username
-    function updateWelcomeMessage(user) {
-      const usernameElement = document.getElementById('welcomeUser');
-      const username = getUsername(user);
-      // Capitalize first letter
-      usernameElement.textContent = 'Welcome, ' + (username.charAt(0).toUpperCase() + username.slice(1));
-      usernameElement.style.display = 'block';
+    // Update user email display
+    function updateUserEmail(user) {
+      const userEmailElement = document.getElementById('userEmail');
+      userEmailElement.textContent = user.email;
+      userEmailElement.style.display = 'block';
     }
 
     // Check authentication state when page loads
@@ -321,12 +309,19 @@
         console.log("User is logged in:", user.email);
         currentUser = user;
         document.querySelector('.logout-btn').style.display = 'block';
-        updateWelcomeMessage(user);
+        updateUserEmail(user);
+        
+        // If user is logged in, pre-fill email in login form
+        document.getElementById('loginEmail').value = user.email;
       } else {
         console.log("User is logged out");
         currentUser = null;
         document.querySelector('.logout-btn').style.display = 'none';
-        document.getElementById('welcomeUser').style.display = 'none';
+        document.getElementById('userEmail').style.display = 'none';
+        
+        // Clear login form when logged out
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
       }
     });
 
@@ -474,7 +469,7 @@
         console.log("User logged in:", userCredential.user);
         
         closePopup();
-        showNotification("Login successful! Welcome back.");
+        showNotification("Login successful!");
         
         setTimeout(() => {
           if (redirectRoom === "products") {
@@ -596,9 +591,7 @@
         closeForgotPasswordModal();
       }
     });
-
-    // Add test credentials for easy testing
-    console.log("Test credentials: test@example.com / password123");
   </script>
 </body>
 </html>
+
